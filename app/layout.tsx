@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cairo, Tajawal, Amiri } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
+import Script from "next/script"; // استيراد مكون السكربت الخاص بـ Next.js
 import "./globals.css";
 
 const cairo = Cairo({
@@ -41,6 +42,23 @@ export default function RootLayout({
       dir="rtl" 
       className={`${cairo.variable} ${tajawal.variable} ${amiri.variable}`}
     >
+      <head>
+        {/* Google Analytics (gtag.js) باستخدام الاستراتيجية المثالية للأداء */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-M3KFLTY6T7"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-M3KFLTY6T7');
+          `}
+        </Script>
+      </head>
+      
       <body className="bg-slate-50 min-h-screen flex flex-col font-cairo text-slate-800">
         
         {/* شريط التنقل العلوي الموحد للموقع بالكامل */}
