@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- تم حذف المربع المصمت لجعل الخلفية شفافة ومندمجة مع المتصفح -->
+  <defs>
+    <linearGradient id="arabicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+
+  <!-- جسم حرف الضاد المحسن هندسياً -->
+  <path d="M 140,280 C 140,210 210,190 280,190 C 350,190 380,220 380,260 C 380,310 320,330 260,330 L 140,330 Z" fill="none" stroke="url(#arabicGradient)" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- نبرة الحرف والكأس -->
+  <path d="M 380,260 C 380,360 330,410 250,410 C 170,410 140,360 140,330" fill="none" stroke="url(#arabicGradient)" stroke-width="42" stroke-linecap="round"/>
+  
+  <!-- النقطة بلون برتقالي دافئ وواضح -->
+  <path d="M 320,100 L 350,130 L 320,160 L 290,130 Z" fill="#f59e0b"/>
+</svg>
