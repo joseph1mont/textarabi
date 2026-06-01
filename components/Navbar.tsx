@@ -1,9 +1,11 @@
+// components/Navbar.tsx
 "use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image"; // IMPORTED: For optimized image delivery
 import { usePathname } from "next/navigation";
-import { Home, BookOpen, Code, Globe, Mail, Menu, X } from "lucide-react";
+import { Home, BookOpen, Globe, Mail, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname() || "/";
@@ -35,7 +37,10 @@ export default function Navbar() {
     contactLink: isArabic ? "/ar/contact" : "/contact",
     langLabel: isArabic ? "English" : "العربية",
     fontClass: isArabic ? "font-tajawal" : "font-sans",
-    ariaLabel: isArabic ? "تبديل القائمة" : "Toggle Navigation Menu"
+    ariaLabel: isArabic ? "تبديل القائمة" : "Toggle Navigation Menu",
+    logoAlt: isArabic 
+      ? "شعار تيكست عربي - محرك معالجة وتدقيق النصوص" 
+      : "TextArabi Logo - Arabic Text Processing Engine"
   };
 
   return (
@@ -44,8 +49,16 @@ export default function Navbar() {
         
         {/* Logo Block */}
         <Link href={content.homeLink} className="flex items-center gap-2.5 group shrink-0">
-          <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm group-hover:bg-blue-700 transition-colors">
-            <Code className="w-5 h-5" />
+          {/* UPDATED: Optimized Next.js Image wrapper replacing the lucide icon */}
+          <div className="w-9 h-9 rounded-xl overflow-hidden flex items-center justify-center bg-slate-50 border border-slate-100 shadow-2xs group-hover:borderColor-blue-200 transition-colors">
+            <Image 
+              src="/textarabi-logo.svg" 
+              alt={content.logoAlt}
+              width={36} 
+              height={36}
+              priority // High priority loading for above-the-fold branding assets (LCP)
+              className="w-full h-full object-contain"
+            />
           </div>
           <span className="text-lg font-black tracking-tight text-slate-900">
             {isArabic ? <>تيكست<span className="text-blue-600">عربي</span></> : <>Text<span className="text-blue-600">Arabi</span></>}

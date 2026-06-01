@@ -1,7 +1,6 @@
 // app/page.tsx
 import React from "react";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
 import { BookOpen, ChevronRight, ShieldCheck, Code } from "lucide-react";
 import TextUtilityPanel from "@/components/TextUtilityPanel";
 import { WhyTextArabi } from "@/components/WhyTextArabi"; 

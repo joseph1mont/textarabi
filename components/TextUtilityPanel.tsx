@@ -1,3 +1,4 @@
+// components/TextUtilityPanel.tsx
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
@@ -25,7 +26,7 @@ import {
   Languages
 } from "lucide-react";
 
-// استيراد المكونات الفرعية بأمان
+// Safe Imports for sub-components
 import StatsBar from "./StatsBar";
 import FontOptionsRibbon from "./FontOptionsRibbon";
 import TashkeelKeyboard from "./TashkeelKeyboard";
@@ -66,7 +67,8 @@ interface TextUtilityPanelProps {
   lang?: "ar" | "en";
 }
 
-export default function TextUtilityPanel({ initialMode = "translate", lang = "ar" }: TextUtilityPanelProps) {
+// FIXED: Default initialMode set to "strip" (Strip Diacritics) as requested
+export default function TextUtilityPanel({ initialMode = "strip", lang = "ar" }: TextUtilityPanelProps) {
   const [inputText, setInputText] = useState("");
   const [activeTab, setActiveTab] = useState<string>(initialMode);
   const [selectedFont, setSelectedFont] = useState("font-cairo");
@@ -92,7 +94,7 @@ export default function TextUtilityPanel({ initialMode = "translate", lang = "ar
     setActiveTab(initialMode);
   }
 
-  // تأثير التعامل مع جلب بيانات الترجمة الفورية بشكل مستقر ومضمون حتماً
+  // Translation hook handler
   useEffect(() => {
     if (activeTab !== "translate" || !inputText.trim()) {
       return;
@@ -106,7 +108,6 @@ export default function TextUtilityPanel({ initialMode = "translate", lang = "ar
         const sourceLang = translationTarget === "en" ? "ar" : "en";
         const targetLang = translationTarget;
 
-        // 🚀 استخدام واجهة ترجمة جوجل الرسمية السريعة والمستقرة للغاية
         const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(inputText)}`;
         
         const res = await fetch(url, {
@@ -116,7 +117,6 @@ export default function TextUtilityPanel({ initialMode = "translate", lang = "ar
 
         if (res.ok) {
           const data = await res.json();
-          // تجميع مخرجات الجمل المترجمة من مصفوفة ردود جوجل المرجعة
           if (data && data[0]) {
             const translatedText = data[0]
               .map((x: any) => x[0])
@@ -216,56 +216,52 @@ export default function TextUtilityPanel({ initialMode = "translate", lang = "ar
         setActiveTab(val);
         if (val !== "translate") setTranslatedOutput("");
       }} className="w-full mb-4">
+        {/* FIXED: Re-sorted layout tab order based on Search Volume Metrics (High -> Low) */}
         <TabsList className="grid grid-cols-2 lg:grid-cols-5 w-full bg-slate-100 p-1 rounded-xl gap-1 h-auto overflow-hidden">
           
+          {/* 1. Instant Translate */}
           <TabsTrigger 
             value="translate" 
-            className={`flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white ${
-              isRtl ? "order-5 lg:order-5" : "order-1 lg:order-1"
-            }`}
+            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
           >
             <Languages className="w-4 h-4 shrink-0" />
             <span>{isRtl ? "الترجمة الفورية" : "Instant Translate"}</span>
           </TabsTrigger>
 
+          {/* 2. Arabic Keyboard (Renamed from Tashkeel Keypad for SEO Optimization) */}
           <TabsTrigger 
             value="keyboard" 
-            className={`flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white ${
-              isRtl ? "order-4 lg:order-4" : "order-2 lg:order-2"
-            }`}
+            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
           >
             <Keyboard className="w-4 h-4 shrink-0" />
-            <span>{isRtl ? "كيبورد التشكيل" : "Tashkeel Keypad"}</span>
+            <span>{isRtl ? "كيبورد عربي" : "Arabic Keyboard"}</span>
           </TabsTrigger>
 
-          <TabsTrigger 
-            value="preview" 
-            className={`flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white ${
-              isRtl ? "order-3 lg:order-3" : "order-3 lg:order-3"
-            }`}
-          >
-            <Type className="w-4 h-4 shrink-0" />
-            <span>{isRtl ? "استعراض الخطوط" : "Font Preview"}</span>
-          </TabsTrigger>
-
+          {/* 3. Photoshop Fixer */}
           <TabsTrigger 
             value="reverse" 
-            className={`flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white ${
-              isRtl ? "order-2 lg:order-2" : "order-4 lg:order-4"
-            }`}
+            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
           >
             <RefreshCw className="w-4 h-4 shrink-0" />
             <span>{isRtl ? "مصحح الفوتوشوب" : "Photoshop Fixer"}</span>
           </TabsTrigger>
 
+          {/* 4. Strip Diacritics (Default Landing Tool) */}
           <TabsTrigger 
             value="strip" 
-            className={`flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white ${
-              isRtl ? "order-1 lg:order-1" : "order-5 lg:order-5"
-            }`}
+            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
           >
             <Trash2 className="w-4 h-4 shrink-0" />
             <span>{isRtl ? "إزالة التشكيل" : "Strip Diacritics"}</span>
+          </TabsTrigger>
+
+          {/* 5. Font Preview */}
+          <TabsTrigger 
+            value="preview" 
+            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+          >
+            <Type className="w-4 h-4 shrink-0" />
+            <span>{isRtl ? "استعراض الخطوط" : "Font Preview"}</span>
           </TabsTrigger>
 
         </TabsList>
@@ -280,7 +276,7 @@ export default function TextUtilityPanel({ initialMode = "translate", lang = "ar
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
         
-        {/* العمود الأيسر: مدخلات النص الأصلي */}
+        {/* Left Column: Input Panel */}
         <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="bg-slate-50/80 border-b border-slate-200 px-4 py-3 flex justify-between items-center h-[48px]">
             <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5 font-cairo">
@@ -308,11 +304,11 @@ export default function TextUtilityPanel({ initialMode = "translate", lang = "ar
           />
         </div>
 
-        {/* العمود الأيمن: مخرجات المعالجة الجاهزة */}
+        {/* Right Column: Processed Outputs Panel */}
         <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="bg-slate-50/80 border-b border-slate-200 px-4 py-3 flex justify-between items-center h-[48px]">
             <span className="text-xs font-bold text-slate-700 font-cairo">
-              {activeTab === "keyboard" ? (isRtl ? "لوحة الحروف والتشكيل الذكية" : "Smart Tashkeel Board") : (isRtl ? "النص المعالج الجاهز" : "Processed Ready Output")}
+              {activeTab === "keyboard" ? (isRtl ? "لوحة الحروف والتشكيل الذكية" : "Smart Arabic Keyboard") : (isRtl ? "النص المعالج الجاهز" : "Processed Ready Output")}
             </span>
             {outputText && activeTab !== "keyboard" && (
               <Button
