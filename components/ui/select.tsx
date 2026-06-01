@@ -1,7 +1,5 @@
-"use client"
-
 import * as React from "react"
-import { Select as SelectPrimitive } from "radix-ui"
+import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -37,7 +35,9 @@ function SelectTrigger({
         className
       )}
       {...props}
-    />
+    >
+      {children}
+    </SelectPrimitive.Trigger>
   )
 }
 
@@ -89,7 +89,7 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-default select-none items-center rounded-md py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[focus]:bg-muted data-[focus]:text-foreground data-[disabled]:opacity-50",
+        "relative flex w-full cursor-default select-none items-center rounded-md py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[focus]:bg-muted data-[focus]:text-foreground data-[disabled]:opacity-50 data-[focus]:outline-none",
         className
       )}
       {...props}

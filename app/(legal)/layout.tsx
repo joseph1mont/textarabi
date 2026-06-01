@@ -1,21 +1,15 @@
+// app/(legal)/layout.tsx
 import React from "react";
-import Link from "next/link";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
-function LegalLayout({ children }: { children: React.ReactNode }) {
+export default function LegalLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-full bg-slate-50 min-h-screen py-10" dir="rtl">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="mb-6">
-          <Link href="/" className="text-sm font-medium text-blue-600 hover:underline">
-            ← العودة إلى الأداة الرئيسية
-          </Link>
-        </div>
-        <main className="bg-white border border-slate-200 rounded-2xl p-6 md:p-10 shadow-xs">
+    <div className="min-h-screen flex flex-col bg-slate-50" dir="ltr">
+      {/* Dynamic Content Area */}
+      <main className="flex-grow w-full">
           {children}
-        </main>
-      </div>
+      </main>
     </div>
   );
 }
-
-export default LegalLayout;

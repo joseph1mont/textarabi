@@ -15,32 +15,49 @@ import {
 } from "lucide-react";
 
 export default function ContactFormEN() {
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+  const [formState, setFormState] = useState({ name: "", email: "", subject: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage("");
 
-    // Smooth UI transition for form submission simulation
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setFormState({ name: "", email: "", subject: "", message: "" });
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "e467fd3a-2778-48f2-9cad-62f3521515c4",
+          name: formState.name,
+          email: formState.email,
+          subject: formState.subject,
+          message: formState.message,
+          from_name: "TextArabi Contact Form", 
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setIsSuccess(true);
+        setFormState({ name: "", email: "", subject: "", message: "" });
+      } else {
+        setErrorMessage(result.message || "An error occurred while sending your message. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Web3Forms Server Error:", error);
+      setErrorMessage("An error occurred while connecting to the mail server. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="w-full bg-slate-50/60 min-h-screen py-12 md:py-16" dir="ltr">
+    <div className="w-full py-12 text-slate-800" dir="ltr">
       <div className="max-w-5xl mx-auto px-4">
         
-        {/* Breadcrumb back navigation line */}
         <div className="mb-8">
           <Link 
             href="/" 
@@ -51,21 +68,17 @@ export default function ContactFormEN() {
           </Link>
         </div>
 
-        {/* Master Two-Column Grid Setup */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Left Column: Platform Context & Info Cards (Spans 5 cols) */}
           <div className="lg:col-span-5 space-y-5">
             <div>
               <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-3">Contact Support</h1>
               <p className="text-slate-600 leading-relaxed text-sm md:text-base">
-                Have a new script feature optimization suggestion or need to report an layout alignment bug? We are always ready to assist the Arabic web layout ecosystem.
+                Have a new script feature optimization suggestion or need to report a layout alignment bug? We are always ready to assist the Arabic web layout ecosystem.
               </p>
             </div>
 
             <hr className="border-slate-200 my-4" />
 
-            {/* Feature Info Card 1 */}
             <div className="border border-slate-200/80 bg-white rounded-xl shadow-xs p-4 flex items-start gap-4">
               <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl shrink-0 mt-0.5">
                 <ShieldCheck className="w-5 h-5" />
@@ -78,7 +91,6 @@ export default function ContactFormEN() {
               </div>
             </div>
 
-            {/* Feature Info Card 2 */}
             <div className="border border-slate-200/80 bg-white rounded-xl shadow-xs p-4 flex items-start gap-4">
               <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl shrink-0 mt-0.5">
                 <Zap className="w-5 h-5" />
@@ -92,7 +104,6 @@ export default function ContactFormEN() {
             </div>
           </div>
 
-          {/* Right Column: Core Functional Form Component Container (Spans 7 cols) */}
           <div className="lg:col-span-7">
             <div className="border border-slate-200 rounded-2xl shadow-xs bg-white p-6 md:p-8">
               {isSuccess ? (
@@ -106,7 +117,7 @@ export default function ContactFormEN() {
                   </p>
                   <Button 
                     variant="outline" 
-                    className="border-slate-200 hover:bg-slate-50 font-bold px-5 cursor-pointer rounded-xl text-slate-700"
+                    className="border-slate-200 hover:bg-slate-50 font-bold px-5 cursor-pointer rounded-xl text-slate-700 transition-colors"
                     onClick={() => setIsSuccess(false)}
                   >
                     Submit Another Inquiry
@@ -114,8 +125,6 @@ export default function ContactFormEN() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  
-                  {/* Dual Form Input Row */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name" className="text-slate-700 font-bold text-sm">Full Name</Label>
@@ -129,7 +138,6 @@ export default function ContactFormEN() {
                         className="h-11 border-slate-200 focus-visible:ring-blue-500 bg-slate-50/30 rounded-lg text-sm"
                       />
                     </div>
-                    
                     <div className="space-y-2">
                       <Label htmlFor="email" className="text-slate-700 font-bold text-sm">Email Address</Label>
                       <Input
@@ -144,7 +152,6 @@ export default function ContactFormEN() {
                     </div>
                   </div>
 
-                  {/* Subject Line Input */}
                   <div className="space-y-2">
                     <Label htmlFor="subject" className="text-slate-700 font-bold text-sm">Subject</Label>
                     <Input
@@ -158,7 +165,6 @@ export default function ContactFormEN() {
                     />
                   </div>
 
-                  {/* Deep Message Content Input */}
                   <div className="space-y-2">
                     <Label htmlFor="message" className="text-slate-700 font-bold text-sm">Message Content</Label>
                     <Textarea
@@ -172,7 +178,10 @@ export default function ContactFormEN() {
                     />
                   </div>
 
-                  {/* Premium Styled Shadcn Interactive Submission Trigger */}
+                  {errorMessage && (
+                    <p className="text-sm font-semibold text-rose-600 animate-in fade-in duration-150">{errorMessage}</p>
+                  )}
+
                   <Button 
                     type="submit" 
                     disabled={isSubmitting}
@@ -187,13 +196,12 @@ export default function ContactFormEN() {
                       </>
                     )}
                   </Button>
-
                 </form>
               )}
             </div>
           </div>
-
         </div>
+
       </div>
     </div>
   );

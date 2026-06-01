@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs";
+import React, { useState, useRef, useEffect } from "react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../components/ui/select";
+} from "@/components/ui/select";
 import {
   Trash2,
   RefreshCw,
@@ -18,10 +18,17 @@ import {
   FileText,
   Check,
   Copy,
-  SlidersHorizontal,
   ChevronLeft,
-  ChevronDown
+  ChevronRight,
+  ChevronDown,
+  Keyboard,
+  Languages
 } from "lucide-react";
+
+// استيراد المكونات الفرعية بأمان
+import StatsBar from "./StatsBar";
+import FontOptionsRibbon from "./FontOptionsRibbon";
+import TashkeelKeyboard from "./TashkeelKeyboard";
 
 const ARABIC_FONTS = [
   { name: "Amiri (نسخ كلاسيكي)", value: "font-amiri" },
@@ -37,7 +44,6 @@ const FONT_SIZES = [
 
 function reverseArabicPreservingWords(text: string): string {
   const segmenter = new Intl.Segmenter("ar", { granularity: "grapheme" });
-  
   return text.split('\n').map(line => {
     return line.split(' ').map(word => {
       const cleanWord = word.replace(/[\u064B-\u0652\u0653\u0670]/g, "");
@@ -47,16 +53,31 @@ function reverseArabicPreservingWords(text: string): string {
   }).join('\n');
 }
 
-interface TextUtilityPanelProps {
-  initialMode?: "strip" | "reverse" | "preview";
+function reshapeArabicText(text: string): string {
+  try {
+    return reverseArabicPreservingWords(text);
+  } catch (e) {
+    return text.split("").reverse().join("");
+  }
 }
 
-export default function TextUtilityPanel({ initialMode = "strip" }: TextUtilityPanelProps) {
+interface TextUtilityPanelProps {
+  initialMode?: "strip" | "reverse" | "preview" | "keyboard" | "translate";
+  lang?: "ar" | "en";
+}
+
+export default function TextUtilityPanel({ initialMode = "translate", lang = "ar" }: TextUtilityPanelProps) {
   const [inputText, setInputText] = useState("");
   const [activeTab, setActiveTab] = useState<string>(initialMode);
   const [selectedFont, setSelectedFont] = useState("font-cairo");
   const [fontSize, setFontSize] = useState("text-xl");
   const [copied, setCopied] = useState(false);
+  const [translationTarget, setTranslationTarget] = useState<"en" | "ar">("en");
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [translatedOutput, setTranslatedOutput] = useState("");
+  
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const isRtl = lang === "ar";
 
   const currentFontLabel = ARABIC_FONTS.find(f => f.value === selectedFont)?.name || "اختر الخط العربي";
   const currentSizeLabel = FONT_SIZES.find(s => s.value === fontSize)?.name || "حجم الخط";
@@ -65,22 +86,115 @@ export default function TextUtilityPanel({ initialMode = "strip" }: TextUtilityP
   const charCountNoSpaces = inputText.replace(/\s/g, "").length;
   const wordCount = inputText.trim() === "" ? 0 : inputText.trim().split(/\s+/).length;
 
+  const [prevInitialMode, setPrevInitialMode] = useState(initialMode);
+  if (initialMode !== prevInitialMode) {
+    setPrevInitialMode(initialMode);
+    setActiveTab(initialMode);
+  }
+
+  // تأثير التعامل مع جلب بيانات الترجمة الفورية بشكل مستقر ومضمون حتماً
+  useEffect(() => {
+    if (activeTab !== "translate" || !inputText.trim()) {
+      return;
+    }
+
+    const controller = new AbortController();
+
+    const delayDebounceFn = setTimeout(async () => {
+      setIsTranslating(true);
+      try {
+        const sourceLang = translationTarget === "en" ? "ar" : "en";
+        const targetLang = translationTarget;
+
+        // 🚀 استخدام واجهة ترجمة جوجل الرسمية السريعة والمستقرة للغاية
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(inputText)}`;
+        
+        const res = await fetch(url, {
+          method: "GET",
+          signal: controller.signal
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          // تجميع مخرجات الجمل المترجمة من مصفوفة ردود جوجل المرجعة
+          if (data && data[0]) {
+            const translatedText = data[0]
+              .map((x: any) => x[0])
+              .filter(Boolean)
+              .join("");
+            setTranslatedOutput(translatedText);
+          } else {
+            setTranslatedOutput(isRtl ? "خطأ في معالجة البيانات" : "Data parsing error response...");
+          }
+        } else {
+          setTranslatedOutput(isRtl ? "خطأ في الاتصال بخادم الترجمة" : "Translation error response...");
+        }
+      } catch (error: any) {
+        if (error.name !== "AbortError") {
+          setTranslatedOutput(isRtl ? "فشلت الترجمة، يرجى التحقق من الاتصال" : "Translation execution timed out...");
+        }
+      } finally {
+        setIsTranslating(false);
+      }
+    }, 600);
+
+    return () => {
+      clearTimeout(delayDebounceFn);
+      controller.abort();
+    };
+  }, [inputText, activeTab, translationTarget, isRtl]);
+
+  const insertCharacter = (char: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      setInputText((prev) => prev + char);
+      return;
+    }
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const newText = text.substring(0, start) + char + text.substring(end);
+    setInputText(newText);
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + char.length, start + char.length);
+    }, 0);
+  };
+
+  const handleBackspace = () => {
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      setInputText((prev) => prev.slice(0, -1));
+      return;
+    }
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    if (start === 0 && end === 0) return;
+    
+    const newText = start === end 
+      ? text.substring(0, start - 1) + text.substring(end) 
+      : text.substring(0, start) + text.substring(end);
+      
+    const newCursorPos = start === end ? start - 1 : start;
+    
+    setInputText(newText);
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+    }, 0);
+  };
+
   let outputText = "";
-  if (inputText.trim()) {
+  if (inputText.trim() || activeTab === "keyboard") {
     if (activeTab === "strip") {
       outputText = inputText.replace(/[\u064B-\u0652\u0653\u0670]/g, "");
     } else if (activeTab === "reverse") {
       outputText = reshapeArabicText(inputText);
+    } else if (activeTab === "translate") {
+      outputText = translatedOutput;
     } else {
       outputText = inputText;
-    }
-  }
-
-  function reshapeArabicText(text: string): string {
-    try {
-      return reverseArabicPreservingWords(text);
-    } catch (e) {
-      return text.split("").reverse().join("");
     }
   }
 
@@ -96,187 +210,192 @@ export default function TextUtilityPanel({ initialMode = "strip" }: TextUtilityP
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-2 mb-8" dir="rtl">
+    <div className="w-full max-w-5xl mx-auto px-4 py-2 mb-8" dir={isRtl ? "rtl" : "ltr"}>
       
-      {/* شريط التنقل العلوي - يعرض كعمود واحد في الموبايل ومرن في الشاشات الأكبر */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mb-4" dir="rtl">
-        <TabsList className="flex flex-col sm:flex-row w-full bg-slate-100 p-1 rounded-xl gap-1 h-auto overflow-hidden">
-          <TabsTrigger
-            value="strip"
-            className="flex items-center justify-start sm:justify-center gap-3 px-4 py-3 text-sm font-medium font-tajawal rounded-lg transition-all cursor-pointer pointer-events-auto select-none w-full sm:w-auto data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
+      <Tabs value={activeTab} onValueChange={(val) => {
+        setActiveTab(val);
+        if (val !== "translate") setTranslatedOutput("");
+      }} className="w-full mb-4">
+        <TabsList className="grid grid-cols-2 lg:grid-cols-5 w-full bg-slate-100 p-1 rounded-xl gap-1 h-auto overflow-hidden">
+          
+          <TabsTrigger 
+            value="translate" 
+            className={`flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white ${
+              isRtl ? "order-5 lg:order-5" : "order-1 lg:order-1"
+            }`}
           >
-            <Trash2 className="w-4 h-4 shrink-0" />
-            <span>إزالة التشكيل والحركات</span>
+            <Languages className="w-4 h-4 shrink-0" />
+            <span>{isRtl ? "الترجمة الفورية" : "Instant Translate"}</span>
           </TabsTrigger>
 
-          <TabsTrigger
-            value="reverse"
-            className="flex items-center justify-start sm:justify-center gap-3 px-4 py-3 text-sm font-medium font-tajawal rounded-lg transition-all cursor-pointer pointer-events-auto select-none w-full sm:w-auto data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
+          <TabsTrigger 
+            value="keyboard" 
+            className={`flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white ${
+              isRtl ? "order-4 lg:order-4" : "order-2 lg:order-2"
+            }`}
           >
-            <RefreshCw className="w-4 h-4 shrink-0" />
-            <span>مصحح خطوط الفوتوشوب</span>
+            <Keyboard className="w-4 h-4 shrink-0" />
+            <span>{isRtl ? "كيبورد التشكيل" : "Tashkeel Keypad"}</span>
           </TabsTrigger>
 
-          <TabsTrigger
-            value="preview"
-            className="flex items-center justify-start sm:justify-center gap-3 px-4 py-3 text-sm font-medium font-tajawal rounded-lg transition-all cursor-pointer pointer-events-auto select-none w-full sm:w-auto data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
+          <TabsTrigger 
+            value="preview" 
+            className={`flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white ${
+              isRtl ? "order-3 lg:order-3" : "order-3 lg:order-3"
+            }`}
           >
             <Type className="w-4 h-4 shrink-0" />
-            <span>معاينة واستعراض الخطوط</span>
+            <span>{isRtl ? "استعراض الخطوط" : "Font Preview"}</span>
           </TabsTrigger>
+
+          <TabsTrigger 
+            value="reverse" 
+            className={`flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white ${
+              isRtl ? "order-2 lg:order-2" : "order-4 lg:order-4"
+            }`}
+          >
+            <RefreshCw className="w-4 h-4 shrink-0" />
+            <span>{isRtl ? "مصحح الفوتوشوب" : "Photoshop Fixer"}</span>
+          </TabsTrigger>
+
+          <TabsTrigger 
+            value="strip" 
+            className={`flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white ${
+              isRtl ? "order-1 lg:order-1" : "order-5 lg:order-5"
+            }`}
+          >
+            <Trash2 className="w-4 h-4 shrink-0" />
+            <span>{isRtl ? "إزالة التشكيل" : "Strip Diacritics"}</span>
+          </TabsTrigger>
+
         </TabsList>
       </Tabs>
 
-{/* لوحة عرض البيانات الإحصائية المطورة - نمط بيكسل كلين رائع للعين */}
-<div className="w-full bg-white rounded-xl p-4 mb-5 grid grid-cols-3 gap-2 border border-slate-200 shadow-2xs text-center" dir="rtl">
-  <div className="flex flex-col justify-center items-center gap-1 border-l border-slate-100 last:border-0">
-    <span className="text-[11px] font-tajawal font-medium text-slate-400 tracking-wide uppercase">الكلمات</span>
-    <span className="text-2xl font-bold font-mono tracking-tight text-slate-800">{wordCount}</span>
-  </div>
-  <div className="flex flex-col justify-center items-center gap-1 border-l border-slate-100 last:border-0">
-    <span className="text-[11px] font-tajawal font-medium text-slate-400 tracking-wide uppercase">الحروف</span>
-    <span className="text-2xl font-bold font-mono tracking-tight text-blue-600">{charCountWithSpaces}</span>
-  </div>
-  <div className="flex flex-col justify-center items-center gap-1">
-    <span className="text-[11px] font-tajawal font-medium text-slate-400 tracking-wide uppercase">بدون مسافات</span>
-    <span className="text-2xl font-bold font-mono tracking-tight text-slate-600">{charCountNoSpaces}</span>
-  </div>
-</div>
+      <StatsBar 
+        wordCount={wordCount} 
+        charCountWithSpaces={charCountWithSpaces} 
+        charCountNoSpaces={charCountNoSpaces} 
+        isRtl={isRtl} 
+      />
 
-      {/* المحرر الرئيسي للبرنامج */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
         
-        {/* صندوق النص الأصلي */}
-        <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden" dir="rtl">
+        {/* العمود الأيسر: مدخلات النص الأصلي */}
+        <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="bg-slate-50/80 border-b border-slate-200 px-4 py-3 flex justify-between items-center h-[48px]">
             <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5 font-cairo">
-              <FileText className="w-3.5 h-3.5 text-slate-400" /> أدخل النص الأصلي هنا
+              <FileText className="w-3.5 h-3.5 text-slate-400" /> {isRtl ? "أدخل النص الأصلي هنا" : "Input Original Text Here"}
             </span>
             {inputText && (
-              <Button 
-                variant="ghost" 
-                onClick={() => setInputText("")} 
-                className="text-xs h-7 px-2 text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-md cursor-pointer transition-colors"
-              >
-                مسح الكل
+              <Button variant="ghost" onClick={() => {
+                setInputText("");
+                setTranslatedOutput("");
+              }} className="text-xs h-7 px-2 text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-md">
+                {isRtl ? "مسح الكل" : "Clear All"}
               </Button>
             )}
           </div>
-          
           <Textarea
+            ref={textareaRef}
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            placeholder="اكتب أو الصق النص العربي المراد معالجته هنا..."
-            className="w-full min-h-[320px] flex-grow p-4 outline-none border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none text-slate-800 text-lg leading-relaxed font-cairo placeholder:text-slate-400"
-            dir="rtl"
+            onChange={(e) => {
+              setInputText(e.target.value);
+              if (!e.target.value.trim()) setTranslatedOutput("");
+            }}
+            placeholder={isRtl ? "اكتب أو الصق النص هنا..." : "Type or paste text here..."}
+            className="notranslate w-full min-h-[320px] flex-grow p-4 outline-none border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none text-slate-800 text-lg leading-relaxed font-cairo"
+            dir={activeTab === "translate" && translationTarget === "ar" ? "ltr" : "rtl"}
           />
         </div>
 
-        {/* صندوق النص المعالج */}
-        <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden" dir="rtl">
+        {/* العمود الأيمن: مخرجات المعالجة الجاهزة */}
+        <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="bg-slate-50/80 border-b border-slate-200 px-4 py-3 flex justify-between items-center h-[48px]">
-            <span className="text-xs font-bold text-slate-700 font-cairo">النص المعالج الجاهز</span>
-            {outputText && (
+            <span className="text-xs font-bold text-slate-700 font-cairo">
+              {activeTab === "keyboard" ? (isRtl ? "لوحة الحروف والتشكيل الذكية" : "Smart Tashkeel Board") : (isRtl ? "النص المعالج الجاهز" : "Processed Ready Output")}
+            </span>
+            {outputText && activeTab !== "keyboard" && (
               <Button
                 onClick={handleCopy}
                 size="sm"
                 variant={copied ? "outline" : "default"}
-                className={`h-7 px-3 gap-1.5 text-xs font-medium rounded-md cursor-pointer transition-all ${
-                  copied 
-                    ? "bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800" 
-                    : "bg-blue-600 text-white hover:bg-blue-700 shadow-xs"
+                className={`h-7 px-3 gap-1.5 text-xs font-medium rounded-md transition-all ${
+                  copied ? "bg-emerald-50 border-emerald-200 text-emerald-700" : "bg-blue-600 text-white hover:bg-blue-700"
                 }`}
               >
                 {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? "تم النسخ!" : "نسخ النص"}</span>
+                <span>{copied ? (isRtl ? "تم النسخ!" : "Copied!") : (isRtl ? "نسخ النص" : "Copy Text")}</span>
               </Button>
             )}
           </div>
 
-          {/* خيارات الخطوط والأحجام المتقدمة */}
           {activeTab === "preview" && (
-            <div className="bg-slate-100/50 border-b border-slate-200 px-3 py-2 flex flex-wrap gap-3 items-center text-xs" dir="rtl">
-              <div className="flex items-center gap-1.5 text-slate-500">
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                <span>خيارات الخط:</span>
-              </div>
-              
-              <Select value={selectedFont} onValueChange={setSelectedFont} dir="rtl">
-                <SelectTrigger className="w-[185px] h-8 bg-white border-slate-200 text-xs shadow-2xs font-tajawal cursor-pointer flex items-center justify-between px-3 gap-2">
-                  <SelectValue>{currentFontLabel}</SelectValue>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 opacity-70 shrink-0" />
-                </SelectTrigger>
-                <SelectContent className="font-sans bg-white z-[100] min-w-[185px] rounded-lg border border-slate-200 shadow-md p-1" dir="rtl">
-                  {ARABIC_FONTS.map((font) => {
-                    const isSelected = selectedFont === font.value;
-                    return (
-                      <SelectItem 
-                        key={font.value} 
-                        value={font.value} 
-                        className={`text-xs cursor-pointer font-tajawal py-1.5 px-7 rounded-md outline-none relative select-none flex items-center justify-between ${
-                          isSelected ? "bg-slate-50 font-bold text-blue-600" : "text-slate-700 hover:bg-slate-50/80"
-                        }`}
-                      >
-                        <span>{font.name}</span>
-                        {isSelected && (
-                          <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
-                            <Check className="w-3.5 h-3.5 text-blue-600 stroke-[2.5]" />
-                          </span>
-                        )}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
+            <FontOptionsRibbon
+              selectedFont={selectedFont}
+              setSelectedFont={setSelectedFont}
+              fontSize={fontSize}
+              setFontSize={setFontSize}
+              currentFontLabel={currentFontLabel}
+              currentSizeLabel={currentSizeLabel}
+              isRtl={isRtl}
+              fonts={ARABIC_FONTS}
+              sizes={FONT_SIZES}
+            />
+          )}
 
-              <Select value={fontSize} onValueChange={setFontSize} dir="rtl">
-                <SelectTrigger className="w-[120px] h-8 bg-white border-slate-200 text-xs shadow-2xs font-tajawal cursor-pointer flex items-center justify-between px-3 gap-2">
-                  <SelectValue>{currentSizeLabel}</SelectValue>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 opacity-70 shrink-0" />
+          {activeTab === "translate" && (
+            <div className="bg-slate-100/50 border-b border-slate-200 px-3 py-2 flex flex-wrap gap-3 items-center text-xs">
+              <span className="text-slate-500 font-tajawal">{isRtl ? "اتجاه الترجمة:" : "Translation Direction:"}</span>
+              <Select value={translationTarget} onValueChange={(val: "en" | "ar") => setTranslationTarget(val)}>
+                <SelectTrigger className="w-[180px] h-8 bg-white border-slate-200 text-xs font-tajawal px-3 flex justify-between items-center">
+                  <SelectValue />
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </SelectTrigger>
-                <SelectContent className="font-sans bg-white z-[100] min-w-[120px] rounded-lg border border-slate-200 shadow-md p-1" dir="rtl">
-                  {FONT_SIZES.map((size) => {
-                    const isSelected = fontSize === size.value;
-                    return (
-                      <SelectItem 
-                        key={size.value} 
-                        value={size.value} 
-                        className={`text-xs cursor-pointer font-tajawal py-1.5 px-7 rounded-md outline-none relative select-none flex items-center justify-between ${
-                          isSelected ? "bg-slate-50 font-bold text-blue-600" : "text-slate-700 hover:bg-slate-50/80"
-                        }`}
-                      >
-                        <span>{size.name}</span>
-                        {isSelected && (
-                          <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
-                            <Check className="w-3.5 h-3.5 text-blue-600 stroke-[2.5]" />
-                          </span>
-                        )}
-                      </SelectItem>
-                    );
-                  })}
+                <SelectContent className="bg-white border border-slate-200 text-slate-700 p-1 rounded-lg">
+                  <SelectItem value="en" className="text-xs font-tajawal py-1.5 cursor-pointer">العربية ➜ English</SelectItem>
+                  <SelectItem value="ar" className="text-xs font-tajawal py-1.5 cursor-pointer">English ➜ العربية</SelectItem>
                 </SelectContent>
               </Select>
+              {isTranslating && (
+                <span className="text-xs text-blue-500 animate-pulse font-tajawal flex items-center gap-1">
+                  <RefreshCw className="w-3 h-3 animate-spin" /> {isRtl ? "جاري المعالجة..." : "Translating content..."}
+                </span>
+              )}
             </div>
           )}
 
-          {/* مساحة عرض النتائج النهائية */}
-          <div
-            className={`w-full h-full min-h-[320px] md:min-h-0 p-4 text-slate-800 whitespace-pre-wrap leading-relaxed overflow-y-auto bg-slate-50/30 ${
-              activeTab === "preview" ? selectedFont : "font-cairo"
-            } ${fontSize}`}
-            dir={activeTab === "reverse" ? "ltr" : "rtl"}
-          >
-            {outputText ? (
-              outputText
-            ) : (
-              <div className="flex items-center gap-1.5 text-slate-400 text-sm select-none font-tajawal" dir="rtl">
-                <ChevronLeft className="w-4 h-4 text-slate-300" />
-                <span>بانتظار إضافة نصوص في الخانة المقابلة...</span>
-              </div>
-            )}
-          </div>
+          {activeTab === "keyboard" ? (
+            <TashkeelKeyboard
+              onInsert={insertCharacter}
+              onBackspace={handleBackspace}
+              onClear={() => {
+                setInputText("");
+                setTranslatedOutput("");
+              }}
+              onCopy={handleCopy}
+              disabledCopy={!inputText}
+              isRtl={isRtl}
+              copied={copied}
+            />
+          ) : (
+            <div
+              className={`w-full h-full min-h-[320px] md:min-h-0 p-4 text-slate-800 whitespace-pre-wrap leading-relaxed overflow-y-auto bg-slate-50/30 ${
+                activeTab === "preview" ? selectedFont : "font-cairo"
+              } ${fontSize}`}
+              dir={activeTab === "translate" ? (translationTarget === "ar" ? "rtl" : "ltr") : (activeTab === "reverse" ? "ltr" : "rtl")}
+            >
+              {outputText ? (
+                outputText
+              ) : (
+                <div className="flex items-center gap-1.5 text-slate-400 text-sm select-none font-tajawal">
+                  {isRtl ? <ChevronLeft className="w-4 h-4 text-slate-300" /> : <ChevronRight className="w-4 h-4 text-slate-300" />}
+                  <span>{isRtl ? "بانتظار إضافة نصوص في الخانة المقابلة..." : "Awaiting input text in the left panel..."}</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
-        
+
       </div>
     </div>
   );

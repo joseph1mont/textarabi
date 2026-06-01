@@ -1,13 +1,25 @@
 import { MetadataRoute } from 'next';
 
-// إلزامي عند استخدام output: export لإجبار المحرك على إخراج الملف كـ Static Text
 export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: '/',
+      allow: [
+        '/',
+        '/ar/',
+        '/blog/',
+        '/ar/blog/'
+      ],
+      disallow: [
+        '/privacy-policy',
+        '/terms',
+        '/contact',
+        '/ar/privacy-policy',
+        '/ar/terms',
+        '/ar/contact'
+      ],
     },
     sitemap: 'https://textarabi.com/sitemap.xml',
   };
