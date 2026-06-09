@@ -1,0 +1,17 @@
+RewriteEngine On
+
+# تحويلات الصفحات التي تم تغيير مسارها
+RewriteRule ^ar/blog/best-arabic-fonts/?$ /ar/blog/ui-font-preview-guide/ [L,R=301]
+RewriteRule ^ar/blog/clean-special-characters/?$ /ar/blog/clean-arabic-database-sql/ [L,R=301]
+RewriteRule ^ar/blog/fix-arabic-photoshop/?$ /ar/blog/fix-photoshop-arabic-text/ [L,R=301]
+RewriteRule ^ar/blog/fix-illustrator-arabic/?$ /ar/blog/fix-premiere-illustrator-arabic/ [L,R=301]
+RewriteRule ^ar/blog/premiere-arabic-fonts/?$ /ar/blog/ui-font-preview-guide/ [L,R=301]
+
+# تحويلات الروابط السبعة إلى صفحة المدونة الرئيسية
+RewriteRule ^ar/blog/long-tail-keywords-seo/?$ /ar/blog/ [L,R=301]
+RewriteRule ^ar/blog/meta-description-guide/?$ /ar/blog/ [L,R=301]
+RewriteRule ^ar/blog/regex-arabic-processing/?$ /ar/blog/ [L,R=301]
+RewriteRule ^ar/blog/seo-article-length-guide/?$ /ar/blog/ [L,R=301]
+RewriteRule ^ar/blog/strip-arabic-diacritics/?$ /ar/blog/ [L,R=301]
+RewriteRule ^ar/blog/understand-utf8-arabic/?$ /ar/blog/ [L,R=301]
+RewriteRule ^ar/blog/word-character-counter-guide/?$ /ar/blog/ [L,R=301]
