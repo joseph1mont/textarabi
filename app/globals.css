@@ -14,7 +14,7 @@
   --color-card-foreground: hsl(222.2 84% 4.9%);
   --color-popover: hsl(0 0% 100%);
   --color-popover-foreground: hsl(222.2 84% 4.9%);
-  --color-primary: hsl(221.2 83.2% 53.3%);
+  --color-primary: hsl(221.2 83.2% 53.3%); /* Blue 600 equivalence */
   --color-primary-foreground: hsl(210 40% 98%);
   --color-secondary: hsl(210 40% 96.1%);
   --color-secondary-foreground: hsl(222.2 47.4% 11.2%);
@@ -29,124 +29,59 @@
   --color-ring: hsl(221.2 83.2% 53.3%);
   
   --radius: 0.75rem;
-
-  /* Native Tailwind v4 Animation Mapping */
   --animate-in: fade-in 0.2s ease-out, zoom-in 0.2s ease-out;
   --animate-out: fade-out 0.15s ease-in, zoom-out 0.15s ease-in;
 }
 
-/* Native CSS Keyframes declared outside the @theme directive */
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-@keyframes zoom-in {
-  from { transform: scale(0.95); }
-  to { transform: scale(1); }
-}
-@keyframes zoom-out {
-  from { transform: scale(1); }
-  to { transform: scale(0.95); }
-}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes zoom-in { from { transform: scale(0.95); } to { transform: scale(1); } }
+@keyframes zoom-out { from { transform: scale(1); } to { transform: scale(0.95); } }
 
-:root {
-  font-family: var(--font-cairo), sans-serif;
-}
+:root { font-family: var(--font-cairo), sans-serif; }
 
 @layer base {
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-
-  /* Distinct Styling for Headings vs Paragraphs */
-  h3 {
-    font-size: 1.5rem;          /* text-2xl equivalent */
-    font-weight: 700;          /* font-bold */
-    line-height: 1.33;         /* leading-snug */
-    letter-spacing: -0.025em;  /* tracking-tight */
-    color: var(--color-foreground); /* deep dark slate for high contrast */
-    margin-top: 1.5rem;        /* separation above sections */
-    margin-bottom: 0.75rem;    /* spacing above content text */
-  }
-
-  p {
-    font-size: 1rem;           /* text-base */
-    font-weight: 400;          /* font-normal */
-    line-height: 1.625;        /* leading-relaxed for enhanced legibility */
-    color: var(--color-muted-foreground); /* muted slate color to step down visual weight */
-    margin-bottom: 1.25rem;    /* predictable block pacing */
-  }
+  body { background-color: var(--color-background); color: var(--color-foreground); font-feature-settings: "rlig" 1, "calt" 1; }
+  h3 { font-size: 1.5rem; font-weight: 700; line-height: 1.33; letter-spacing: -0.025em; color: var(--color-foreground); margin: 1.5rem 0 0.75rem 0; }
+  p { font-size: 1rem; font-weight: 400; line-height: 1.625; color: var(--color-muted-foreground); margin-bottom: 1.25rem; }
 }
 
-/* Isolated Namespace for Dynamic HTML Content Articles */
-.prose-arabic {
-  font-family: var(--font-cairo), sans-serif;
-  line-height: 1.85; /* Optimized vertical reading rhythm for extended Arabic blocks */
-  color: var(--color-foreground);
-  text-align: justify;
-  text-justify: inter-word;
+/* =========================================================================
+   RICH-TEXT ARTICLE CONTENT INLINE LINKS (Dynamic Injection Styles)
+   ========================================================================= */
+.prose-arabic, .prose-english { color: var(--color-foreground); }
+.prose-arabic p, .prose-english p { color: var(--color-foreground); margin-bottom: 1.5rem; }
+
+/* Enforces uniform blue links within article typography content markup matching text-blue-600 */
+.prose-arabic a, .prose-english a {
+  color: hsl(221.2 83.2% 53.3%); 
+  font-weight: 700;
+  text-decoration: none;
+  transition: text-decoration 0.2s ease-in-out;
 }
 
-/* Explicit text element control to override base layer configurations safely */
-.prose-arabic p {
-  color: var(--color-foreground); /* Enhances body text weight inside long-form articles */
-  margin-bottom: 1.5rem;
-}
-
-.prose-arabic h3 {
-  font-family: var(--font-tajawal), sans-serif;
-  font-size: 1.625rem;
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-/* Uniform Hyperlink Directives inside Injectable Content Strings */
-.prose-arabic a {
-  color: var(--color-emerald-600);
-  font-weight: 600;
+.prose-arabic a:hover, .prose-english a:hover {
   text-decoration: underline;
-  text-underline-offset: 5px;
-  text-decoration-thickness: 2px;
-  text-decoration-color: hsla(221.2, 83.2%, 53.3%, 0.25);
-  transition: all 0.2s ease-in-out;
 }
 
-.prose-arabic a:hover {
-  text-decoration-color: var(--color-primary);
-  background-color: hsla(221.2, 83.2%, 53.3%, 0.06);
-  border-radius: 0.25rem;
+.prose-arabic a[target="_blank"]::after, .prose-english a[target="_blank"]::after {
+  content: " ↗"; font-size: 0.8em; font-weight: 400; display: inline-block; transition: transform 0.2s ease;
 }
 
-/* External Link Marker Indicator */
-.prose-arabic a[target="_blank"]::after {
-  content: " ↗";
-  font-size: 0.8em;
-  font-weight: 400;
-  display: inline-block;
-  transition: transform 0.2s ease;
+.prose-arabic blockquote, .prose-english blockquote {
+  border-inline-start: 4px solid var(--color-primary); padding: 1.25rem 1.75rem; background-color: var(--color-secondary); margin: 2rem 0; border-radius: var(--radius);
 }
+.prose-arabic blockquote p, .prose-english blockquote p { margin-bottom: 0; font-style: italic; color: var(--color-secondary-foreground); }
 
-.prose-arabic a[target="_blank"]:hover::after {
-  transform: translate(-2px, -2px); /* Correctly offsets upward and outward in RTL/LTR layouts */
-}
+/* =========================================================================
+   LOCALIZED VARIANTS
+   ========================================================================= */
+.prose-arabic { font-family: var(--font-cairo), sans-serif; line-height: 1.85; text-align: justify; text-justify: inter-word; }
+.prose-arabic h3 { font-family: var(--font-tajawal), sans-serif; font-size: 1.625rem; margin: 2.5rem 0 1rem 0; }
+.prose-arabic a { font-family: var(--font-tajawal), sans-serif; }
+.prose-arabic a[target="_blank"]:hover::after { transform: translate(-2px, -2px); }
 
-/* Editorial Blockquote Annotations */
-.prose-arabic blockquote {
-  border-inline-start: 4px solid var(--color-primary);
-  padding: 1.25rem 1.75rem;
-  background-color: var(--color-secondary);
-  margin: 2rem 0;
-  border-radius: var(--radius);
-}
-
-.prose-arabic blockquote p {
-  margin-bottom: 0;
-  font-style: italic;
-  color: var(--color-secondary-foreground);
-}
+.prose-english { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.7; }
+.prose-english p { font-size: 1.0625rem; }
+.prose-english h3 { font-family: system-ui, sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin: 2.5rem 0 1rem 0; }
+.prose-english a[target="_blank"]:hover::after { transform: translate(2px, -2px); }
