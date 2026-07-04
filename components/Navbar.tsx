@@ -1,11 +1,10 @@
-// components/Navbar.tsx
 "use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image"; // IMPORTED: For optimized image delivery
 import { usePathname } from "next/navigation";
-import { Home, BookOpen, Globe, Mail, Menu, X } from "lucide-react";
+import { Home, BookOpen, Globe, Mail, User, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname() || "/";
@@ -18,7 +17,9 @@ export default function Navbar() {
   // 2. Dynamic Language Toggling Path Logic
   const getTogglePath = () => {
     if (isArabic) {
-      const baselineSegment = pathname.replace(/^\/ar/, "").replace(/^\/|\/$/g, "");
+      const baselineSegment = pathname
+        .replace(/^\/ar/, "")
+        .replace(/^\/|\/$/g, "");
       return baselineSegment === "" ? "/" : `/${baselineSegment}`;
     } else {
       if (pathname === "/" || pathname === "/en") return "/ar";
@@ -31,51 +32,81 @@ export default function Navbar() {
   const content = {
     home: isArabic ? "الرئيسية" : "Home",
     blog: isArabic ? "المدونة" : "Blog",
+    about: isArabic ? "من نحن" : "About",
     contact: isArabic ? "اتصل بنا" : "Contact",
     homeLink: isArabic ? "/ar" : "/",
     blogLink: isArabic ? "/ar/blog" : "/blog",
+    aboutLink: isArabic ? "/ar/about" : "/about",
     contactLink: isArabic ? "/ar/contact" : "/contact",
     langLabel: isArabic ? "English" : "العربية",
     fontClass: isArabic ? "font-tajawal" : "font-sans",
     ariaLabel: isArabic ? "تبديل القائمة" : "Toggle Navigation Menu",
-    logoAlt: isArabic 
-      ? "شعار تيكست عربي - محرك معالجة وتدقيق النصوص" 
-      : "TextArabi Logo - Arabic Text Processing Engine"
+    logoAlt: isArabic
+      ? "شعار تيكست عربي - محرك معالجة وتدقيق النصوص"
+      : "TextArabi Logo - Arabic Text Processing Engine",
   };
 
   return (
-    <header className={`w-full bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs ${content.fontClass}`} dir={currentDir}>
+    <header
+      className={`w-full bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs ${content.fontClass}`}
+      dir={currentDir}
+    >
       <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-        
         {/* Logo Block */}
-        <Link href={content.homeLink} className="flex items-center gap-2.5 group shrink-0">
-          {/* UPDATED: Optimized Next.js Image wrapper replacing the lucide icon */}
+        <Link
+          href={content.homeLink}
+          className="flex items-center gap-2.5 group shrink-0"
+        >
           <div className="w-9 h-9 rounded-xl overflow-hidden flex items-center justify-center bg-slate-50 border border-slate-100 shadow-2xs group-hover:borderColor-blue-200 transition-colors">
-            <Image 
-              src="/textarabi-logo.svg" 
+            <Image
+              src="/textarabi-logo.svg"
               alt={content.logoAlt}
-              width={36} 
+              width={36}
               height={36}
-              priority // High priority loading for above-the-fold branding assets (LCP)
+              priority
               className="w-full h-full object-contain"
             />
           </div>
           <span className="text-lg font-black tracking-tight text-slate-900">
-            {isArabic ? <>تيكست<span className="text-blue-600">عربي</span></> : <>Text<span className="text-blue-600">Arabi</span></>}
+            {isArabic ? (
+              <>
+                تيكست<span className="text-blue-600">عربي</span>
+              </>
+            ) : (
+              <>
+                Text<span className="text-blue-600">Arabi</span>
+              </>
+            )}
           </span>
         </Link>
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-4">
-          <Link href={content.homeLink} className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors">
+          <Link
+            href={content.homeLink}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+          >
             <Home className="w-3.5 h-3.5 text-slate-400" />
             <span>{content.home}</span>
           </Link>
-          <Link href={content.blogLink} className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors">
+          <Link
+            href={content.blogLink}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+          >
             <BookOpen className="w-3.5 h-3.5 text-slate-400" />
             <span>{content.blog}</span>
           </Link>
-          <Link href={content.contactLink} className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors">
+          <Link
+            href={content.aboutLink}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+          >
+            <User className="w-3.5 h-3.5 text-slate-400" />
+            <span>{content.about}</span>
+          </Link>
+          <Link
+            href={content.contactLink}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+          >
             <Mail className="w-3.5 h-3.5 text-slate-400" />
             <span>{content.contact}</span>
           </Link>
@@ -92,7 +123,6 @@ export default function Navbar() {
 
         {/* Mobile View Interactive Action Bar */}
         <div className="flex md:hidden items-center gap-2.5">
-          {/* Always Available Mobile Switcher */}
           <Link
             href={getTogglePath()}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs bg-slate-50"
@@ -101,7 +131,6 @@ export default function Navbar() {
             <span>{content.langLabel}</span>
           </Link>
 
-          {/* Mobile Hamburger Toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 rounded-xl border border-slate-200 bg-white text-slate-600 hover:text-slate-900 focus:outline-hidden shadow-2xs"
@@ -115,24 +144,32 @@ export default function Navbar() {
       {/* Mobile Responsive Dropdown Draw Layer */}
       {isOpen && (
         <div className="md:hidden w-full bg-white border-t border-slate-100 px-4 py-3 flex flex-col gap-1 shadow-inner absolute left-0 right-0 top-16 z-50">
-          <Link 
-            href={content.homeLink} 
+          <Link
+            href={content.homeLink}
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all"
           >
             <Home className="w-4 h-4 text-slate-400" />
             <span>{content.home}</span>
           </Link>
-          <Link 
-            href={content.blogLink} 
+          <Link
+            href={content.blogLink}
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all"
           >
             <BookOpen className="w-4 h-4 text-slate-400" />
             <span>{content.blog}</span>
           </Link>
-          <Link 
-            href={content.contactLink} 
+          <Link
+            href={content.aboutLink}
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all"
+          >
+            <User className="w-4 h-4 text-slate-400" />
+            <span>{content.about}</span>
+          </Link>
+          <Link
+            href={content.contactLink}
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all"
           >
