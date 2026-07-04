@@ -1,4 +1,3 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import { Cairo, Tajawal, Amiri, Inter } from "next/font/google";
 import Script from "next/script";
@@ -6,15 +5,14 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
-// 1. Core English Font
+// Fonts initialization
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "600", "800"],
   variable: "--font-inter",
-  display: "swap", // Prevents invisible text while loading
+  display: "swap",
 });
 
-// 2. Arabic Fonts (Initialized cleanly at the root level)
 const cairo = Cairo({
   subsets: ["arabic"],
   weight: ["400", "700", "900"],
@@ -36,18 +34,26 @@ const amiri = Amiri({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://textarabi.com"),
-  title: "Arabic Text Developer Utilities & Counter | TextArabi",
-  description: "Advanced text processing tools, code cleaners, and SEO optimization utilities engineered for fast performance and programmatic monetization.",
-  alternates: {
-    canonical: "/",
-    languages: {
-      en: "/",
-      ar: "/ar/",
+export async function generateMetadata(): Promise<Metadata> {
+  const isVercel = process.env.IS_VERCEL === "true";
+
+  return {
+    metadataBase: new URL("https://textarabi.com"),
+    title: "Arabic Text Developer Utilities & Counter | TextArabi",
+    description:
+      "Advanced text processing tools, code cleaners, and SEO optimization utilities engineered for fast performance and programmatic monetization.",
+    robots: isVercel
+      ? { index: false, follow: false }
+      : { index: true, follow: true },
+    alternates: {
+      canonical: "/",
+      languages: {
+        en: "/",
+        ar: "/ar/",
+      },
     },
-  },
-};
+  };
+}
 
 export default function RootLayout({
   children,
@@ -55,10 +61,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html 
+    <html
       lang="en"
       dir="ltr"
-
       className={`${inter.variable} ${cairo.variable} ${tajawal.variable} ${amiri.variable} bg-slate-50 min-h-screen antialiased`}
     >
       <head>
@@ -74,8 +79,7 @@ export default function RootLayout({
             gtag('config', 'G-M3KFLTY6T7');
           `}
         </Script>
-      </head>            
-      {/* font-sans points directly to Inter via your Tailwind configuration */}
+      </head>
       <body className="min-h-screen flex flex-col text-slate-800 font-sans">
         <Navbar />
         {children}
