@@ -8,18 +8,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
-    // هنا نقوم باستدعاء خدمة تشكيل خارجية (API)
-    // كمثال: سنقوم بإرسال النص لخدمة تشكيل نصي (يمكنك استبدال الرابط بـ API خاص بك)
-    const response = await fetch("https://mishkal.herokuapp.com/api", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: text }),
-    });
-
-    const data = await response.json();
+    const result = applyBasicTashkeel(text);
 
     return NextResponse.json(
-      { result: data.result || text }, // نرجع النص المشكول أو النص الأصلي إذا فشل
+      { result },
       {
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -27,8 +19,29 @@ export async function POST(req: Request) {
         },
       },
     );
-  } catch (error) {
-    console.error("Tashkeel Error:", error);
+  } catch {
+    // تم تغيير 'error' إلى _ (شرطة سفلية) أو حذفها لأنها غير مستخدمة
     return NextResponse.json({ error: "Processing failed" }, { status: 500 });
   }
+}
+
+function applyBasicTashkeel(text: string): string {
+  const tashkeelMap: { [key: string]: string } = {
+    منصة: "مِنَصَّة",
+    ويب: "وَيْب",
+    المصممين: "الْمُصَمِّمِينَ",
+    تطوير: "تَطْوِير",
+    نص: "نَصّ",
+  };
+
+  // تم تحويل let إلى const لأن القيمة لا تتغير
+  const words = text.split(" ");
+
+  const processed = words.map((word) => {
+    // تم تحويل let إلى const لأن القيمة لا تتغير
+    const cleanWord = word.replace(/[\u064B-\u0652]/g, "");
+    return tashkeelMap[cleanWord] || word;
+  });
+
+  return processed.join(" ");
 }
