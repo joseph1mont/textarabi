@@ -8,12 +8,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
-    // هنا تضع منطق التشكيل الفعلي
-    // مثال: إذا كنت تستخدم مكتبة أو خدمة API خارجية
-    const result = await performTashkeel(text);
+    // هنا نقوم باستدعاء خدمة تشكيل خارجية (API)
+    // كمثال: سنقوم بإرسال النص لخدمة تشكيل نصي (يمكنك استبدال الرابط بـ API خاص بك)
+    const response = await fetch("https://mishkal.herokuapp.com/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text }),
+    });
+
+    const data = await response.json();
 
     return NextResponse.json(
-      { result },
+      { result: data.result || text }, // نرجع النص المشكول أو النص الأصلي إذا فشل
       {
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -22,13 +28,7 @@ export async function POST(req: Request) {
       },
     );
   } catch (error) {
+    console.error("Tashkeel Error:", error);
     return NextResponse.json({ error: "Processing failed" }, { status: 500 });
   }
-}
-
-// هذه دالة وهمية، استبدلها بـ API التشكيل الخاص بك
-async function performTashkeel(text: string): Promise<string> {
-  // يمكنك هنا عمل fetch لـ API تشكيل خارجي
-  // أو استخدام مكتبة npm إذا كان مشروعك يسمح بذلك
-  return text + " [تم التشكيل بواسطة خوارزمية ذكية]";
 }
