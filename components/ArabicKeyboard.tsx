@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Copy, Trash2, Wand2 } from "lucide-react";
+import { Trash2, Wand2 } from "lucide-react";
 
 export default function AcademicTashkeelKeyboard() {
   const [inputText, setInputText] = useState("");
