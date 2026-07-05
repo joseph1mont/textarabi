@@ -1,40 +1,34 @@
 import { NextResponse } from "next/server";
 
-export const runtime = "edge";
-
 export async function POST(req: Request) {
   try {
-    const { text } = await req.json();
+    // 1. محاولة قراءة النص
+    const body = await req.json();
+    const { text } = body;
 
     if (!text) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
-    // هنا يتم معالجة التشكيل (يمكنك دمج مكتبة تشكيل هنا)
-    const result = text + " (تم التشكيل)"; // استبدلها بمنطق التشكيل الفعلي
+    // 2. منطق المعالجة (تجريبي)
+    const result = text + " (مشكول)";
 
+    // 3. إرجاع النتيجة
     return NextResponse.json(
       { result },
       {
+        status: 200,
         headers: {
-          "Access-Control-Allow-Origin": "https://textarabi.com",
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
         },
       },
     );
   } catch (error) {
-    return NextResponse.json({ error: "Processing failed" }, { status: 500 });
+    console.error("API Error:", error); // هذا سيظهر في Vercel Logs
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
-}
-
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "https://textarabi.com",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-    },
-  });
 }
