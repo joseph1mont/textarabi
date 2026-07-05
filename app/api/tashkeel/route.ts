@@ -2,22 +2,19 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    // 1. محاولة قراءة النص
-    const body = await req.json();
-    const { text } = body;
+    const { text } = await req.json();
 
     if (!text) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
-    // 2. منطق المعالجة (تجريبي)
-    const result = text + " (مشكول)";
+    // هنا تضع منطق التشكيل الفعلي
+    // مثال: إذا كنت تستخدم مكتبة أو خدمة API خارجية
+    const result = await performTashkeel(text);
 
-    // 3. إرجاع النتيجة
     return NextResponse.json(
       { result },
       {
-        status: 200,
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
@@ -25,10 +22,13 @@ export async function POST(req: Request) {
       },
     );
   } catch (error) {
-    console.error("API Error:", error); // هذا سيظهر في Vercel Logs
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Processing failed" }, { status: 500 });
   }
+}
+
+// هذه دالة وهمية، استبدلها بـ API التشكيل الخاص بك
+async function performTashkeel(text: string): Promise<string> {
+  // يمكنك هنا عمل fetch لـ API تشكيل خارجي
+  // أو استخدام مكتبة npm إذا كان مشروعك يسمح بذلك
+  return text + " [تم التشكيل بواسطة خوارزمية ذكية]";
 }
