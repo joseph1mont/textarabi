@@ -125,7 +125,6 @@ export default function TextUtilityPanel({
     if (!inputText.trim()) return;
     setLoadingTashkeel(true);
     try {
-      // قم بتغيير هذا السطر وضغ رابط Vercel الحي الخاص بك بدلاً من الرابط النسبي
       const response = await fetch(
         "https://textarabi.vercel.app/api/tashkeel",
         {
