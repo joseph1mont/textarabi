@@ -1,19 +1,23 @@
-import json
-from http.server import BaseHTTPRequestHandler
-from mishkal.tashkeel import TashkeelClass
+# pyright: reportMissingImports=false
 
-# في Next.js على Vercel، يجب أن تكون الدالة باسم الطريقة المستهدفة (POST)
+import json
+
+def OPTIONS(request):
+    return json({}, headers={
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+    })
+
 def POST(request):
     try:
-        # قراءة البيانات القادمة من الطلب
+        from mishkal.tashkeel import TashkeelClass
         body = request.json()
         text = body.get('text', '')
         
-        # تشغيل مكتبة مشكال المعالجة النصوص
         tashkeel_backend = TashkeelClass()
         result_text = tashkeel_backend.tashkeel(text)
         
-        # إرجاع رد بتنسيق JSON متوافق مع Next.js
         return json({
             "result": result_text
         }, headers={
@@ -22,4 +26,4 @@ def POST(request):
             "Access-Control-Allow-Headers": "Content-Type"
         })
     except Exception as e:
-        return json({"error": str(e)}, status=500)
+        return json({"error": str(e)}, status=500, headers={"Access-Control-Allow-Origin": "*"})
