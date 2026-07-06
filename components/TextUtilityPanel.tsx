@@ -92,18 +92,35 @@ export default function TextUtilityPanel({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const isRtl = lang === "ar";
 
+  // قاموس الترجمة الديناميكي للواجهة
+  const t = {
+    translateTab: isRtl ? "الترجمة" : "Translation",
+    keyboardTab: isRtl ? "كيبورد عربي" : "Arabic Keyboard",
+    reverseTab: isRtl ? "مصحح الفوتوشوب" : "Photoshop Fix",
+    stripTab: isRtl ? "إزالة التشكيل" : "Remove Tashkeel",
+    previewTab: isRtl ? "استعراض الخطوط" : "Font Preview",
+    originalText: isRtl ? "النص الأصلي" : "Original Text",
+    processedText: isRtl ? "النص المعالج" : "Processed Text",
+    autoTashkeel: isRtl ? "تشكيل تلقائي" : "Auto Tashkeel",
+    processing: isRtl ? "جاري التشكيل..." : "Processing...",
+    clear: isRtl ? "مسح" : "Clear",
+    copy: isRtl ? "نسخ" : "Copy",
+    copied: isRtl ? "تم!" : "Copied!",
+    waitingText: isRtl ? "بانتظار النص..." : "Waiting for text...",
+  };
+
   const currentFontLabel =
     ARABIC_FONTS.find((f) => f.value === selectedFont)?.name ||
-    "اختر الخط العربي";
+    (isRtl ? "اختر الخط العربي" : "Select Arabic Font");
   const currentSizeLabel =
-    FONT_SIZES.find((s) => s.value === fontSize)?.name || "حجم الخط";
+    FONT_SIZES.find((s) => s.value === fontSize)?.name ||
+    (isRtl ? "حجم الخط" : "Font Size");
 
   const charCountWithSpaces = inputText.length;
   const charCountNoSpaces = inputText.replace(/\s/g, "").length;
   const wordCount =
     inputText.trim() === "" ? 0 : inputText.trim().split(/\s+/).length;
 
-  // دالة التشكيل التلقائي
   const handleAutoTashkeel = async () => {
     if (!inputText.trim()) return;
     setLoadingTashkeel(true);
@@ -113,6 +130,11 @@ export default function TextUtilityPanel({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: inputText }),
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
       if (data.result) {
         setInputText(data.result);
@@ -139,10 +161,14 @@ export default function TextUtilityPanel({
         });
         if (res.ok) {
           const data = await res.json();
-          setTranslatedOutput(data[0].map((x: any) => x[0]).join(""));
+          // الاستغناء عن any عبر تعريف المصفوفة المستلمة من Google Translate
+          setTranslatedOutput(data[0].map((x: string[]) => x[0]).join(""));
         }
-      } catch (error: any) {
-        if (error.name !== "AbortError") console.error(error);
+      } catch (error: unknown) {
+        // استخدام unknown بدلاً من any، والتحقق من نوع الخطأ
+        if (error instanceof Error && error.name !== "AbortError") {
+          console.error(error);
+        }
       } finally {
         setIsTranslating(false);
       }
@@ -220,11 +246,11 @@ export default function TextUtilityPanel({
         className="w-full mb-4"
       >
         <TabsList className="grid grid-cols-2 lg:grid-cols-5 w-full bg-slate-100 p-1 rounded-xl gap-1 h-auto">
-          <TabsTrigger value="translate">الترجمة</TabsTrigger>
-          <TabsTrigger value="keyboard">كيبورد عربي</TabsTrigger>
-          <TabsTrigger value="reverse">مصحح الفوتوشوب</TabsTrigger>
-          <TabsTrigger value="strip">إزالة التشكيل</TabsTrigger>
-          <TabsTrigger value="preview">استعراض الخطوط</TabsTrigger>
+          <TabsTrigger value="translate">{t.translateTab}</TabsTrigger>
+          <TabsTrigger value="keyboard">{t.keyboardTab}</TabsTrigger>
+          <TabsTrigger value="reverse">{t.reverseTab}</TabsTrigger>
+          <TabsTrigger value="strip">{t.stripTab}</TabsTrigger>
+          <TabsTrigger value="preview">{t.previewTab}</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -239,21 +265,21 @@ export default function TextUtilityPanel({
         <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="bg-slate-50/80 border-b border-slate-200 px-4 py-3 flex justify-between items-center h-[48px]">
             <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5" /> النص الأصلي
+              <FileText className="w-3.5 h-3.5" /> {t.originalText}
             </span>
             <div className="flex gap-2">
               {activeTab === "strip" && (
                 <Button
                   onClick={handleAutoTashkeel}
                   disabled={loadingTashkeel}
-                  className="h-7 text-xs bg-indigo-600 hover:bg-indigo-700"
+                  className="h-7 text-xs bg-indigo-600 hover:bg-indigo-700 transition-colors"
                 >
                   {loadingTashkeel ? (
-                    <RefreshCw className="animate-spin w-3 h-3" />
+                    <RefreshCw className="animate-spin w-3 h-3 ml-1" />
                   ) : (
                     <Wand2 className="w-3 h-3 ml-1" />
-                  )}{" "}
-                  تشكيل
+                  )}
+                  {loadingTashkeel ? t.processing : t.autoTashkeel}
                 </Button>
               )}
               <Button
@@ -261,7 +287,7 @@ export default function TextUtilityPanel({
                 onClick={() => setInputText("")}
                 className="text-xs h-7 text-rose-600"
               >
-                مسح
+                {t.clear}
               </Button>
             </div>
           </div>
@@ -276,7 +302,7 @@ export default function TextUtilityPanel({
         <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="bg-slate-50/80 border-b border-slate-200 px-4 py-3 flex justify-between items-center h-[48px]">
             <span className="text-xs font-bold text-slate-700">
-              النص المعالج
+              {t.processedText}
             </span>
             {outputText && activeTab !== "keyboard" && (
               <Button
@@ -290,7 +316,7 @@ export default function TextUtilityPanel({
                 ) : (
                   <Copy className="w-3.5 h-3.5" />
                 )}{" "}
-                {copied ? "تم!" : "نسخ"}
+                {copied ? t.copied : t.copy}
               </Button>
             )}
           </div>
@@ -308,7 +334,7 @@ export default function TextUtilityPanel({
               className={`w-full h-full min-h-[320px] p-4 whitespace-pre-wrap ${activeTab === "preview" ? selectedFont : "font-cairo"} ${fontSize}`}
             >
               {outputText || (
-                <span className="text-slate-400">بانتظار النص...</span>
+                <span className="text-slate-400">{t.waitingText}</span>
               )}
             </div>
           )}
