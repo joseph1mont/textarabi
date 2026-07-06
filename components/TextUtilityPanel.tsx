@@ -125,11 +125,15 @@ export default function TextUtilityPanel({
     if (!inputText.trim()) return;
     setLoadingTashkeel(true);
     try {
-      const response = await fetch("/api/tashkeel", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: inputText }),
-      });
+      // قم بتغيير هذا السطر وضغ رابط Vercel الحي الخاص بك بدلاً من الرابط النسبي
+      const response = await fetch(
+        "https://textarabi.vercel.app/api/tashkeel",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: inputText }),
+        },
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
