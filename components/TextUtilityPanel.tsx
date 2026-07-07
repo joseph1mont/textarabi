@@ -138,10 +138,18 @@ export default function TextUtilityPanel({
         });
 
         if (res.ok) {
-          const data = await res.json();
+          // استجابة مصفوفات جوجل المترجمة المهيكلة بدون أي استخدام لـ any
+          const data = (await res.json()) as unknown[][][] | undefined;
+
           if (data && data[0]) {
             const translatedText = data[0]
-              .map((x: any) => x[0])
+              .map((x) => {
+                // التحقق من أن المصفوفة الفرعية موجودة وأن العنصر الأول نص
+                if (Array.isArray(x) && typeof x[0] === "string") {
+                  return x[0];
+                }
+                return "";
+              })
               .filter(Boolean)
               .join("");
             setTranslatedOutput(translatedText);
@@ -159,8 +167,9 @@ export default function TextUtilityPanel({
               : "Translation error response...",
           );
         }
-      } catch (error: any) {
-        if (error.name !== "AbortError") {
+      } catch (error: unknown) {
+        // فحص نوع الخطأ بشكل آمن متوافق مع معايير ESLint الصارمة
+        if (error instanceof Error && error.name !== "AbortError") {
           setTranslatedOutput(
             isRtl
               ? "فشلت الترجمة، يرجى التحقق من الاتصال"
@@ -177,6 +186,11 @@ export default function TextUtilityPanel({
       controller.abort();
     };
   }, [inputText, activeTab, translationTarget, isRtl]);
+
+  interface TashkeelResponse {
+    result?: string;
+    error?: string;
+  }
 
   // Remote Vercel API Core Handler for Auto Tashkeel Execution
   const handleAutoTashkeel = async () => {
@@ -200,13 +214,16 @@ export default function TextUtilityPanel({
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      // عمل صب (Casting) للنوع المخصص لمنع خطأ الـ any نهائياً
+      const data = (await response.json()) as TashkeelResponse;
+
       if (data && data.result) {
         setInputText(data.result);
       }
-    } catch (err) {
-      console.error("Tashkeel API Error:", err);
-      // تنبيه خفيف ومحترف للمستخدم في حال انقطاع السيرفر أو الشبكة
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      console.error("Tashkeel API Error:", errorMessage);
+
       alert(
         isRtl
           ? "فشل الاتصال بخادم التشكيل، يرجى التحقق من الشبكة."

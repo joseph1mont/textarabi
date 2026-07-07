@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "app/api/tashkeel/route.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/tashkeel",
+      "dest": "app/api/tashkeel/route.py"
+    }
+  ]
+}
