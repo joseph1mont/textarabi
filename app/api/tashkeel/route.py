@@ -1,29 +1,45 @@
-# pyright: reportMissingImports=false
-
+# api/tashkeel.py أو التسمية المعتمدة لديك في العناوين
 import json
+from http.server import BaseHTTPRequestHandler
+from mishkal.tashkeel import TashkeelClass
 
-def OPTIONS(request):
-    return json({}, headers={
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type"
-    })
+class handler(BaseHTTPRequestHandler):
 
-def POST(request):
-    try:
-        from mishkal.tashkeel import TashkeelClass
-        body = request.json()
-        text = body.get('text', '')
-        
-        tashkeel_backend = TashkeelClass()
-        result_text = tashkeel_backend.tashkeel(text)
-        
-        return json({
-            "result": result_text
-        }, headers={
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type"
-        })
-    except Exception as e:
-        return json({"error": str(e)}, status=500, headers={"Access-Control-Allow-Origin": "*"})
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Accept")
+        self.end_headers()
+
+    def do_POST(self):
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode('utf-8'))
+            
+            text = data.get('text', '')
+            
+            # استدعاء مكتبة مشكال
+            tashkeel_backend = TashkeelClass()
+            result_text = tashkeel_backend.tashkeel(text)
+            
+            # إرسال الاستجابة الناجحة
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type, Accept")
+            self.end_headers()
+            
+            response_data = {"result": result_text}
+            self.wfile.write(json.dumps(response_data).encode('utf-8'))
+            
+        except Exception as e:
+            self.send_response(500)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            
+            response_data = {"error": str(e)}
+            self.wfile.write(json.dumps(response_data).encode('utf-8'))
