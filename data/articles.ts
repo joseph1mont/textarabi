@@ -13,6 +13,8 @@ import tashkeelAcademicTextsAr from "./articles/ar/tashkeel-academic-texts.json"
 import optimizeBounceRateRtlAr from "./articles/ar/optimize-bounce-rate-rtl.json";
 import comprehensiveTashkeelAr from "./articles/ar/comprehensive-tashkeel-guide.json";
 import fixDisconnectedLettersAr from "./articles/ar/fix-disconnected-letters.json";
+import formingArabicDiacriticsCorporateLettersAr from "./articles/ar/forming-arabic-diacritics-corporate-letters.json";
+import accurateTashkeelEbooksNovelsAr from "./articles/ar/accurate-tashkeel-ebooks-novels.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -27,9 +29,11 @@ import tashkeelAcademicTextsEn from "./articles/en/tashkeel-academic-texts.json"
 import optimizeBounceRateRtlEn from "./articles/en/optimize-bounce-rate-rtl.json";
 import comprehensiveTashkeelEn from "./articles/en/comprehensive-tashkeel-guide.json";
 import fixDisconnectedLettersEn from "./articles/en/fix-disconnected-letters.json";
+import formingArabicDiacriticsCorporateLettersEn from "./articles/en/forming-arabic-diacritics-corporate-letters.json";
+import accurateTashkeelEbooksNovelsEn from "./articles/en/accurate-tashkeel-ebooks-novels.json";
 
-export const articles: Article[] = [
-  // Arabic Articles
+const rawArticles: Article[] = [
+  // Arabic Articles (14 items)
   fixPhotoshopArabicTextAr,
   seoStripDiacriticsAr,
   instantTranslateLocalizationAr,
@@ -41,9 +45,11 @@ export const articles: Article[] = [
   tashkeelAcademicTextsAr,
   optimizeBounceRateRtlAr,
   comprehensiveTashkeelAr,
-  fixDisconnectedLettersAr,
+  fixDisconnectedLettersAr, // Added and safe
+  formingArabicDiacriticsCorporateLettersAr,
+  accurateTashkeelEbooksNovelsAr, // Added missing item
 
-  // English Articles
+  // English Articles (14 items)
   fixPhotoshopArabicTextEn,
   seoStripDiacriticsEn,
   instantTranslateLocalizationEn,
@@ -55,5 +61,12 @@ export const articles: Article[] = [
   tashkeelAcademicTextsEn,
   optimizeBounceRateRtlEn,
   comprehensiveTashkeelEn,
-  fixDisconnectedLettersEn,
+  fixDisconnectedLettersEn, // Added missing item
+  formingArabicDiacriticsCorporateLettersEn,
+  accurateTashkeelEbooksNovelsEn,
 ];
+
+// Sort from newer (descending date) to older
+export const articles: Article[] = [...rawArticles].sort((a, b) => {
+  return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+});
