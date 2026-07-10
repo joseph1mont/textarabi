@@ -15,6 +15,10 @@ import comprehensiveTashkeelAr from "./articles/ar/comprehensive-tashkeel-guide.
 import fixDisconnectedLettersAr from "./articles/ar/fix-disconnected-letters.json";
 import formingArabicDiacriticsCorporateLettersAr from "./articles/ar/forming-arabic-diacritics-corporate-letters.json";
 import accurateTashkeelEbooksNovelsAr from "./articles/ar/accurate-tashkeel-ebooks-novels.json";
+// New Long-Tail Keywords Strategy Imports (Arabic)
+import formingArabicTextSaudiVision2030Ar from "./articles/ar/forming-arabic-text-saudi-vision-2030.json";
+import howToUseArabicNlpToolsAcademicResearchAr from "./articles/ar/how-to-use-arabic-nlp-tools-academic-research.json";
+import optimizingArabicContentSeoDiacritizationAr from "./articles/ar/optimizing-arabic-content-seo-diacritization.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -31,9 +35,13 @@ import comprehensiveTashkeelEn from "./articles/en/comprehensive-tashkeel-guide.
 import fixDisconnectedLettersEn from "./articles/en/fix-disconnected-letters.json";
 import formingArabicDiacriticsCorporateLettersEn from "./articles/en/forming-arabic-diacritics-corporate-letters.json";
 import accurateTashkeelEbooksNovelsEn from "./articles/en/accurate-tashkeel-ebooks-novels.json";
+// New Long-Tail Keywords Strategy Imports (English)
+import formingArabicTextSaudiVision2030En from "./articles/en/forming-arabic-text-saudi-vision-2030.json";
+import howToUseArabicNlpToolsAcademicResearchEn from "./articles/en/how-to-use-arabic-nlp-tools-academic-research.json";
+import optimizingArabicContentSeoDiacritizationEn from "./articles/en/optimizing-arabic-content-seo-diacritization.json";
 
 const rawArticles: Article[] = [
-  // Arabic Articles (14 items)
+  // Arabic Articles (17 items)
   fixPhotoshopArabicTextAr,
   seoStripDiacriticsAr,
   instantTranslateLocalizationAr,
@@ -45,11 +53,14 @@ const rawArticles: Article[] = [
   tashkeelAcademicTextsAr,
   optimizeBounceRateRtlAr,
   comprehensiveTashkeelAr,
-  fixDisconnectedLettersAr, // Added and safe
+  fixDisconnectedLettersAr,
   formingArabicDiacriticsCorporateLettersAr,
-  accurateTashkeelEbooksNovelsAr, // Added missing item
+  accurateTashkeelEbooksNovelsAr,
+  formingArabicTextSaudiVision2030Ar,
+  howToUseArabicNlpToolsAcademicResearchAr,
+  optimizingArabicContentSeoDiacritizationAr,
 
-  // English Articles (14 items)
+  // English Articles (17 items)
   fixPhotoshopArabicTextEn,
   seoStripDiacriticsEn,
   instantTranslateLocalizationEn,
@@ -61,9 +72,12 @@ const rawArticles: Article[] = [
   tashkeelAcademicTextsEn,
   optimizeBounceRateRtlEn,
   comprehensiveTashkeelEn,
-  fixDisconnectedLettersEn, // Added missing item
+  fixDisconnectedLettersEn,
   formingArabicDiacriticsCorporateLettersEn,
   accurateTashkeelEbooksNovelsEn,
+  formingArabicTextSaudiVision2030En,
+  howToUseArabicNlpToolsAcademicResearchEn,
+  optimizingArabicContentSeoDiacritizationEn,
 ];
 
 // Sort from newer (descending date) to older

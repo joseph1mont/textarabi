@@ -1,3 +1,4 @@
+// app/blog/[slug]/page.tsx
 import { Metadata } from "next";
 import { articles } from "@/data/articles";
 import BasePostPage from "@/components/BasePostPage";

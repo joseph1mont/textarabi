@@ -25,7 +25,22 @@ export default function TashkeelKeyboard({
 }: TashkeelKeyboardProps) {
   const keyboardRow1 = ["ج", "ح", "خ", "ه", "ع", "غ", "ف", "ق", "ث", "ص", "ض"];
   const keyboardRow2 = ["ك", "م", "ن", "ت", "ا", "ل", "ب", "ي", "س", "ش"];
-  const keyboardRow3 = ["د", "ذ", "ر", "ز", "و", "ة", "ى", "ئ", "ء", "ؤ", "لا"];
+  const keyboardRow3 = [
+    "د",
+    "ذ",
+    "ر",
+    "ز",
+    "و",
+    "ة",
+    "ى",
+    "ئ",
+    "ء",
+    "ؤ",
+    "أ",
+    "آ",
+    "لا",
+    "لآ",
+  ];
 
   const tashkeelKeys = [
     { label: "َ (فتحة)", value: "\u064e" },
@@ -39,7 +54,10 @@ export default function TashkeelKeyboard({
   ];
 
   return (
-    <div className="w-full h-full bg-slate-50/50 p-3 flex flex-col justify-between gap-2 overflow-y-auto" dir="rtl">
+    <div
+      className="w-full h-full bg-slate-50/50 p-3 flex flex-col justify-between gap-2 overflow-y-auto"
+      dir="rtl"
+    >
       <div className="grid grid-cols-4 sm:grid-cols-8 gap-1">
         {tashkeelKeys.map((key) => (
           <button
@@ -54,11 +72,11 @@ export default function TashkeelKeyboard({
 
       {[keyboardRow1, keyboardRow2, keyboardRow3].map((row, rIndex) => (
         <div key={rIndex} className="flex justify-center gap-1 w-full">
-          {row.map((char) => (
+          {row.map((char, cIndex) => (
             <button
-              key={char}
+              key={`${char}-${cIndex}`}
               onClick={() => onInsert(char)}
-              className="flex-1 bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 font-semibold py-3 rounded-lg text-[15px] sm:text-base shadow-3xs transition-all active:scale-95 cursor-pointer min-w-[24px]"
+              className="flex-1 bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 font-semibold py-3 rounded-lg text-[14px] sm:text-base shadow-3xs transition-all active:scale-95 cursor-pointer min-w-[20px]"
             >
               {char}
             </button>
@@ -67,13 +85,22 @@ export default function TashkeelKeyboard({
       ))}
 
       <div className="flex gap-1.5 w-full pt-1">
-        <button onClick={onClear} className="bg-rose-50 border border-rose-100 hover:bg-rose-100 text-rose-600 font-bold px-3 py-3 rounded-lg text-xs transition-all active:scale-95 cursor-pointer">
+        <button
+          onClick={onClear}
+          className="bg-rose-50 border border-rose-100 hover:bg-rose-100 text-rose-600 font-bold px-3 py-3 rounded-lg text-xs transition-all active:scale-95 cursor-pointer"
+        >
           {isRtl ? "مسح" : "Clear"}
         </button>
-        <button onClick={() => onInsert(" ")} className="flex-grow bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 py-3 rounded-lg shadow-3xs text-sm font-medium cursor-pointer">
+        <button
+          onClick={() => onInsert(" ")}
+          className="flex-grow bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 py-3 rounded-lg shadow-3xs text-sm font-medium cursor-pointer"
+        >
           {isRtl ? "مسافة" : "Space"}
         </button>
-        <button onClick={onBackspace} className="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-3 rounded-lg text-xs transition-all active:scale-95 cursor-pointer">
+        <button
+          onClick={onBackspace}
+          className="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-3 rounded-lg text-xs transition-all active:scale-95 cursor-pointer"
+        >
           {isRtl ? "حذف" : "Back"}
         </button>
       </div>
@@ -82,13 +109,13 @@ export default function TashkeelKeyboard({
         onClick={onCopy}
         disabled={disabledCopy}
         className={`w-full mt-2 h-10 gap-2 font-tajawal text-xs rounded-lg transition-all cursor-pointer ${
-          copied ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-slate-800 hover:bg-slate-900 text-white"
+          copied
+            ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+            : "bg-slate-800 hover:bg-slate-900 text-white"
         }`}
       >
         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-        <span>
-          {isRtl ? "نسخ النص الحالي بالكامل" : "Copy Full Text"}
-        </span>
+        <span>{isRtl ? "نسخ النص الحالي بالكامل" : "Copy Full Text"}</span>
       </Button>
     </div>
   );

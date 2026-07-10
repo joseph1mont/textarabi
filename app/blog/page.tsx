@@ -1,4 +1,4 @@
-import React from "react";
+// app/blog/page.tsx
 import Link from "next/link";
 import { articles } from "@/data/articles";
 
