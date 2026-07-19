@@ -19,6 +19,7 @@ import accurateTashkeelEbooksNovelsAr from "./articles/ar/accurate-tashkeel-eboo
 import formingArabicTextSaudiVision2030Ar from "./articles/ar/forming-arabic-text-saudi-vision-2030.json";
 import howToUseArabicNlpToolsAcademicResearchAr from "./articles/ar/how-to-use-arabic-nlp-tools-academic-research.json";
 import optimizingArabicContentSeoDiacritizationAr from "./articles/ar/optimizing-arabic-content-seo-diacritization.json";
+import wordpressArabicRtlFixAr from "./articles/ar/wordpress-arabic-rtl-fix.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -39,6 +40,7 @@ import accurateTashkeelEbooksNovelsEn from "./articles/en/accurate-tashkeel-eboo
 import formingArabicTextSaudiVision2030En from "./articles/en/forming-arabic-text-saudi-vision-2030.json";
 import howToUseArabicNlpToolsAcademicResearchEn from "./articles/en/how-to-use-arabic-nlp-tools-academic-research.json";
 import optimizingArabicContentSeoDiacritizationEn from "./articles/en/optimizing-arabic-content-seo-diacritization.json";
+import wordpressArabicRtlFixEn from "./articles/en/wordpress-arabic-rtl-fix.json";
 
 const rawArticles: Article[] = [
   // Arabic Articles (17 items)
@@ -59,6 +61,7 @@ const rawArticles: Article[] = [
   formingArabicTextSaudiVision2030Ar,
   howToUseArabicNlpToolsAcademicResearchAr,
   optimizingArabicContentSeoDiacritizationAr,
+  wordpressArabicRtlFixAr,
 
   // English Articles (17 items)
   fixPhotoshopArabicTextEn,
@@ -78,6 +81,7 @@ const rawArticles: Article[] = [
   formingArabicTextSaudiVision2030En,
   howToUseArabicNlpToolsAcademicResearchEn,
   optimizingArabicContentSeoDiacritizationEn,
+  wordpressArabicRtlFixEn,
 ];
 
 // Sort from newer (descending date) to older
