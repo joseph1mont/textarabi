@@ -1,6 +1,7 @@
 // app/ar/page.tsx
 import React from "react";
 import Link from "next/link";
+import Script from "next/script";
 import { BookOpen, ChevronLeft, ShieldCheck, Code } from "lucide-react";
 import TextUtilityPanel from "@/components/TextUtilityPanel";
 import { WhyTextArabi } from "@/components/WhyTextArabi";
@@ -126,6 +127,24 @@ export default function ArabicHomePage() {
           </div>
         </div>
       </div>
+
+      {/* Grow Widget Integration */}
+      <Script
+        id="grow-initializer"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            !(function(){window.growMe||((window.growMe=function(e){window.growMe._.push(e);}),(window.growMe._=[]));})();
+          `,
+        }}
+      />
+      <Script
+        id="grow-widget-loader"
+        src="https://faves.grow.me/main.js"
+        data-grow-faves-site-id="U2l0ZTo3ZTM0ZjQ2Ni0wM2Y5LTRlN2ItOTY5OS1kMThlMTgyN2ZmMzI="
+        strategy="afterInteractive"
+        defer
+      />
     </main>
   );
 }
