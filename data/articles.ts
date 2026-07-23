@@ -15,11 +15,11 @@ import comprehensiveTashkeelAr from "./articles/ar/comprehensive-tashkeel-guide.
 import fixDisconnectedLettersAr from "./articles/ar/fix-disconnected-letters.json";
 import formingArabicDiacriticsCorporateLettersAr from "./articles/ar/forming-arabic-diacritics-corporate-letters.json";
 import accurateTashkeelEbooksNovelsAr from "./articles/ar/accurate-tashkeel-ebooks-novels.json";
-// New Long-Tail Keywords Strategy Imports (Arabic)
 import formingArabicTextSaudiVision2030Ar from "./articles/ar/forming-arabic-text-saudi-vision-2030.json";
 import howToUseArabicNlpToolsAcademicResearchAr from "./articles/ar/how-to-use-arabic-nlp-tools-academic-research.json";
 import optimizingArabicContentSeoDiacritizationAr from "./articles/ar/optimizing-arabic-content-seo-diacritization.json";
 import wordpressArabicRtlFixAr from "./articles/ar/wordpress-arabic-rtl-fix.json";
+import handlingArabicReshapingInWebCanvasElementsAr from "./articles/ar/handling-arabic-reshaping-in-web-canvas-elements.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -36,14 +36,14 @@ import comprehensiveTashkeelEn from "./articles/en/comprehensive-tashkeel-guide.
 import fixDisconnectedLettersEn from "./articles/en/fix-disconnected-letters.json";
 import formingArabicDiacriticsCorporateLettersEn from "./articles/en/forming-arabic-diacritics-corporate-letters.json";
 import accurateTashkeelEbooksNovelsEn from "./articles/en/accurate-tashkeel-ebooks-novels.json";
-// New Long-Tail Keywords Strategy Imports (English)
 import formingArabicTextSaudiVision2030En from "./articles/en/forming-arabic-text-saudi-vision-2030.json";
 import howToUseArabicNlpToolsAcademicResearchEn from "./articles/en/how-to-use-arabic-nlp-tools-academic-research.json";
 import optimizingArabicContentSeoDiacritizationEn from "./articles/en/optimizing-arabic-content-seo-diacritization.json";
 import wordpressArabicRtlFixEn from "./articles/en/wordpress-arabic-rtl-fix.json";
+import handlingArabicReshapingInWebCanvasElementsEn from "./articles/en/handling-arabic-reshaping-in-web-canvas-elements.json";
 
 const rawArticles: Article[] = [
-  // Arabic Articles (17 items)
+  // Arabic Articles
   fixPhotoshopArabicTextAr,
   seoStripDiacriticsAr,
   instantTranslateLocalizationAr,
@@ -62,8 +62,9 @@ const rawArticles: Article[] = [
   howToUseArabicNlpToolsAcademicResearchAr,
   optimizingArabicContentSeoDiacritizationAr,
   wordpressArabicRtlFixAr,
+  handlingArabicReshapingInWebCanvasElementsAr,
 
-  // English Articles (17 items)
+  // English Articles
   fixPhotoshopArabicTextEn,
   seoStripDiacriticsEn,
   instantTranslateLocalizationEn,
@@ -82,6 +83,7 @@ const rawArticles: Article[] = [
   howToUseArabicNlpToolsAcademicResearchEn,
   optimizingArabicContentSeoDiacritizationEn,
   wordpressArabicRtlFixEn,
+  handlingArabicReshapingInWebCanvasElementsEn,
 ];
 
 // Sort from newer (descending date) to older
