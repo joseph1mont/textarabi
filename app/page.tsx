@@ -2,7 +2,15 @@
 import React from "react";
 import Link from "next/link";
 import Script from "next/script";
-import { BookOpen, ChevronRight, ShieldCheck, Code } from "lucide-react";
+import {
+  BookOpen,
+  ChevronRight,
+  ShieldCheck,
+  Code,
+  Cpu,
+  Database,
+  FileText,
+} from "lucide-react";
 import TextUtilityPanel from "@/components/TextUtilityPanel";
 import { WhyTextArabi } from "@/components/WhyTextArabi";
 
@@ -44,6 +52,89 @@ export default function EnglishHomePage() {
       {/* English Utility Panel Workspace Grid */}
       <TextUtilityPanel initialMode="strip" lang="en" />
       <WhyTextArabi lang="en" />
+
+      {/* Substantive Editorial & Technical Architecture Section for AdSense Compliance */}
+      <section className="my-16 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-2xs">
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-4 border border-blue-100">
+            <Cpu className="w-3.5 h-3.5" />
+            <span>Technical Architecture & Engineering Insights</span>
+          </div>
+          <h2 className="text-2xl font-black text-slate-900 mb-4 tracking-tight">
+            Solving Multi-Byte Arabic Text Fragmentation in Modern Web Stacks
+          </h2>
+          <div className="space-y-4 text-slate-600 text-sm leading-relaxed">
+            <p>
+              Developing scalable web applications, publishing portals, and
+              content management systems for the Arabic language requires
+              solving core character encoding and normalization challenges.
+              Unlike Latin-script environments where tokenization is
+              straightforward, Arabic typography introduces combining diacritics
+              (
+              <Link
+                href="/blog/comprehensive-tashkeel-guide"
+                className="text-blue-600 hover:underline font-medium"
+              >
+                Tashkeel
+              </Link>
+              ), dual-byte character variants, and right-to-left (RTL)
+              directional rendering rules that routinely cause query mismatches
+              and broken indexing states in relational database engines.
+            </p>
+            <p>
+              When raw vocalized strings containing combining marks such as
+              Fatha, Damma, and Shadda are stored directly in search indices,
+              query miss rates can skyrocket. Users typing unvocalized search
+              queries fail to retrieve matching database records, degrading user
+              experience and signaling low search utility to automated
+              evaluation crawlers. TextArabi provides frontend architects and
+              backend engineers with the precise string manipulation layers,
+              regular expression middleware utilities, and{" "}
+              <Link
+                href="/blog/clean-arabic-database-sql"
+                className="text-blue-600 hover:underline font-medium"
+              >
+                dual-column schema patterns
+              </Link>{" "}
+              required to decouple human-facing typography from
+              machine-optimized search vectors.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-6 border-t border-slate-100">
+            <div className="space-y-1">
+              <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                <Database className="w-4 h-4 text-blue-600" />
+                <span>SQL Normalization</span>
+              </div>
+              <p className="text-xs text-slate-500">
+                Dual-column patterns separating human display text from
+                indexable search strings.
+              </p>
+            </div>
+            <div className="space-y-1">
+              <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-blue-600" />
+                <span>Unicode Precision</span>
+              </div>
+              <p className="text-xs text-slate-500">
+                Regex filtering protecting zero-width joiners and combining mark
+                sequences.
+              </p>
+            </div>
+            <div className="space-y-1">
+              <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                <Code className="w-4 h-4 text-blue-600" />
+                <span>Client-Side Sandbox</span>
+              </div>
+              <p className="text-xs text-slate-500">
+                Zero-retention local processing guaranteeing strict proprietary
+                data security.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Trust Framework Features Grid */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 w-full">
@@ -89,6 +180,66 @@ export default function EnglishHomePage() {
             <span className="transition-transform group-hover:translate-x-0.5">
               →
             </span>
+          </Link>
+        </div>
+      </section>
+
+      {/* Featured Articles Section for Internal Linking */}
+      <section className="my-16">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl md:text-2xl font-black text-slate-900">
+              Featured Technical Guides & Articles
+            </h2>
+            <p className="text-xs md:text-sm text-slate-500 mt-1">
+              Deep-dive engineering tutorials on Arabic typography, database
+              normalization, and SEO.
+            </p>
+          </div>
+          <Link
+            href="/blog"
+            className="text-xs font-bold text-blue-600 hover:text-blue-700 hidden sm:inline-flex items-center gap-1"
+          >
+            <span>View all articles</span>
+            <span>→</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Article Card 1 */}
+          <Link
+            href="/blog/clean-arabic-database-sql"
+            className="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs hover:border-blue-300 transition-all group block"
+          >
+            <span className="inline-block px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-bold mb-3">
+              Database Architecture
+            </span>
+            <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-2">
+              Structuring Clean SQL Databases for High-Performance Text Content
+              Indexes
+            </h3>
+            <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">
+              Learn structural design patterns for handling character variants
+              and diacritics in database lookup engines.
+            </p>
+          </Link>
+
+          {/* Article Card 2 */}
+          <Link
+            href="/blog/comprehensive-tashkeel-guide"
+            className="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs hover:border-blue-300 transition-all group block"
+          >
+            <span className="inline-block px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-bold mb-3">
+              SEO & Diacritics
+            </span>
+            <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-2">
+              The Comprehensive Guide to Arabic Diacritics: Balancing Literacy
+              and SEO
+            </h3>
+            <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">
+              Master managing Arabic diacritics in digital content while
+              maintaining high search engine visibility and E-E-A-T.
+            </p>
           </Link>
         </div>
       </section>

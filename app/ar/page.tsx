@@ -2,7 +2,15 @@
 import React from "react";
 import Link from "next/link";
 import Script from "next/script";
-import { BookOpen, ChevronLeft, ShieldCheck, Code } from "lucide-react";
+import {
+  BookOpen,
+  ChevronLeft,
+  ShieldCheck,
+  Code,
+  Cpu,
+  Database,
+  FileText,
+} from "lucide-react";
 import TextUtilityPanel from "@/components/TextUtilityPanel";
 import { WhyTextArabi } from "@/components/WhyTextArabi";
 
@@ -15,7 +23,7 @@ export const metadata = {
 
 export default function ArabicHomePage() {
   return (
-    <main className="w-full py-12 px-4 max-w-5xl mx-auto flex-grow">
+    <main className="w-full py-12 px-4 max-w-5xl mx-auto flex-grow" dir="rtl">
       {/* Right-Aligned Premium Hero Header with Full Tashkeel */}
       <div className="text-start max-w-3xl mb-10">
         <h1 className="text-3xl font-black text-slate-900 sm:text-4xl mb-4 font-tajawal leading-tight tracking-tight">
@@ -50,6 +58,85 @@ export default function ArabicHomePage() {
       {/* Arabic Utility Panel Workspace Grid */}
       <TextUtilityPanel initialMode="strip" lang="ar" />
       <WhyTextArabi lang="ar" />
+
+      {/* Substantive Editorial & Technical Architecture Section for AdSense Compliance */}
+      <section className="my-16 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-2xs">
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-4 border border-blue-100 font-tajawal">
+            <Cpu className="w-3.5 h-3.5" />
+            <span>الهندسة التقنية وحلول معالجة النصوص</span>
+          </div>
+          <h2 className="text-2xl font-black text-slate-900 mb-4 tracking-tight font-tajawal">
+            حل تحديات تجزئة الحروف العربية متعددة البايتات في منصات الويب
+            الحديثة
+          </h2>
+          <div className="space-y-4 text-slate-600 text-sm leading-relaxed font-tajawal">
+            <p>
+              تتطلب هندسة وتطوير منصات الويب الخدمية ومواقع النشر الرقمي باللغة
+              العربية معالجة دقيقة لمشاكل ترميز الحروف وأنظمة التباين اللغوي.
+              بخلاف اللغات اللاتينية، تفرض النصوص العربية تحديات فريدة تتمثل في
+              أحرف التشكيل المركبة (
+              <Link
+                href="/ar/blog/comprehensive-tashkeel-guide"
+                className="text-blue-600 hover:underline font-medium"
+              >
+                الحركات
+              </Link>
+              )، ومتغيرات الهمزات والألفات، وقواعد الاتجاه من اليمين لليسار
+              (RTL) والتي تتسبب غالباً في أخطاء مطابقة الكلمات وفشل قواعد
+              البيانات في أرشفة الكلمات بدقة.
+            </p>
+            <p>
+              عند تخزين النصوص المشكولة المشتملة على علامات الفتحة والضمة والشدة
+              مباشرة في فهارس البحث دون تنقية مسبقة، ترتفع معدلات فقدان نتائج
+              البحث (Query Miss Rate) بشكل ملحوظ. يبحث المستخدمون عادةً بدون
+              تشكيل، مما يؤدي إلى عدم تطابق النتائج وتراجع تقييمات جودة تجربة
+              المستخدم لدى خوارزميات محركات البحث. توفر منصة تيكست عربي للمطورين
+              والمصممين أدوات برمجة متطورة، وتعبيرات نمطية (Regex)،{" "}
+              <Link
+                href="/ar/blog/clean-arabic-database-sql"
+                className="text-blue-600 hover:underline font-medium"
+              >
+                ومعمارية جداول مزدوجة
+              </Link>{" "}
+              تفصل العرض البشري عن محركات البحث لضمان أقصى سرعة وكفاءة تقنية.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-6 border-t border-slate-100 font-tajawal">
+            <div className="space-y-1">
+              <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                <Database className="w-4 h-4 text-blue-600" />
+                <span>تسوية قواعد البيانات</span>
+              </div>
+              <p className="text-xs text-slate-500">
+                فصل نصوص العرض البشري عن كلمات البحث المفهرسة لتحقيق أعلى
+                توافقية.
+              </p>
+            </div>
+            <div className="space-y-1">
+              <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-blue-600" />
+                <span>دقة اليونيكود</span>
+              </div>
+              <p className="text-xs text-slate-500">
+                فلاتر ذكية لحماية الرموز الخفية وعلامات الربط المدمجة في النصوص
+                الطويلة.
+              </p>
+            </div>
+            <div className="space-y-1">
+              <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                <Code className="w-4 h-4 text-blue-600" />
+                <span>معالجة محلية آمنة</span>
+              </div>
+              <p className="text-xs text-slate-500">
+                معالجة كاملة داخل المتصفح لضمان السرية المطلقة لبيانات الشركات
+                والمؤلفين.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Trust Framework Features Grid */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 w-full">
@@ -96,6 +183,65 @@ export default function ArabicHomePage() {
             <span className="transition-transform group-hover:-translate-x-0.5">
               ←
             </span>
+          </Link>
+        </div>
+      </section>
+
+      {/* Featured Articles Section for Internal Linking */}
+      <section className="my-16 font-tajawal">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl md:text-2xl font-black text-slate-900">
+              أبرز المقالات والدلائل التقنية
+            </h2>
+            <p className="text-xs md:text-sm text-slate-500 mt-1">
+              شروحات برمجية متعمقة حول الخطوط العربية، تصميم قواعد البيانات،
+              وتحسين محركات البحث.
+            </p>
+          </div>
+          <Link
+            href="/ar/blog"
+            className="text-xs font-bold text-blue-600 hover:text-blue-700 hidden sm:inline-flex items-center gap-1"
+          >
+            <span>عرض كل المقالات</span>
+            <span>←</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Article Card 1 */}
+          <Link
+            href="/ar/blog/clean-arabic-database-sql"
+            className="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs hover:border-blue-300 transition-all group block"
+          >
+            <span className="inline-block px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-bold mb-3">
+              هندسة قواعد البيانات
+            </span>
+            <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-2">
+              بناء قواعد بيانات SQL نظيفة وعالية الأداء لفهارس النصوص العربية
+            </h3>
+            <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">
+              تعرف على أنماط التصميم الهيكلي للتعامل مع متغيرات الحروف والتشكيل
+              في محركات البحث.
+            </p>
+          </Link>
+
+          {/* Article Card 2 */}
+          <Link
+            href="/ar/blog/comprehensive-tashkeel-guide"
+            className="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs hover:border-blue-300 transition-all group block"
+          >
+            <span className="inline-block px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-bold mb-3">
+              السيو والتشكيل
+            </span>
+            <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-2">
+              الدليل الشامل للتشكيل العربي: الموازنة بين سلامة القراءة وظهور
+              محركات البحث
+            </h3>
+            <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">
+              احتراف إدارة التشكيل العربي في المحتوى الرقمي مع الحفاظ على أعلى
+              معايير الظهور لمحركات البحث والثقة.
+            </p>
           </Link>
         </div>
       </section>
