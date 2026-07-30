@@ -43,7 +43,7 @@ export default async function ArabicPostPage({ params }: Props) {
         ctaTitle: "هل تحتاج إلى اختصار تقني فوري؟",
         ctaDesc: "قم بمعالجة نصوصك مباشرة عبر محركنا البرمجي.",
         ctaBtn: "تشغيل الأداة",
-        ctaPath: "/",
+        ctaPath: "/ar",
       }}
     />
   );
