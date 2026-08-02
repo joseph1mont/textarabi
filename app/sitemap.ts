@@ -26,7 +26,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "how-to-use-arabic-nlp-tools-academic-research",
     "optimizing-arabic-content-seo-diacritization",
     "wordpress-arabic-rtl-fix",
-    "handling-arabic-reshaping-in-web-canvas-elements", // Added new canvas reshaping article
+    "handling-arabic-reshaping-in-web-canvas-elements",
+    "fix-arabic-text-photoshop-figma-python", // Added Photoshop/Figma/Python cross-tool guide
   ];
 
   return [

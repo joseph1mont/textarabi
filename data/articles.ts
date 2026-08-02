@@ -20,6 +20,7 @@ import howToUseArabicNlpToolsAcademicResearchAr from "./articles/ar/how-to-use-a
 import optimizingArabicContentSeoDiacritizationAr from "./articles/ar/optimizing-arabic-content-seo-diacritization.json";
 import wordpressArabicRtlFixAr from "./articles/ar/wordpress-arabic-rtl-fix.json";
 import handlingArabicReshapingInWebCanvasElementsAr from "./articles/ar/handling-arabic-reshaping-in-web-canvas-elements.json";
+import fixArabicTextPhotoshopFigmaPythonAr from "./articles/ar/fix-arabic-text-photoshop-figma-python.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -41,6 +42,7 @@ import howToUseArabicNlpToolsAcademicResearchEn from "./articles/en/how-to-use-a
 import optimizingArabicContentSeoDiacritizationEn from "./articles/en/optimizing-arabic-content-seo-diacritization.json";
 import wordpressArabicRtlFixEn from "./articles/en/wordpress-arabic-rtl-fix.json";
 import handlingArabicReshapingInWebCanvasElementsEn from "./articles/en/handling-arabic-reshaping-in-web-canvas-elements.json";
+import fixArabicTextPhotoshopFigmaPythonEn from "./articles/en/fix-arabic-text-photoshop-figma-python.json";
 
 const rawArticles: Article[] = [
   // Arabic Articles
@@ -63,6 +65,7 @@ const rawArticles: Article[] = [
   optimizingArabicContentSeoDiacritizationAr,
   wordpressArabicRtlFixAr,
   handlingArabicReshapingInWebCanvasElementsAr,
+  fixArabicTextPhotoshopFigmaPythonAr,
 
   // English Articles
   fixPhotoshopArabicTextEn,
@@ -84,6 +87,7 @@ const rawArticles: Article[] = [
   optimizingArabicContentSeoDiacritizationEn,
   wordpressArabicRtlFixEn,
   handlingArabicReshapingInWebCanvasElementsEn,
+  fixArabicTextPhotoshopFigmaPythonEn,
 ];
 
 // Sort from newer (descending date) to older
