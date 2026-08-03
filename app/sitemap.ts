@@ -4,7 +4,7 @@ import { MetadataRoute } from "next";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const buildDate = new Date("2026-07-22T00:00:00.000Z"); // Updated to current date
+  const buildDate = new Date("2026-08-03T00:00:00.000Z"); // Updated to current date
   const baseUrl = "https://textarabi.com";
 
   const slugs = [
@@ -27,7 +27,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "optimizing-arabic-content-seo-diacritization",
     "wordpress-arabic-rtl-fix",
     "handling-arabic-reshaping-in-web-canvas-elements",
-    "fix-arabic-text-photoshop-figma-python", // Added Photoshop/Figma/Python cross-tool guide
+    "fix-arabic-text-photoshop-figma-python",
+    "saudi-official-letters-protocols-guide", // Added Saudi official letters protocols guide
   ];
 
   return [

@@ -21,6 +21,7 @@ import optimizingArabicContentSeoDiacritizationAr from "./articles/ar/optimizing
 import wordpressArabicRtlFixAr from "./articles/ar/wordpress-arabic-rtl-fix.json";
 import handlingArabicReshapingInWebCanvasElementsAr from "./articles/ar/handling-arabic-reshaping-in-web-canvas-elements.json";
 import fixArabicTextPhotoshopFigmaPythonAr from "./articles/ar/fix-arabic-text-photoshop-figma-python.json";
+import saudiOfficialLettersProtocolsGuideAr from "./articles/ar/saudi-official-letters-protocols-guide.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -43,6 +44,7 @@ import optimizingArabicContentSeoDiacritizationEn from "./articles/en/optimizing
 import wordpressArabicRtlFixEn from "./articles/en/wordpress-arabic-rtl-fix.json";
 import handlingArabicReshapingInWebCanvasElementsEn from "./articles/en/handling-arabic-reshaping-in-web-canvas-elements.json";
 import fixArabicTextPhotoshopFigmaPythonEn from "./articles/en/fix-arabic-text-photoshop-figma-python.json";
+import saudiOfficialLettersProtocolsGuideEN from "./articles/en/saudi-official-letters-protocols-guide.json";
 
 const rawArticles: Article[] = [
   // Arabic Articles
@@ -66,6 +68,7 @@ const rawArticles: Article[] = [
   wordpressArabicRtlFixAr,
   handlingArabicReshapingInWebCanvasElementsAr,
   fixArabicTextPhotoshopFigmaPythonAr,
+  saudiOfficialLettersProtocolsGuideAr,
 
   // English Articles
   fixPhotoshopArabicTextEn,
@@ -88,6 +91,7 @@ const rawArticles: Article[] = [
   wordpressArabicRtlFixEn,
   handlingArabicReshapingInWebCanvasElementsEn,
   fixArabicTextPhotoshopFigmaPythonEn,
+  saudiOfficialLettersProtocolsGuideEN,
 ];
 
 // Sort from newer (descending date) to older
