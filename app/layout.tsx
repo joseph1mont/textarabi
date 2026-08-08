@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cairo, Tajawal, Amiri, Inter } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -37,7 +38,10 @@ export const metadata: Metadata = {
     "Advanced text processing tools, code cleaners, and SEO optimization utilities engineered for fast performance and programmatic monetization.",
   alternates: {
     canonical: "/",
-    languages: { en: "/", ar: "/ar/" },
+    languages: {
+      en: "/",
+      ar: "/ar/",
+    },
   },
 };
 
@@ -53,18 +57,30 @@ export default function RootLayout({
       className={`${inter.variable} ${cairo.variable} ${tajawal.variable} ${amiri.variable} bg-slate-50 min-h-screen antialiased`}
     >
       <head>
+        {/* Grow Step 1: Base Queue Function loaded before interactivity */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-M3KFLTY6T7"
-          strategy="afterInteractive"
+          id="grow-initializer"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `!(function(){window.growMe||((window.growMe=function(e){window.growMe._.push(e);}),(window.growMe._=[]));})();`,
+          }}
         />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-M3KFLTY6T7');`}
-        </Script>
+
+        {/* Grow Step 2: Main Widget Asset Call containing site parameters */}
+        <Script
+          id="grow-widget-loader"
+          src="https://grow.me"
+          data-grow-faves-site-id="U2l0ZTo3ZTM0ZjQ2Ni0wM2Y5LTRlN2ItOTY5OS1kMThlMTgyN2ZmMzI="
+          strategy="beforeInteractive"
+          data-grow-initializer="true"
+        />
       </head>
       <body className="min-h-screen flex flex-col text-slate-800 font-sans">
         <Navbar />
         {children}
         <Footer lang="en" />
+        {/* Analytics moved safely inside body tracking G-M3KFLTY6T7 */}
+        <GoogleAnalytics gaId="G-M3KFLTY6T7" />
       </body>
     </html>
   );

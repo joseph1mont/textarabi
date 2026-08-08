@@ -28,7 +28,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "wordpress-arabic-rtl-fix",
     "handling-arabic-reshaping-in-web-canvas-elements",
     "fix-arabic-text-photoshop-figma-python",
-    "saudi-official-letters-protocols-guide", // Added Saudi official letters protocols guide
+    "saudi-official-letters-protocols-guide",
+    "export-arabic-svg-illustrator-to-web", // Added export arabic svg illustrator to web guide
   ];
 
   return [

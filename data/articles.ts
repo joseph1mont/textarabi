@@ -22,6 +22,8 @@ import wordpressArabicRtlFixAr from "./articles/ar/wordpress-arabic-rtl-fix.json
 import handlingArabicReshapingInWebCanvasElementsAr from "./articles/ar/handling-arabic-reshaping-in-web-canvas-elements.json";
 import fixArabicTextPhotoshopFigmaPythonAr from "./articles/ar/fix-arabic-text-photoshop-figma-python.json";
 import saudiOfficialLettersProtocolsGuideAr from "./articles/ar/saudi-official-letters-protocols-guide.json";
+import exportArabicSvgIllustratorToWebAr from "./articles/ar/export-arabic-svg-illustrator-to-web.json";
+import fixReversedArabicTextOnlineInstantCopyPasteAr from "./articles/ar/fix-reversed-arabic-text-online-instant-copy-paste.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -45,6 +47,8 @@ import wordpressArabicRtlFixEn from "./articles/en/wordpress-arabic-rtl-fix.json
 import handlingArabicReshapingInWebCanvasElementsEn from "./articles/en/handling-arabic-reshaping-in-web-canvas-elements.json";
 import fixArabicTextPhotoshopFigmaPythonEn from "./articles/en/fix-arabic-text-photoshop-figma-python.json";
 import saudiOfficialLettersProtocolsGuideEN from "./articles/en/saudi-official-letters-protocols-guide.json";
+import exportArabicSvgIllustratorToWebEn from "./articles/en/export-arabic-svg-illustrator-to-web.json";
+import fixReversedArabicTextOnlineInstantCopyPasteEn from "./articles/en/fix-reversed-arabic-text-online-instant-copy-paste.json";
 
 const rawArticles: Article[] = [
   // Arabic Articles
@@ -69,6 +73,8 @@ const rawArticles: Article[] = [
   handlingArabicReshapingInWebCanvasElementsAr,
   fixArabicTextPhotoshopFigmaPythonAr,
   saudiOfficialLettersProtocolsGuideAr,
+  exportArabicSvgIllustratorToWebAr,
+  fixReversedArabicTextOnlineInstantCopyPasteAr,
 
   // English Articles
   fixPhotoshopArabicTextEn,
@@ -92,6 +98,8 @@ const rawArticles: Article[] = [
   handlingArabicReshapingInWebCanvasElementsEn,
   fixArabicTextPhotoshopFigmaPythonEn,
   saudiOfficialLettersProtocolsGuideEN,
+  exportArabicSvgIllustratorToWebEn,
+  fixReversedArabicTextOnlineInstantCopyPasteEn,
 ];
 
 // Sort from newer (descending date) to older
