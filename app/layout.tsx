@@ -57,7 +57,7 @@ export default function RootLayout({
       className={`${inter.variable} ${cairo.variable} ${tajawal.variable} ${amiri.variable} bg-slate-50 min-h-screen antialiased`}
     >
       <head>
-        {/* Grow Step 1: Base Queue Function loaded before interactivity */}
+        {/* 1. Core Grow Queue Initialization (Matches the first half of your script) */}
         <Script
           id="grow-initializer"
           strategy="beforeInteractive"
@@ -66,13 +66,14 @@ export default function RootLayout({
           }}
         />
 
-        {/* Grow Step 2: Main Widget Asset Call containing site parameters */}
+        {/* 2. Main Widget Script Loader (Matches the second half of your script with your custom parameters) */}
         <Script
           id="grow-widget-loader"
-          src="https://grow.me"
-          data-grow-faves-site-id="U2l0ZTo3ZTM0ZjQ2Ni0wM2Y5LTRlN2ItOTY5OS1kMThlMTgyN2ZmMzI="
+          src="https://faves.grow.me/main.js"
           strategy="beforeInteractive"
+          defer={true}
           data-grow-initializer="true"
+          data-grow-faves-site-id="U2l0ZTo3ZTM0ZjQ2Ni0wM2Y5LTRlN2ItOTY5OS1kMThlMTgyN2ZmMzI="
         />
       </head>
       <body className="min-h-screen flex flex-col text-slate-800 font-sans">
