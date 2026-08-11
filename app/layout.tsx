@@ -1,3 +1,4 @@
+// file name: app/layout.tsx
 import type { Metadata } from "next";
 import { Cairo, Tajawal, Amiri, Inter } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -57,23 +58,24 @@ export default function RootLayout({
       className={`${inter.variable} ${cairo.variable} ${tajawal.variable} ${amiri.variable} bg-slate-50 min-h-screen antialiased`}
     >
       <head>
-        {/* 1. Core Grow Queue Initialization (Matches the first half of your script) */}
+        {/* The entire combined vanilla Grow code translated perfectly for Next.js */}
         <Script
-          id="grow-initializer"
+          id="grow-unified-setup"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `!(function(){window.growMe||((window.growMe=function(e){window.growMe._.push(e);}),(window.growMe._=[]));})();`,
+            __html: `
+        !(function(){
+          window.growMe||((window.growMe=function(e){window.growMe._.push(e);}),(window.growMe._=[]));
+          var e=document.createElement("script");
+          e.type="text/javascript";
+          e.src="https://grow.me";
+          e.defer=!0;
+          e.setAttribute("data-grow-faves-site-id","U2l0ZTo3ZTM0ZjQ2Ni0wM2Y5LTRlN2ItOTY5OS1kMThlMTgyN2ZmMzI=");
+          var t=document.getElementsByTagName("script")[0];
+          t.parentNode.insertBefore(e,t);
+        })();
+      `,
           }}
-        />
-
-        {/* 2. Main Widget Script Loader (Matches the second half of your script with your custom parameters) */}
-        <Script
-          id="grow-widget-loader"
-          src="https://faves.grow.me/main.js"
-          strategy="beforeInteractive"
-          defer={true}
-          data-grow-initializer="true"
-          data-grow-faves-site-id="U2l0ZTo3ZTM0ZjQ2Ni0wM2Y5LTRlN2ItOTY5OS1kMThlMTgyN2ZmMzI="
         />
       </head>
       <body className="min-h-screen flex flex-col text-slate-800 font-sans">

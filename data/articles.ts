@@ -24,6 +24,7 @@ import fixArabicTextPhotoshopFigmaPythonAr from "./articles/ar/fix-arabic-text-p
 import saudiOfficialLettersProtocolsGuideAr from "./articles/ar/saudi-official-letters-protocols-guide.json";
 import exportArabicSvgIllustratorToWebAr from "./articles/ar/export-arabic-svg-illustrator-to-web.json";
 import fixReversedArabicTextOnlineInstantCopyPasteAr from "./articles/ar/fix-reversed-arabic-text-online-instant-copy-paste.json";
+import seoDeveloperGuideCharacterCounterTashkeelRemovalAr from "./articles/ar/seo-developer-guide-character-counter-tashkeel-removal.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -49,6 +50,7 @@ import fixArabicTextPhotoshopFigmaPythonEn from "./articles/en/fix-arabic-text-p
 import saudiOfficialLettersProtocolsGuideEN from "./articles/en/saudi-official-letters-protocols-guide.json";
 import exportArabicSvgIllustratorToWebEn from "./articles/en/export-arabic-svg-illustrator-to-web.json";
 import fixReversedArabicTextOnlineInstantCopyPasteEn from "./articles/en/fix-reversed-arabic-text-online-instant-copy-paste.json";
+import seoDeveloperGuideCharacterCounterTashkeelRemovalEn from "./articles/en/seo-developer-guide-character-counter-tashkeel-removal.json";
 
 const rawArticles: Article[] = [
   // Arabic Articles
@@ -75,6 +77,7 @@ const rawArticles: Article[] = [
   saudiOfficialLettersProtocolsGuideAr,
   exportArabicSvgIllustratorToWebAr,
   fixReversedArabicTextOnlineInstantCopyPasteAr,
+  seoDeveloperGuideCharacterCounterTashkeelRemovalAr,
 
   // English Articles
   fixPhotoshopArabicTextEn,
@@ -100,6 +103,7 @@ const rawArticles: Article[] = [
   saudiOfficialLettersProtocolsGuideEN,
   exportArabicSvgIllustratorToWebEn,
   fixReversedArabicTextOnlineInstantCopyPasteEn,
+  seoDeveloperGuideCharacterCounterTashkeelRemovalEn,
 ];
 
 // Sort from newer (descending date) to older

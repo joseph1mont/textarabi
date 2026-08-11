@@ -29,7 +29,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "handling-arabic-reshaping-in-web-canvas-elements",
     "fix-arabic-text-photoshop-figma-python",
     "saudi-official-letters-protocols-guide",
-    "export-arabic-svg-illustrator-to-web", // Added export arabic svg illustrator to web guide
+    "export-arabic-svg-illustrator-to-web",
+    "fix-reversed-arabic-text-online-instant-copy-paste",
+    "seo-developer-guide-character-counter-tashkeel-removal",
   ];
 
   return [
