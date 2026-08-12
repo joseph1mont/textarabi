@@ -58,18 +58,19 @@ export default function RootLayout({
       className={`${inter.variable} ${cairo.variable} ${tajawal.variable} ${amiri.variable} bg-slate-50 min-h-screen antialiased`}
     >
       <head>
-        {/* Official Grow Script Implementation */}
+        {/* Official Grow Script Implementation with Initializer Attribute */}
         <Script
-          id="grow-tag"
+          id="grow-script"
           strategy="beforeInteractive"
+          data-grow-initializer=""
           dangerouslySetInnerHTML={{
             __html: `
-              !(function(){
-                window.growMe || ((window.growMe = function(e){window.growMe._.push(e);}), (window.growMe._ = []));
+              !(function () {
+                window.growMe || ((window.growMe = function (e) { window.growMe._.push(e); }), (window.growMe._ = []));
                 var e = document.createElement("script");
                 e.type = "text/javascript";
+                e.async = !0;
                 e.src = "https://faves.grow.me/main.js";
-                e.defer = true;
                 e.setAttribute("data-grow-faves-site-id", "U2l0ZTo3ZTM0ZjQ2Ni0wM2Y5LTRlN2ItOTY5OS1kMThlMTgyN2ZmMzI=");
                 var t = document.getElementsByTagName("script")[0];
                 t.parentNode.insertBefore(e, t);
