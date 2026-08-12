@@ -1,3 +1,4 @@
+// file name: app/ar/layout.tsx
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -5,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "منصة برمجية متطورة لتنظيف وإزالة تشكيل النصوص العربية، معالجة مشاكل فوتوشوب وإليستريتور، وحساب عدد الكلمات بدقة بالاعتماد على محرك Sandbox آمن ولحظي.",
   alternates: {
-    canonical: "/ar/",
+    canonical: "https://textarabi.com/ar/",
   },
 };
 
