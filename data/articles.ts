@@ -25,6 +25,8 @@ import saudiOfficialLettersProtocolsGuideAr from "./articles/ar/saudi-official-l
 import exportArabicSvgIllustratorToWebAr from "./articles/ar/export-arabic-svg-illustrator-to-web.json";
 import fixReversedArabicTextOnlineInstantCopyPasteAr from "./articles/ar/fix-reversed-arabic-text-online-instant-copy-paste.json";
 import seoDeveloperGuideCharacterCounterTashkeelRemovalAr from "./articles/ar/seo-developer-guide-character-counter-tashkeel-removal.json";
+import seoArabicJsonFormatterBeautifierAr from "./articles/ar/seo-arabic-json-formatter-beautifier.json";
+import fixAdobeAppsArabicTextGuideAr from "./articles/ar/fix-adobe-apps-arabic-text-guide.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -51,6 +53,8 @@ import saudiOfficialLettersProtocolsGuideEN from "./articles/en/saudi-official-l
 import exportArabicSvgIllustratorToWebEn from "./articles/en/export-arabic-svg-illustrator-to-web.json";
 import fixReversedArabicTextOnlineInstantCopyPasteEn from "./articles/en/fix-reversed-arabic-text-online-instant-copy-paste.json";
 import seoDeveloperGuideCharacterCounterTashkeelRemovalEn from "./articles/en/seo-developer-guide-character-counter-tashkeel-removal.json";
+import seoArabicJsonFormatterBeautifierEn from "./articles/en/seo-arabic-json-formatter-beautifier.json";
+import fixAdobeAppsArabicTextGuideEn from "./articles/en/fix-adobe-apps-arabic-text-guide.json";
 
 const rawArticles: Article[] = [
   // Arabic Articles
@@ -78,6 +82,8 @@ const rawArticles: Article[] = [
   exportArabicSvgIllustratorToWebAr,
   fixReversedArabicTextOnlineInstantCopyPasteAr,
   seoDeveloperGuideCharacterCounterTashkeelRemovalAr,
+  seoArabicJsonFormatterBeautifierAr,
+  fixAdobeAppsArabicTextGuideAr,
 
   // English Articles
   fixPhotoshopArabicTextEn,
@@ -104,6 +110,8 @@ const rawArticles: Article[] = [
   exportArabicSvgIllustratorToWebEn,
   fixReversedArabicTextOnlineInstantCopyPasteEn,
   seoDeveloperGuideCharacterCounterTashkeelRemovalEn,
+  seoArabicJsonFormatterBeautifierEn,
+  fixAdobeAppsArabicTextGuideEn,
 ];
 
 // Sort from newer (descending date) to older

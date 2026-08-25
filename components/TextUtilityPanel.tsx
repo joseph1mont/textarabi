@@ -25,6 +25,7 @@ import {
   Keyboard,
   Languages,
   Sparkles,
+  Braces,
 } from "lucide-react";
 
 // Safe Imports for sub-components
@@ -72,8 +73,29 @@ function reshapeArabicText(text: string): string {
   }
 }
 
+// دالة تنسيق وتمرير بيانات JSON وتحويل المفاتيح والنصوص العربية مع الحفاظ على الهيكلة
+function formatJsonArabic(text: string, isRtl: boolean): string {
+  if (!text.trim()) return "";
+  try {
+    const parsed = JSON.parse(text);
+    const formatted = JSON.stringify(parsed, null, 2);
+    return formatted;
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    return isRtl
+      ? `خطأ في تنسيق بيانات JSON: ${errorMsg}`
+      : `Invalid JSON format error: ${errorMsg}`;
+  }
+}
+
 interface TextUtilityPanelProps {
-  initialMode?: "strip" | "reverse" | "preview" | "keyboard" | "translate";
+  initialMode?:
+    | "strip"
+    | "reverse"
+    | "preview"
+    | "keyboard"
+    | "translate"
+    | "json";
   lang?: "ar" | "en";
 }
 
@@ -138,13 +160,11 @@ export default function TextUtilityPanel({
         });
 
         if (res.ok) {
-          // استجابة مصفوفات جوجل المترجمة المهيكلة بدون أي استخدام لـ any
           const data = (await res.json()) as unknown[][][] | undefined;
 
           if (data && data[0]) {
             const translatedText = data[0]
               .map((x) => {
-                // التحقق من أن المصفوفة الفرعية موجودة وأن العنصر الأول نص
                 if (Array.isArray(x) && typeof x[0] === "string") {
                   return x[0];
                 }
@@ -168,7 +188,6 @@ export default function TextUtilityPanel({
           );
         }
       } catch (error: unknown) {
-        // فحص نوع الخطأ بشكل آمن متوافق مع معايير ESLint الصارمة
         if (error instanceof Error && error.name !== "AbortError") {
           setTranslatedOutput(
             isRtl
@@ -214,7 +233,6 @@ export default function TextUtilityPanel({
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // عمل صب (Casting) للنوع المخصص لمنع خطأ الـ any نهائياً
       const data = (await response.json()) as TashkeelResponse;
 
       if (data && data.result) {
@@ -289,6 +307,8 @@ export default function TextUtilityPanel({
       outputText = reshapeArabicText(inputText);
     } else if (activeTab === "translate") {
       outputText = translatedOutput;
+    } else if (activeTab === "json") {
+      outputText = formatJsonArabic(inputText, isRtl);
     } else {
       outputText = inputText;
     }
@@ -318,7 +338,7 @@ export default function TextUtilityPanel({
         }}
         className="w-full mb-4"
       >
-        <TabsList className="grid grid-cols-2 lg:grid-cols-5 w-full bg-slate-100 p-1 rounded-xl gap-1 h-auto overflow-hidden">
+        <TabsList className="grid grid-cols-2 lg:grid-cols-6 w-full bg-slate-100 p-1 rounded-xl gap-1 h-auto overflow-hidden">
           {/* 1. Instant Translate */}
           <TabsTrigger
             value="translate"
@@ -355,7 +375,16 @@ export default function TextUtilityPanel({
             <span>{isRtl ? "تشكيل / إزالة" : "Tashkeel / Strip"}</span>
           </TabsTrigger>
 
-          {/* 5. Font Preview */}
+          {/* 5. JSON Formatter (تحويل وتنسيق JSON بالعربي) */}
+          <TabsTrigger
+            value="json"
+            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+          >
+            <Braces className="w-4 h-4 shrink-0" />
+            <span>{isRtl ? "تنسيق JSON" : "JSON Formatter"}</span>
+          </TabsTrigger>
+
+          {/* 6. Font Preview */}
           <TabsTrigger
             value="preview"
             className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
@@ -402,13 +431,23 @@ export default function TextUtilityPanel({
               if (!e.target.value.trim()) setTranslatedOutput("");
             }}
             placeholder={
-              isRtl ? "اكتب أو الصق النص هنا..." : "Type or paste text here..."
+              activeTab === "json"
+                ? isRtl
+                  ? 'اكتب أو الصق كود JSON هنا (مثال: {"الاسم": "أحمد"})...'
+                  : "Type or paste JSON code here..."
+                : isRtl
+                  ? "اكتب أو الصق النص هنا..."
+                  : "Type or paste text here..."
             }
-            className="notranslate w-full min-h-[320px] flex-grow p-4 outline-none border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none text-slate-800 text-lg leading-relaxed font-cairo"
+            className={`notranslate w-full min-h-[320px] flex-grow p-4 outline-none border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none text-slate-800 text-lg leading-relaxed font-cairo ${
+              activeTab === "json" ? "font-mono text-sm" : ""
+            }`}
             dir={
               activeTab === "translate" && translationTarget === "ar"
                 ? "ltr"
-                : "rtl"
+                : activeTab === "json"
+                  ? "ltr"
+                  : "rtl"
             }
           />
         </div>
@@ -421,9 +460,13 @@ export default function TextUtilityPanel({
                 ? isRtl
                   ? "لوحة الحروف والتشكيل الذكية"
                   : "Smart Arabic Keyboard"
-                : isRtl
-                  ? "النص المعالج الجاهز"
-                  : "Processed Ready Output"}
+                : activeTab === "json"
+                  ? isRtl
+                    ? "كود JSON المنسق والمعالج"
+                    : "Formatted JSON Output"
+                  : isRtl
+                    ? "النص المعالج الجاهز"
+                    : "Processed Ready Output"}
             </span>
             {outputText && activeTab !== "keyboard" && (
               <Button
@@ -572,14 +615,18 @@ export default function TextUtilityPanel({
           ) : (
             <div
               className={`w-full h-full min-h-[320px] md:min-h-0 p-4 text-slate-800 whitespace-pre-wrap leading-relaxed overflow-y-auto bg-slate-50/30 ${
-                activeTab === "preview" ? selectedFont : "font-cairo"
+                activeTab === "preview"
+                  ? selectedFont
+                  : activeTab === "json"
+                    ? "font-mono text-sm"
+                    : "font-cairo"
               } ${fontSize}`}
               dir={
                 activeTab === "translate"
                   ? translationTarget === "ar"
                     ? "rtl"
                     : "ltr"
-                  : activeTab === "reverse"
+                  : activeTab === "reverse" || activeTab === "json"
                     ? "ltr"
                     : "rtl"
               }
@@ -598,9 +645,13 @@ export default function TextUtilityPanel({
                       ? isRtl
                         ? "أدخل نصاً ثم اضغط على 'شكل النص الآن' لبدء المعالجة السحابية..."
                         : "Insert text then click 'Tashkeel Now' to execute..."
-                      : isRtl
-                        ? "بانتظار إضافة نصوص في الخانة المقابلة..."
-                        : "Awaiting input text in the left panel..."}
+                      : activeTab === "json"
+                        ? isRtl
+                          ? "أدخل بيانات JSON في الخانة المقابلة لتنسيقها وعرضها بدقة..."
+                          : "Enter JSON data in the left panel to format..."
+                        : isRtl
+                          ? "بانتظار إضافة نصوص في الخانة المقابلة..."
+                          : "Awaiting input text in the left panel..."}
                   </span>
                 </div>
               )}

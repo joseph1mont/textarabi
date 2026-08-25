@@ -4,7 +4,7 @@ import { MetadataRoute } from "next";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const buildDate = new Date("2026-08-03T00:00:00.000Z"); // Updated to current date
+  const buildDate = new Date("2026-08-24T00:00:00.000Z"); // Updated to current date
   const baseUrl = "https://textarabi.com";
 
   const slugs = [
@@ -32,6 +32,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "export-arabic-svg-illustrator-to-web",
     "fix-reversed-arabic-text-online-instant-copy-paste",
     "seo-developer-guide-character-counter-tashkeel-removal",
+    "seo-arabic-json-formatter-beautifier",
+    "fix-adobe-apps-arabic-text-guide",
   ];
 
   return [
@@ -59,7 +61,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: buildDate,
       changeFrequency: "weekly",
       priority: 0.9,
-    }, // New tool page
+    },
+    {
+      url: `${baseUrl}/tools/json-formatter/`,
+      lastModified: buildDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/tools/strip-diacritics/`,
+      lastModified: buildDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/tools/character-counter/`,
+      lastModified: buildDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
 
     // Core Arabic Platform Pages
     {
@@ -103,7 +123,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: buildDate,
       changeFrequency: "weekly",
       priority: 0.9,
-    }, // New Arabic tool page
+    },
+    {
+      url: `${baseUrl}/ar/tools/json-formatter/`,
+      lastModified: buildDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/ar/tools/strip-diacritics/`,
+      lastModified: buildDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/ar/tools/character-counter/`,
+      lastModified: buildDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
 
     // English Blog Articles
     ...slugs.map((slug) => ({

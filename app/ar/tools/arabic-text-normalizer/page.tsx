@@ -1,6 +1,6 @@
 // file: app/tools/arabic-text-normalizer/page.tsx
 import TextUtilityPanel from "@/components/TextUtilityPanel";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = {
   title: "منقي ومعالج النصوص العربية للمطورين والمصممين",
