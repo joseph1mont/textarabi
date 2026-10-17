@@ -1,3 +1,4 @@
+// file path: data/articles.ts
 import { Article } from "./types";
 
 // Arabic Imports
@@ -25,8 +26,18 @@ import saudiOfficialLettersProtocolsGuideAr from "./articles/ar/saudi-official-l
 import exportArabicSvgIllustratorToWebAr from "./articles/ar/export-arabic-svg-illustrator-to-web.json";
 import fixReversedArabicTextOnlineInstantCopyPasteAr from "./articles/ar/fix-reversed-arabic-text-online-instant-copy-paste.json";
 import seoDeveloperGuideCharacterCounterTashkeelRemovalAr from "./articles/ar/seo-developer-guide-character-counter-tashkeel-removal.json";
-import seoArabicJsonFormatterBeautifierAr from "./articles/ar/seo-arabic-json-formatter-beautifier.json";
+import jsonFormatterUtf8UnicodeGuideAr from "./articles/ar/json-formatter-utf8-unicode-guide.json";
 import fixAdobeAppsArabicTextGuideAr from "./articles/ar/fix-adobe-apps-arabic-text-guide.json";
+import disablePhotoshopUnifiedTextEngineHebrewFixAr from "./articles/ar/disable-photoshop-unified-text-engine-hebrew-fix.json";
+import bilingualOcrImageToText2026GuideAr from "./articles/ar/bilingual-ocr-image-to-text-2026-guide.json";
+import textToDigitalOcrGuideAr from "./articles/ar/text-to-digital-ocr-guide.json";
+import extractTextFromImagesSecurelyGuideAr from "./articles/ar/extract-text-from-images-securely-guide.json";
+import canadianBilingualOcrImageToTextGuideAr from "./articles/ar/canadian-bilingual-ocr-image-to-text-guide.json";
+import zeroDependencySvgTypographyGeneratorAr from "./articles/ar/zero-dependency-svg-typography-generator.json";
+import howToArchitectDualLanguageRtlLtrNextjsAppsAr from "./articles/ar/how-to-architect-dual-language-rtl-ltr-nextjs-apps.json";
+import fixIndesignArabicTextAr from "./articles/ar/fix-indesign-arabic-text.json";
+import reactNativeFlutterTailwindRtlArabicFixAr from "./articles/ar/react-native-flutter-tailwind-rtl-arabic-fix.json";
+import pythonArabicTextShapingReportlabMatplotlibAr from "./articles/ar/python-arabic-text-shaping-reportlab-matplotlib.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -53,8 +64,18 @@ import saudiOfficialLettersProtocolsGuideEN from "./articles/en/saudi-official-l
 import exportArabicSvgIllustratorToWebEn from "./articles/en/export-arabic-svg-illustrator-to-web.json";
 import fixReversedArabicTextOnlineInstantCopyPasteEn from "./articles/en/fix-reversed-arabic-text-online-instant-copy-paste.json";
 import seoDeveloperGuideCharacterCounterTashkeelRemovalEn from "./articles/en/seo-developer-guide-character-counter-tashkeel-removal.json";
-import seoArabicJsonFormatterBeautifierEn from "./articles/en/seo-arabic-json-formatter-beautifier.json";
+import jsonFormatterUtf8UnicodeGuideEn from "./articles/en/json-formatter-utf8-unicode-guide.json";
 import fixAdobeAppsArabicTextGuideEn from "./articles/en/fix-adobe-apps-arabic-text-guide.json";
+import disablePhotoshopUnifiedTextEngineHebrewFixEn from "./articles/en/disable-photoshop-unified-text-engine-hebrew-fix.json";
+import bilingualOcrImageToText2026GuideEn from "./articles/en/bilingual-ocr-image-to-text-2026-guide.json";
+import textToDigitalOcrGuideEn from "./articles/en/text-to-digital-ocr-guide.json";
+import extractTextFromImagesSecurelyGuideEn from "./articles/en/extract-text-from-images-securely-guide.json";
+import canadianBilingualOcrImageToTextGuideEn from "./articles/en/canadian-bilingual-ocr-image-to-text-guide.json";
+import zeroDependencySvgTypographyGeneratorEn from "./articles/en/zero-dependency-svg-typography-generator.json";
+import howToArchitectDualLanguageRtlLtrNextjsAppsEn from "./articles/en/how-to-architect-dual-language-rtl-ltr-nextjs-apps.json";
+import fixIndesignArabicTextEn from "./articles/en/fix-indesign-arabic-text.json";
+import reactNativeFlutterTailwindRtlArabicFixEn from "./articles/en/react-native-flutter-tailwind-rtl-arabic-fix.json";
+import pythonArabicTextShapingReportlabMatplotlibEn from "./articles/en/python-arabic-text-shaping-reportlab-matplotlib.json";
 
 const rawArticles: Article[] = [
   // Arabic Articles
@@ -82,8 +103,18 @@ const rawArticles: Article[] = [
   exportArabicSvgIllustratorToWebAr,
   fixReversedArabicTextOnlineInstantCopyPasteAr,
   seoDeveloperGuideCharacterCounterTashkeelRemovalAr,
-  seoArabicJsonFormatterBeautifierAr,
+  jsonFormatterUtf8UnicodeGuideAr,
   fixAdobeAppsArabicTextGuideAr,
+  disablePhotoshopUnifiedTextEngineHebrewFixAr,
+  bilingualOcrImageToText2026GuideAr,
+  textToDigitalOcrGuideAr,
+  extractTextFromImagesSecurelyGuideAr,
+  canadianBilingualOcrImageToTextGuideAr,
+  zeroDependencySvgTypographyGeneratorAr,
+  howToArchitectDualLanguageRtlLtrNextjsAppsAr,
+  fixIndesignArabicTextAr,
+  reactNativeFlutterTailwindRtlArabicFixAr,
+  pythonArabicTextShapingReportlabMatplotlibAr,
 
   // English Articles
   fixPhotoshopArabicTextEn,
@@ -110,8 +141,18 @@ const rawArticles: Article[] = [
   exportArabicSvgIllustratorToWebEn,
   fixReversedArabicTextOnlineInstantCopyPasteEn,
   seoDeveloperGuideCharacterCounterTashkeelRemovalEn,
-  seoArabicJsonFormatterBeautifierEn,
+  jsonFormatterUtf8UnicodeGuideEn,
   fixAdobeAppsArabicTextGuideEn,
+  disablePhotoshopUnifiedTextEngineHebrewFixEn,
+  bilingualOcrImageToText2026GuideEn,
+  textToDigitalOcrGuideEn,
+  extractTextFromImagesSecurelyGuideEn,
+  canadianBilingualOcrImageToTextGuideEn,
+  zeroDependencySvgTypographyGeneratorEn,
+  howToArchitectDualLanguageRtlLtrNextjsAppsEn,
+  fixIndesignArabicTextEn,
+  reactNativeFlutterTailwindRtlArabicFixEn,
+  pythonArabicTextShapingReportlabMatplotlibEn,
 ];
 
 // Sort from newer (descending date) to older

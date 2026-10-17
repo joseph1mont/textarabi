@@ -1,208 +1,232 @@
-// file: app/tools/arabic-text-normalizer/page.tsx
-
-import TextUtilityPanel from "@/components/TextUtilityPanel";
+// file path: app/tools/arabic-text-normalizer/page.tsx
+import type { Metadata } from "next";
 import Link from "next/link";
+import TextUtilityPanel from "@/components/TextUtilityPanel";
 
-export const metadata = {
-  title: "Professional Arabic Text Normalizer & Developer Toolkit",
-
+export const metadata: Metadata = {
+  title:
+    "All-in-One Arabic Text Normalizer, Character Counter & JSON Tool | TextArabi",
   description:
-    "A developer-focused Arabic utility to strip diacritics, fix Adobe character reversal, apply instant tashkeel, and normalize text for database and SEO efficiency.",
+    "Free online Arabic text normalizer, reversed text fixer, diacritics stripper, character counter, JSON formatter, and browser-based OCR extractor for SEO and software developers.",
+  alternates: {
+    canonical: "https://textarabi.com/tools/arabic-text-normalizer/",
+  },
 };
 
-export default function ToolPage() {
-  return (
-    <main className="min-h-screen bg-slate-50 pt-10 pb-16">
-      <div className="max-w-5xl mx-auto px-4 mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2 font-cairo">
-          Arabic Text Normalizer & Utilities
-        </h1>
+export default function ArabicTextNormalizerEnPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "What does the Arabic Text Normalizer & Utility Suite do?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "The TextArabi workspace consolidates six core text-processing functions: fixing reversed/unshaping Arabic text, stripping diacritics (Tashkeel), counting characters and byte lengths, formatting JSON with Arabic keys, running browser-based OCR extraction, and previewing UI typography.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Why do Arabic meta descriptions get truncated in Google search results?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Arabic characters consume more horizontal pixel width on SERP containers compared to standard Latin characters. Relying strictly on character counts can cause snippet truncation. Our counter monitors both string length and multi-byte UTF-8 overhead.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How does diacritic stripping help database search performance?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Database queries usually fail when comparing plain user searches against records stored with full diacritics (Fatha, Damma, Kasra, Shadda). Stripping diacritics normalizes strings so exact-match SQL queries work reliably.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Is client-side OCR extraction secure for confidential images?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes. All optical character recognition is executed locally inside your WebAssembly browser instance. Your uploaded graphics, screenshots, or documents are never transmitted to external remote servers.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Does formatting JSON alter or corrupt Arabic UTF-8 Unicode strings?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "No. The parser preserves native UTF-8 multi-byte encoding while formatting, preventing unescaped hexadecimal conversions (e.g., \\u0627\\u0644) and maintaining strict Schema.org standards.",
+        },
+      },
+    ],
+  };
 
-        <p className="text-slate-600 mb-8 font-tajawal">
-          The professional-grade toolkit for Arabic localization, web
-          development, and SEO optimization.
+  return (
+    <main className="min-h-screen bg-slate-50 pt-10 pb-16" dir="ltr">
+      {/* Schema.org Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <div className="max-w-5xl mx-auto px-4 mb-8 text-center sm:text-left">
+        <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-900 font-cairo mb-3">
+          All-in-One Arabic Text Normalizer & Developer Utility Suite
+        </h1>
+        <p className="text-slate-600 font-tajawal text-base max-w-3xl">
+          Fix reversed text, remove diacritics, count visual characters, format
+          UTF-8 JSON payloads, and extract text from images using an all-in-one,
+          privacy-first browser workspace.
         </p>
       </div>
 
-      <TextUtilityPanel initialMode="strip" lang="en" />
+      {/* Primary Tool Panel */}
+      <TextUtilityPanel initialMode="reverse" lang="en" />
 
+      {/* Technical Overview Section */}
       <section className="max-w-5xl mx-auto px-4 mt-12 py-8 border-t border-slate-200">
         <h2 className="text-2xl font-bold mb-4 font-cairo text-slate-900">
-          Architectural Guide: Programmatic Arabic Text Processing for Modern
-          Web Apps
+          Complete Architectural Guide: Processing Arabic BiDi Strings for
+          Modern Web Systems
         </h2>
 
         <div className="prose prose-slate max-w-none text-slate-700 font-tajawal space-y-6 text-base leading-relaxed">
           <p>
-            Processing Arabic typography across distributed web architectures
-            introduces profound engineering complexity. Unlike Latin-based
-            scripts, Arabic requires advanced bidirectional (BiDi) layout
-            handling, complex cursor positioning, and dynamic character
-            reshaping (OpenType GSUB/GPOS tables). When modern single-page
-            applications built with <strong>Next.js</strong> or{" "}
-            <strong>React</strong> interact with legacy databases, search
-            indexes, or non-native design environments like Adobe Photoshop and
-            Premiere Pro, string corruption frequently occurs. This utility
-            suite directly tackles long-tail developer searches such as{" "}
-            <em>fix reversed arabic text online</em>,{" "}
-            <em>instant arabic text normalizer</em>,{" "}
-            <em>remove tashkeel from arabic string javascript</em>, and{" "}
-            <em>adobe illustrator arabic letter separation fix</em>.
+            Building internationalized software products, managing database
+            migrations, or optimizing multilingual search engine landing pages
+            presents complex engineering hurdles when working with Right-to-Left
+            (RTL) Arabic scripts.
+          </p>
+          <p>
+            Our <strong>TextArabi Unified Processing Suite</strong> integrates
+            the tools previously distributed across separate endpoints into a
+            single client-side engine designed to eliminate string degradation,
+            formatting bugs, and serialization errors.
           </p>
 
           <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">
-            Core Instant Utilities Built Into This Engine
+            1. Text Reshaping & BiDi Reversal Corrections
           </h3>
-
           <p>
-            Engineered specifically to eliminate manual string manipulation
-            bottlenecks, our platform executes instant transformations entirely
-            client-side for maximum speed and data privacy:
+            Non-RTL design software often renders Arabic script backwards with
+            detached letters. The reshaping engine calculates contextual glyph
+            joining and reverses letter order so strings copy cleanly without
+            manual character re-entry.
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
-            <li>
-              <strong>Instant Tashkeel & Diacritic Stripping:</strong>{" "}
-              Automatically strips Arabic vowel markers (Fatha, Damma, Kasra,
-              Shaddah, Sukun) to establish canonical database search indexes.
-              This directly resolves mismatch queries in SQL/NoSQL search
-              implementations.
-            </li>
-
-            <li>
-              <strong>One-Click Reversed & Disconnected Letter Repair:</strong>{" "}
-              Instantly rectifies backward strings caused by bitmap graphics
-              editors or legacy DOM rendering layers. For deeper workflows
-              involving vector suites, consult our dedicated guide on{" "}
-              <Link
-                href="/blog/fix-premiere-illustrator-arabic"
-                className="text-blue-600 font-semibold underline hover:text-blue-800"
-              >
-                resolving inverted layout alignment errors in video editing
-                applications
-              </Link>
-              .
-            </li>
-
-            <li>
-              <strong>Unicode NFC/NFKC Normalization:</strong> Harmonizes
-              disparate character code points, ensuring compound Unicode glyphs
-              and compatibility characters match expected string matching
-              criteria.
-            </li>
-          </ul>
-
           <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">
-            Solving the &quot;Photoshop/Adobe&quot; Reversal & Disconnection Bug
+            2. Eliminating Index Fragmentation via Tashkeel Normalization
           </h3>
-
           <p>
-            When engineers or digital artists copy raw Arabic strings from web
-            inputs into legacy desktop software, characters render completely
-            backward—starting from the left margin with isolated, disconnected
-            glyphs. This failure happens because bitmap graphics pipelines lack
-            native Right-to-Left (RTL) flow engines. Our integrated utility
-            algorithm re-sequences word tokens and character arrays, ensuring
-            seamless compatibility across web-native components and external
-            design boards. For complex canvas rendering pipelines, review our
-            technical tutorial on{" "}
+            While Arabic vowel markers provide linguistic precision, SQL
+            databases often struggle to match vowelled entries against plain
+            queries. Strip diacritics to keep internal site searches and
+            external index crawlers aligned. For database architecture
+            guidelines, review our analysis on{" "}
             <Link
-              href="/blog/handling-arabic-reshaping-in-web-canvas-elements"
+              href="/blog/clean-arabic-database-sql"
               className="text-blue-600 font-semibold underline hover:text-blue-800"
             >
-              handling Arabic reshaping and BiDi text in HTML5 web canvas
-              elements
+              structuring high-performance SQL tables for Arabic text indexes
             </Link>
             .
           </p>
 
           <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">
-            Troubleshooting Edge Cases & Rendering Bottlenecks
+            3. Character Counting & SERP Snippet Optimization
           </h3>
-
           <p>
-            When deploying automated string processing pipelines or handling
-            bulk data ingestion, developers often encounter specific rendering
-            exceptions. Use this technical checklist to diagnose common
-            structural issues:
+            Traditional JavaScript counters can be misleading when working with
+            complex UTF-8 strings containing diacritics. Our counter engine
+            tracks character density, word frequencies, and byte allocations to
+            keep your meta tags inside SERP snippet limits.
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
-            <li>
-              <strong>Mixed Alphanumeric Substrings:</strong> Applying an
-              aggressive string reversal script to sentences containing embedded
-              English URLs, version numbers, or numerical digits will
-              inadvertently flip the foreign tokens. Always isolate Latin
-              character blocks using regex tokenization before applying
-              re-ordering filters.
-            </li>
+          <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">
+            4. UTF-8 JSON Formatting & Schema Validation
+          </h3>
+          <p>
+            Standard JSON validators frequently escape raw Arabic keys into
+            hexadecimal sequences. Our integrated formatter parses, beautifies,
+            and validates JSON-LD payloads while preserving human-readable
+            Arabic strings.
+          </p>
 
-            <li>
-              <strong>Vertical Tashkeel Displaced Spacing:</strong> Ingesting
-              raw strings containing diacritics without prior Unicode
-              normalization can cause vowel markings to detach or stack
-              vertically. Always execute an <code>NFKC</code> normalization pass
-              before running character transformations.
-            </li>
-
-            <li>
-              <strong>Invisible Zero-Width Character Injection:</strong> Copying
-              text from unverified web sources can inject zero-width joiners
-              (ZWJ) or invalid byte order marks (BOM) that crash downstream
-              layout rendering. Pass payloads through a lightweight client-side
-              sanitation filter prior to state updates.
-            </li>
-          </ul>
+          <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">
+            5. Secure Browser-Based OCR Text Extraction
+          </h3>
+          <p>
+            Extracting text from scanned documents or app screenshots usually
+            requires sending files to third-party services. Our WebAssembly OCR
+            engine processes images entirely within your browser for full data
+            privacy.
+          </p>
 
           <h3 className="text-xl font-bold text-slate-900 mt-6 mb-2">
             Frequently Asked Questions (FAQ)
           </h3>
-
-          <div className="space-y-4 my-4">
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div className="space-y-4 my-6">
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
               <h4 className="font-bold text-slate-900 mb-1">
-                Why does Arabic text appear completely backward when pasted into
-                Photoshop or custom canvas layers?
+                Q: Why were the separate tool endpoints merged into this single
+                page?
               </h4>
-
               <p className="text-slate-600 text-sm">
-                Standard graphics software and unconfigured canvas environments
-                process text layers as standard Left-to-Right (LTR) blocks,
-                printing individual characters from left to right and reversing
-                the overall word sequence without evaluating BiDi layout rules.
+                A: Combining text reshaping, diacritic stripping, character
+                counting, JSON formatting, and OCR scanning into one workspace
+                prevents context switching and lets you chain operations
+                smoothly.
               </p>
             </div>
 
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
               <h4 className="font-bold text-slate-900 mb-1">
-                How does stripping diacritics (Tashkeel) improve database search
-                performance and SEO?
+                Q: Why do Arabic meta descriptions get truncated in Google
+                search results?
               </h4>
-
               <p className="text-slate-600 text-sm">
-                Search queries entered by users rarely include precise vowel
-                markings. By normalizing stored records and search terms into
-                their canonical unvowelled forms, you eliminate search
-                discrepancies and dramatically boost query matching efficiency
-                across SQL and NoSQL engines.
+                A: Arabic characters take up more horizontal pixel width on
+                screen than standard Latin characters. Monitoring visual pixel
+                budget prevents unexpected truncation.
               </p>
             </div>
 
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
               <h4 className="font-bold text-slate-900 mb-1">
-                Can I integrate this normalization logic directly into a React
-                or Next.js frontend workflow?
+                Q: How does diacritic stripping help database search
+                performance?
               </h4>
-
               <p className="text-slate-600 text-sm">
-                Yes. All transformations utilize pure, lightweight JavaScript
-                string methods and standard Unicode normalization libraries (
-                <code>String.normalize(&apos;NFKC&apos;)</code>), making them
-                fully compatible with server-side rendering (SSR) and
-                client-side hooks without external binary dependencies.
+                A: Most user queries are unvowelled. Normalizing database lookup
+                strings ensures query records match unvowelled user searches.
+              </p>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+              <h4 className="font-bold text-slate-900 mb-1">
+                Q: Is client-side OCR extraction secure for sensitive developer
+                data?
+              </h4>
+              <p className="text-slate-600 text-sm">
+                A: Yes. All processing is handled locally by WebAssembly scripts
+                in your browser without external file uploads.
               </p>
             </div>
           </div>
+
+          <p className="mt-8 text-sm text-slate-500">
+            For further technical specifications on bidirectional text
+            compliance, refer to the{" "}
+            <a
+              href="https://unicode.org/faq/arabic.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 font-semibold underline hover:text-blue-800"
+            >
+              Unicode Arabic Technical FAQ
+            </a>
+            .
+          </p>
         </div>
       </section>
     </main>

@@ -1,16 +1,78 @@
-// app/about/page.tsx
+// file path: app/about/page.tsx
 import React from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "About | Eng. Joseph Thomas",
   description:
     "Meet Eng. Joseph Thomas, a CS Engineer with 25+ years of experience in SEO, web development, and former IT instructor at Aleppo University.",
+  alternates: {
+    canonical: "https://textarabi.com/about",
+  },
 };
 
 export default function AboutEN() {
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      name: "About Eng. Joseph Thomas",
+      url: "https://textarabi.com/about",
+      mainEntity: {
+        "@type": "Person",
+        name: "Eng. Joseph Thomas",
+        jobTitle: "Computer Science Engineer & Web Developer",
+        alumniOf: [
+          {
+            "@type": "EducationalOrganization",
+            name: "Aleppo University",
+          },
+          {
+            "@type": "EducationalOrganization",
+            name: "Concordia University",
+          },
+        ],
+        sameAs: ["https://freelancewebdesignusa.com/"],
+        knowsAbout: [
+          "Web Development",
+          "Search Engine Optimization (SEO)",
+          "Arabic Text Processing",
+          "RTL Typography",
+        ],
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://textarabi.com",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "About",
+          item: "https://textarabi.com/about",
+        },
+      ],
+    },
+  ];
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 font-sans">
+      {/* Schema.org Structured Data */}
+      {jsonLd.map((schema, index) => (
+        <script
+          key={`about-jsonld-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+
       <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
         <h1 className="text-3xl font-black mb-6">About Eng. Joseph Thomas</h1>
         <p className="text-lg text-slate-700 mb-6">
@@ -62,6 +124,8 @@ export default function AboutEN() {
           <Link
             href="https://freelancewebdesignusa.com/"
             className="text-blue-600 font-bold hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             https://freelancewebdesignusa.com/
           </Link>

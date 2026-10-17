@@ -1,4 +1,3 @@
-// components/TextUtilityPanel.tsx
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
@@ -15,18 +14,18 @@ import {
 import {
   Trash2,
   RefreshCw,
-  Type,
   FileText,
   Check,
   Copy,
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown,
   Keyboard,
   Languages,
   Sparkles,
-  Braces,
+  Camera,
+  Upload,
+  Maximize2,
+  Spline,
 } from "lucide-react";
+import { createWorker } from "tesseract.js";
 
 // Safe Imports for sub-components
 import StatsBar from "./StatsBar";
@@ -68,18 +67,16 @@ function reverseArabicPreservingWords(text: string): string {
 function reshapeArabicText(text: string): string {
   try {
     return reverseArabicPreservingWords(text);
-  } catch (e) {
+  } catch {
     return text.split("").reverse().join("");
   }
 }
 
-// دالة تنسيق وتمرير بيانات JSON وتحويل المفاتيح والنصوص العربية مع الحفاظ على الهيكلة
 function formatJsonArabic(text: string, isRtl: boolean): string {
   if (!text.trim()) return "";
   try {
     const parsed = JSON.parse(text);
-    const formatted = JSON.stringify(parsed, null, 2);
-    return formatted;
+    return JSON.stringify(parsed, null, 2);
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : String(err);
     return isRtl
@@ -88,37 +85,133 @@ function formatJsonArabic(text: string, isRtl: boolean): string {
   }
 }
 
+/**
+ * Enhanced Rule-Based Arabic Keshida (Tatweel) Generator
+ * Fixes joining errors by filtering out non-connecting characters,
+ * preserving Tashkeel diacritics, and limiting Tatweel placement per word.
+ */
+function applyKeshida(
+  text: string,
+  mode: "balanced" | "full" = "balanced",
+): string {
+  if (!text) return "";
+
+  // Arabic Tashkeel (harakat) character range
+  const tashkeel = "[\u064B-\u0652\u0653\u0670]?";
+
+  // Dual-joiner letters that can connect forward to the next letter
+  const connectingLetters = "[بتثجحخسشصضطظعغفقكلمنهيئ]";
+
+  // Valid target letters that can follow a connecting letter
+  const followLetters = "[ابتثجحخدذرزسشصضطظعغفقكلمنهوىيأإآؤئ]";
+
+  const regex = new RegExp(
+    `(${connectingLetters}${tashkeel})(?=${followLetters})`,
+    "g",
+  );
+
+  if (mode === "balanced") {
+    return text
+      .split("\n")
+      .map((line) =>
+        line
+          .split(" ")
+          .map((word) => {
+            // Skip short words (<= 3 characters) to avoid visual clutter
+            const cleanWord = word.replace(/[\u064B-\u0652\u0653\u0670]/g, "");
+            if (cleanWord.length <= 3) return word;
+
+            let count = 0;
+            return word.replace(regex, (match) => {
+              // Restrict to max 1 Tatweel insertion per word for typography balance
+              if (count < 1) {
+                count++;
+                return match + "\u0640";
+              }
+              return match;
+            });
+          })
+          .join(" "),
+      )
+      .join("\n");
+  }
+
+  // Full mode: Places Tatweel across all valid dual-joiner connections
+  return text.replace(regex, "$1\u0640");
+}
+
+function generateSvgVector(text: string): string {
+  if (!text.trim()) return "";
+  const escapedText = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="100%" height="100%">
+  <style>
+    .vector-text {
+      font-family: 'Cairo', 'Amiri', sans-serif;
+      font-size: 48px;
+      font-weight: bold;
+      fill: #1e293b;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+  </style>
+  <text x="50%" y="50%" class="vector-text" direction="rtl">${escapedText}</text>
+</svg>`;
+}
+
+export type TextUtilityMode =
+  | "strip"
+  | "reverse"
+  | "preview"
+  | "keyboard"
+  | "translate"
+  | "json"
+  | "scan"
+  | "keshida"
+  | "vector";
+
+export type TextArabiTool =
+  | "arabic-text-normalizer"
+  | "ocr-scanner"
+  | "arabic-keshida-generator"
+  | "arabic-text-to-vector";
+
 interface TextUtilityPanelProps {
-  initialMode?:
-    | "strip"
-    | "reverse"
-    | "preview"
-    | "keyboard"
-    | "translate"
-    | "json";
+  initialMode?: TextUtilityMode;
   lang?: "ar" | "en";
+  allowedTool?: TextArabiTool;
 }
 
 export default function TextUtilityPanel({
   initialMode = "strip",
   lang = "ar",
+  allowedTool,
 }: TextUtilityPanelProps) {
   const [inputText, setInputText] = useState("");
-  const [activeTab, setActiveTab] = useState<string>(initialMode);
+  const [activeTab, setActiveTab] = useState<TextUtilityMode>(initialMode);
   const [selectedFont, setSelectedFont] = useState("font-cairo");
   const [fontSize, setFontSize] = useState("text-xl");
   const [copied, setCopied] = useState(false);
   const [translationTarget, setTranslationTarget] = useState<"en" | "ar">("en");
   const [isTranslating, setIsTranslating] = useState(false);
   const [translatedOutput, setTranslatedOutput] = useState("");
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanProgressText, setScanProgressText] = useState("");
+  const [scanPreviewImage, setScanPreviewImage] = useState<string | null>(null);
 
-  // States for Combined Tab Options
   const [tashkeelSubMode, setTashkeelSubMode] = useState<"strip" | "auto">(
     "strip",
+  );
+  const [keshidaMode, setKeshidaMode] = useState<"balanced" | "full">(
+    "balanced",
   );
   const [loadingTashkeel, setLoadingTashkeel] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const isRtl = lang === "ar";
 
   const currentFontLabel =
@@ -138,14 +231,58 @@ export default function TextUtilityPanel({
     setActiveTab(initialMode);
   }
 
-  // Translation hook handler
-  useEffect(() => {
-    if (activeTab !== "translate" || !inputText.trim()) {
-      return;
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+    setScanPreviewImage(imageUrl);
+    setIsScanning(true);
+    setScanProgressText(
+      isRtl ? "جاري تهيئة محرك التعرف الضوئي..." : "Initializing OCR Engine...",
+    );
+
+    try {
+      const worker = await createWorker(["ara", "eng"]);
+      setScanProgressText(
+        isRtl
+          ? "جاري قراءة وتحليل النص من الصورة..."
+          : "Scanning text from image...",
+      );
+      const ret = await worker.recognize(file);
+
+      const extractedText = ret.data.text.trim();
+      await worker.terminate();
+
+      if (extractedText) {
+        setInputText((prev) =>
+          prev ? `${prev}\n\n${extractedText}` : extractedText,
+        );
+      } else {
+        alert(
+          isRtl
+            ? "لم يتم العثور على نص واضح في الصورة المرفقة."
+            : "No clear text found in the image.",
+        );
+      }
+    } catch (error) {
+      console.error("Tesseract OCR Error:", error);
+      alert(
+        isRtl
+          ? "فشل تحليل الصورة واستخراج النصوص."
+          : "Failed to process image OCR extraction.",
+      );
+    } finally {
+      setIsScanning(false);
+      setScanProgressText("");
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
+  };
+
+  useEffect(() => {
+    if (activeTab !== "translate" || !inputText.trim()) return;
 
     const controller = new AbortController();
-
     const delayDebounceFn = setTimeout(async () => {
       setIsTranslating(true);
       try {
@@ -161,15 +298,11 @@ export default function TextUtilityPanel({
 
         if (res.ok) {
           const data = (await res.json()) as unknown[][][] | undefined;
-
           if (data && data[0]) {
             const translatedText = data[0]
-              .map((x) => {
-                if (Array.isArray(x) && typeof x[0] === "string") {
-                  return x[0];
-                }
-                return "";
-              })
+              .map((x) =>
+                Array.isArray(x) && typeof x[0] === "string" ? x[0] : "",
+              )
               .filter(Boolean)
               .join("");
             setTranslatedOutput(translatedText);
@@ -211,7 +344,6 @@ export default function TextUtilityPanel({
     error?: string;
   }
 
-  // Remote Vercel API Core Handler for Auto Tashkeel Execution
   const handleAutoTashkeel = async () => {
     if (!inputText.trim()) return;
     setLoadingTashkeel(true);
@@ -229,19 +361,16 @@ export default function TextUtilityPanel({
         },
       );
 
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
-      }
 
       const data = (await response.json()) as TashkeelResponse;
-
       if (data && data.result) {
         setInputText(data.result);
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       console.error("Tashkeel API Error:", errorMessage);
-
       alert(
         isRtl
           ? "فشل الاتصال بخادم التشكيل، يرجى التحقق من الشبكة."
@@ -294,21 +423,31 @@ export default function TextUtilityPanel({
     }, 0);
   };
 
-  // Pure evaluation layer to avoid side-effects inside the React cycle
+  const handleClear = () => {
+    setInputText("");
+    setTranslatedOutput("");
+    setScanPreviewImage(null);
+  };
+
   let outputText = "";
   if (inputText.trim() || activeTab === "keyboard") {
     if (activeTab === "strip") {
-      if (tashkeelSubMode === "strip") {
-        outputText = inputText.replace(/[\u064B-\u0652\u0653\u0670]/g, "");
-      } else {
-        outputText = inputText;
-      }
+      outputText =
+        tashkeelSubMode === "strip"
+          ? inputText.replace(/[\u064B-\u0652\u0653\u0670]/g, "")
+          : inputText;
     } else if (activeTab === "reverse") {
       outputText = reshapeArabicText(inputText);
     } else if (activeTab === "translate") {
       outputText = translatedOutput;
     } else if (activeTab === "json") {
       outputText = formatJsonArabic(inputText, isRtl);
+    } else if (activeTab === "keshida") {
+      outputText = applyKeshida(inputText, keshidaMode);
+    } else if (activeTab === "vector") {
+      outputText = generateSvgVector(inputText);
+    } else if (activeTab === "scan") {
+      outputText = inputText;
     } else {
       outputText = inputText;
     }
@@ -325,148 +464,252 @@ export default function TextUtilityPanel({
     }
   };
 
+  const showTranslate =
+    !allowedTool || allowedTool === "arabic-text-normalizer";
+  const showKeyboard = !allowedTool || allowedTool === "arabic-text-normalizer";
+  const showReverse = !allowedTool || allowedTool === "arabic-text-normalizer";
+  const showStrip = !allowedTool || allowedTool === "arabic-text-normalizer";
+  const showScan = !allowedTool || allowedTool === "ocr-scanner";
+  const showKeshida =
+    !allowedTool || allowedTool === "arabic-keshida-generator";
+  const showVector = !allowedTool || allowedTool === "arabic-text-to-vector";
+
+  const activeTabsCount = [
+    showTranslate,
+    showKeyboard,
+    showReverse,
+    showStrip,
+    showKeshida,
+    showVector,
+    showScan,
+  ].filter(Boolean).length;
+
   return (
     <div
       className="w-full max-w-5xl mx-auto px-4 py-2 mb-8"
       dir={isRtl ? "rtl" : "ltr"}
     >
-      <Tabs
-        value={activeTab}
-        onValueChange={(val) => {
-          setActiveTab(val);
-          if (val !== "translate") setTranslatedOutput("");
-        }}
-        className="w-full mb-4"
-      >
-        <TabsList className="grid grid-cols-2 lg:grid-cols-6 w-full bg-slate-100 p-1 rounded-xl gap-1 h-auto overflow-hidden">
-          {/* 1. Instant Translate */}
-          <TabsTrigger
-            value="translate"
-            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+      {(!allowedTool || activeTabsCount > 1) && (
+        <Tabs
+          value={activeTab}
+          onValueChange={(val) => {
+            setActiveTab(val as TextUtilityMode);
+            if (val !== "translate") setTranslatedOutput("");
+          }}
+          className="w-full mb-4"
+        >
+          <TabsList
+            className={`grid grid-cols-2 lg:grid-cols-${Math.min(
+              activeTabsCount,
+              8,
+            )} w-full bg-slate-100 p-1 rounded-xl gap-1 h-auto overflow-hidden`}
           >
-            <Languages className="w-4 h-4 shrink-0" />
-            <span>{isRtl ? "الترجمة الفورية" : "Instant Translate"}</span>
-          </TabsTrigger>
+            {showTranslate && (
+              <TabsTrigger
+                value="translate"
+                className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+              >
+                <Languages className="w-4 h-4 shrink-0" />
+                <span>{isRtl ? "الترجمة الفورية" : "Instant Translate"}</span>
+              </TabsTrigger>
+            )}
 
-          {/* 2. Arabic Keyboard */}
-          <TabsTrigger
-            value="keyboard"
-            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-          >
-            <Keyboard className="w-4 h-4 shrink-0" />
-            <span>{isRtl ? "كيبورد عربي" : "Arabic Keyboard"}</span>
-          </TabsTrigger>
+            {showKeyboard && (
+              <TabsTrigger
+                value="keyboard"
+                className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+              >
+                <Keyboard className="w-4 h-4 shrink-0" />
+                <span>{isRtl ? "كيبورد عربي" : "Arabic Keyboard"}</span>
+              </TabsTrigger>
+            )}
 
-          {/* 3. Photoshop Fixer */}
-          <TabsTrigger
-            value="reverse"
-            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-          >
-            <RefreshCw className="w-4 h-4 shrink-0" />
-            <span>{isRtl ? "مصحح الفوتوشوب" : "Photoshop Fixer"}</span>
-          </TabsTrigger>
+            {showReverse && (
+              <TabsTrigger
+                value="reverse"
+                className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+              >
+                <RefreshCw className="w-4 h-4 shrink-0" />
+                <span>{isRtl ? "مصحح الفوتوشوب" : "Photoshop Fixer"}</span>
+              </TabsTrigger>
+            )}
 
-          {/* 4. Combined Tab: Tashkeel & Strip Diacritics */}
-          <TabsTrigger
-            value="strip"
-            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-          >
-            <Trash2 className="w-4 h-4 shrink-0" />
-            <span>{isRtl ? "تشكيل / إزالة" : "Tashkeel / Strip"}</span>
-          </TabsTrigger>
+            {showStrip && (
+              <TabsTrigger
+                value="strip"
+                className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+              >
+                <Trash2 className="w-4 h-4 shrink-0" />
+                <span>{isRtl ? "تشكيل / إزالة" : "Tashkeel / Strip"}</span>
+              </TabsTrigger>
+            )}
 
-          {/* 5. JSON Formatter (تحويل وتنسيق JSON بالعربي) */}
-          <TabsTrigger
-            value="json"
-            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-          >
-            <Braces className="w-4 h-4 shrink-0" />
-            <span>{isRtl ? "تنسيق JSON" : "JSON Formatter"}</span>
-          </TabsTrigger>
+            {showKeshida && (
+              <TabsTrigger
+                value="keshida"
+                className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+              >
+                <Maximize2 className="w-4 h-4 shrink-0" />
+                <span>{isRtl ? "الكشيدة والتطويل" : "Keshida / Tatweel"}</span>
+              </TabsTrigger>
+            )}
 
-          {/* 6. Font Preview */}
-          <TabsTrigger
-            value="preview"
-            className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-          >
-            <Type className="w-4 h-4 shrink-0" />
-            <span>{isRtl ? "استعراض الخطوط" : "Font Preview"}</span>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+            {showVector && (
+              <TabsTrigger
+                value="vector"
+                className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+              >
+                <Spline className="w-4 h-4 shrink-0" />
+                <span>{isRtl ? "تحويل النص لمتجه" : "Text to Vector"}</span>
+              </TabsTrigger>
+            )}
 
-      <StatsBar
-        wordCount={wordCount}
-        charCountWithSpaces={charCountWithSpaces}
-        charCountNoSpaces={charCountNoSpaces}
-        isRtl={isRtl}
-      />
+            {showScan && (
+              <TabsTrigger
+                value="scan"
+                className="relative flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-semibold font-tajawal rounded-lg transition-all bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-700 border border-blue-300/60 shadow-2xs hover:bg-blue-500/20 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:border-transparent overflow-hidden group"
+              >
+                <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-500"></span>
+                </span>
+                <Camera className="w-4 h-4 shrink-0 text-blue-600 group-data-[state=active]:text-white animate-pulse" />
+                <span>{isRtl ? "مسح ضوئي OCR" : "OCR Scanner"}</span>
+              </TabsTrigger>
+            )}
+          </TabsList>
+        </Tabs>
+      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-        {/* Left Column: Input Panel */}
-        <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+      {(!allowedTool || allowedTool === "arabic-text-normalizer") && (
+        <StatsBar
+          wordCount={wordCount}
+          charCountWithSpaces={charCountWithSpaces}
+          charCountNoSpaces={charCountNoSpaces}
+          isRtl={isRtl}
+        />
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch w-full">
+        {/* Left Column Input */}
+        <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden w-full min-w-0">
           <div className="bg-slate-50/80 border-b border-slate-200 px-4 py-3 flex justify-between items-center h-[48px]">
             <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5 font-cairo">
               <FileText className="w-3.5 h-3.5 text-slate-400" />{" "}
               {isRtl ? "أدخل النص الأصلي هنا" : "Input Original Text Here"}
             </span>
+
             {inputText && (
               <Button
                 variant="ghost"
-                onClick={() => {
-                  setInputText("");
-                  setTranslatedOutput("");
-                }}
+                onClick={handleClear}
                 className="text-xs h-7 px-2 text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-md"
               >
                 {isRtl ? "مسح الكل" : "Clear All"}
               </Button>
             )}
           </div>
-          <Textarea
-            ref={textareaRef}
-            value={inputText}
-            onChange={(e) => {
-              setInputText(e.target.value);
-              if (!e.target.value.trim()) setTranslatedOutput("");
-            }}
-            placeholder={
-              activeTab === "json"
-                ? isRtl
-                  ? 'اكتب أو الصق كود JSON هنا (مثال: {"الاسم": "أحمد"})...'
-                  : "Type or paste JSON code here..."
-                : isRtl
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImageUpload}
+            accept="image/*"
+            className="hidden"
+          />
+
+          {activeTab === "scan" ? (
+            <div className="p-6 flex flex-col items-center justify-center border-2 border-dashed border-blue-200 bg-blue-50/30 m-4 rounded-xl flex-grow text-center transition-all hover:bg-blue-50/50">
+              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mb-3 shadow-inner">
+                {isScanning ? (
+                  <RefreshCw className="w-6 h-6 animate-spin" />
+                ) : (
+                  <Upload className="w-6 h-6" />
+                )}
+              </div>
+              <h3 className="text-sm font-bold text-slate-800 font-cairo mb-1">
+                {isRtl
+                  ? "رفع صورة لاستخراج النص (OCR)"
+                  : "Upload Image for OCR Extraction"}
+              </h3>
+              <p className="text-xs text-slate-500 font-tajawal mb-4 max-w-xs">
+                {isRtl
+                  ? "استخرج النصوص الإنجليزية والعربية بدقة من الصور المرفقة عبر محرك التعرّف الفوري."
+                  : "Extract English and Arabic text from your images instantly."}
+              </p>
+              <Button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isScanning}
+                className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-tajawal gap-2 h-9 px-4 shadow-sm"
+              >
+                <Camera className="w-4 h-4" />
+                <span>
+                  {isScanning
+                    ? scanProgressText ||
+                      (isRtl ? "جاري معالجة الصورة..." : "Processing image...")
+                    : isRtl
+                      ? "اختر صورة (JPG, PNG)"
+                      : "Browse Image"}
+                </span>
+              </Button>
+
+              {scanPreviewImage && (
+                <div className="mt-4 relative w-24 h-24 rounded-lg overflow-hidden border border-slate-200 shadow-xs">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={scanPreviewImage}
+                    alt="Scan Preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <Textarea
+              ref={textareaRef}
+              value={inputText}
+              onChange={(e) => {
+                setInputText(e.target.value);
+                if (!e.target.value.trim()) setTranslatedOutput("");
+              }}
+              placeholder={
+                isRtl
                   ? "اكتب أو الصق النص هنا..."
                   : "Type or paste text here..."
-            }
-            className={`notranslate w-full min-h-[320px] flex-grow p-4 outline-none border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none text-slate-800 text-lg leading-relaxed font-cairo ${
-              activeTab === "json" ? "font-mono text-sm" : ""
-            }`}
-            dir={
-              activeTab === "translate" && translationTarget === "ar"
-                ? "ltr"
-                : activeTab === "json"
+              }
+              className="notranslate w-full min-h-[320px] flex-grow p-4 outline-none border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none text-slate-800 text-lg leading-relaxed font-cairo"
+              dir={
+                activeTab === "translate" && translationTarget === "ar"
                   ? "ltr"
                   : "rtl"
-            }
-          />
+              }
+            />
+          )}
         </div>
 
-        {/* Right Column: Processed Outputs Panel */}
-        <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+        {/* Right Column Output */}
+        <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden w-full min-w-0">
           <div className="bg-slate-50/80 border-b border-slate-200 px-4 py-3 flex justify-between items-center h-[48px]">
             <span className="text-xs font-bold text-slate-700 font-cairo">
               {activeTab === "keyboard"
                 ? isRtl
                   ? "لوحة الحروف والتشكيل الذكية"
                   : "Smart Arabic Keyboard"
-                : activeTab === "json"
+                : activeTab === "keshida"
                   ? isRtl
-                    ? "كود JSON المنسق والمعالج"
-                    : "Formatted JSON Output"
-                  : isRtl
-                    ? "النص المعالج الجاهز"
-                    : "Processed Ready Output"}
+                    ? "النص الممتد بالتطويل"
+                    : "Stretched Keshida Text"
+                  : activeTab === "vector"
+                    ? isRtl
+                      ? "كود مسار SVG المتجه"
+                      : "SVG Vector Path Code"
+                    : activeTab === "scan"
+                      ? isRtl
+                        ? "النص المستخرج من الصورة"
+                        : "Extracted OCR Text"
+                      : isRtl
+                        ? "النص المعالج الجاهز"
+                        : "Processed Ready Output"}
             </span>
             {outputText && activeTab !== "keyboard" && (
               <Button
@@ -497,7 +740,6 @@ export default function TextUtilityPanel({
             )}
           </div>
 
-          {/* Sub-Header Ribbon for Combined Tab: Safe Layout Control */}
           {activeTab === "strip" && (
             <div className="bg-slate-100/50 border-b border-slate-200 px-3 py-2 flex items-center justify-between gap-2">
               <div className="flex bg-slate-200/70 p-0.5 rounded-lg border border-slate-300/40">
@@ -524,7 +766,6 @@ export default function TextUtilityPanel({
                 </button>
               </div>
 
-              {/* Action Trigger for Cloud-side Processing */}
               {tashkeelSubMode === "auto" && inputText.trim() && (
                 <Button
                   onClick={handleAutoTashkeel}
@@ -545,6 +786,33 @@ export default function TextUtilityPanel({
                   </span>
                 </Button>
               )}
+            </div>
+          )}
+
+          {activeTab === "keshida" && (
+            <div className="bg-slate-100/50 border-b border-slate-200 px-3 py-2 flex items-center justify-between gap-2">
+              <div className="flex bg-slate-200/70 p-0.5 rounded-lg border border-slate-300/40">
+                <button
+                  onClick={() => setKeshidaMode("balanced")}
+                  className={`px-3 py-1 text-xs font-medium font-tajawal rounded-md transition-all ${
+                    keshidaMode === "balanced"
+                      ? "bg-white text-slate-900 shadow-xs"
+                      : "text-slate-500 hover:text-slate-800"
+                  }`}
+                >
+                  {isRtl ? "تطويل متوازن" : "Balanced Keshida"}
+                </button>
+                <button
+                  onClick={() => setKeshidaMode("full")}
+                  className={`px-3 py-1 text-xs font-medium font-tajawal rounded-md transition-all ${
+                    keshidaMode === "full"
+                      ? "bg-white text-slate-900 shadow-xs"
+                      : "text-slate-500 hover:text-slate-800"
+                  }`}
+                >
+                  {isRtl ? "تطويل كامل" : "Full Extension"}
+                </button>
+              </div>
             </div>
           )}
 
@@ -573,90 +841,50 @@ export default function TextUtilityPanel({
               >
                 <SelectTrigger className="w-[180px] h-8 bg-white border-slate-200 text-xs font-tajawal px-3 flex justify-between items-center">
                   <SelectValue />
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </SelectTrigger>
-                <SelectContent className="bg-white border border-slate-200 text-slate-700 p-1 rounded-lg">
-                  <SelectItem
-                    value="en"
-                    className="text-xs font-tajawal py-1.5 cursor-pointer"
-                  >
-                    العربية ➜ English
+                <SelectContent>
+                  <SelectItem value="en" className="text-xs font-tajawal">
+                    {isRtl ? "العربية إلى الإنجليزية" : "Arabic to English"}
                   </SelectItem>
-                  <SelectItem
-                    value="ar"
-                    className="text-xs font-tajawal py-1.5 cursor-pointer"
-                  >
-                    English ➜ العربية
+                  <SelectItem value="ar" className="text-xs font-tajawal">
+                    {isRtl ? "الإنجليزية إلى العربية" : "English to Arabic"}
                   </SelectItem>
                 </SelectContent>
               </Select>
-              {isTranslating && (
-                <span className="text-xs text-blue-500 animate-pulse font-tajawal flex items-center gap-1">
-                  <RefreshCw className="w-3 h-3 animate-spin" />{" "}
-                  {isRtl ? "جاري المعالجة..." : "Translating content..."}
-                </span>
-              )}
             </div>
           )}
 
-          {activeTab === "keyboard" ? (
-            <TashkeelKeyboard
-              onInsert={insertCharacter}
-              onBackspace={handleBackspace}
-              onClear={() => {
-                setInputText("");
-                setTranslatedOutput("");
-              }}
-              onCopy={handleCopy}
-              disabledCopy={!inputText}
-              isRtl={isRtl}
-              copied={copied}
-            />
-          ) : (
-            <div
-              className={`w-full h-full min-h-[320px] md:min-h-0 p-4 text-slate-800 whitespace-pre-wrap leading-relaxed overflow-y-auto bg-slate-50/30 ${
-                activeTab === "preview"
-                  ? selectedFont
-                  : activeTab === "json"
-                    ? "font-mono text-sm"
-                    : "font-cairo"
-              } ${fontSize}`}
-              dir={
-                activeTab === "translate"
-                  ? translationTarget === "ar"
-                    ? "rtl"
-                    : "ltr"
-                  : activeTab === "reverse" || activeTab === "json"
+          <div className="p-4 flex-grow flex flex-col justify-between">
+            {activeTab === "keyboard" ? (
+              <TashkeelKeyboard
+                onInsert={insertCharacter}
+                onBackspace={handleBackspace}
+                onClear={handleClear}
+                onCopy={handleCopy}
+                disabledCopy={!inputText}
+                copied={copied}
+                isRtl={isRtl}
+              />
+            ) : (
+              <Textarea
+                readOnly
+                value={outputText}
+                placeholder={
+                  isRtl
+                    ? "ستظهر النتيجة المعالجة هنا تلقائياً..."
+                    : "Processed output will appear here automatically..."
+                }
+                className="notranslate w-full min-h-[320px] flex-grow p-0 outline-none border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none text-slate-800 text-lg leading-relaxed font-cairo"
+                dir={
+                  activeTab === "translate" && translationTarget === "en"
                     ? "ltr"
-                    : "rtl"
-              }
-            >
-              {outputText ? (
-                outputText
-              ) : (
-                <div className="flex items-center gap-1.5 text-slate-400 text-sm select-none font-tajawal">
-                  {isRtl ? (
-                    <ChevronLeft className="w-4 h-4 text-slate-300" />
-                  ) : (
-                    <ChevronRight className="w-4 h-4 text-slate-300" />
-                  )}
-                  <span>
-                    {activeTab === "strip" && tashkeelSubMode === "auto"
-                      ? isRtl
-                        ? "أدخل نصاً ثم اضغط على 'شكل النص الآن' لبدء المعالجة السحابية..."
-                        : "Insert text then click 'Tashkeel Now' to execute..."
-                      : activeTab === "json"
-                        ? isRtl
-                          ? "أدخل بيانات JSON في الخانة المقابلة لتنسيقها وعرضها بدقة..."
-                          : "Enter JSON data in the left panel to format..."
-                        : isRtl
-                          ? "بانتظار إضافة نصوص في الخانة المقابلة..."
-                          : "Awaiting input text in the left panel..."}
-                  </span>
-                </div>
-              )}
-            </div>
-          )}
+                    : activeTab === "vector"
+                      ? "ltr"
+                      : "rtl"
+                }
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

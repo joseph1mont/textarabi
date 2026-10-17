@@ -1,4 +1,4 @@
-import React from "react";
+// file path: components/footer.tsx
 import Link from "next/link";
 
 interface FooterProps {

@@ -32,16 +32,15 @@ export default function BasePostPage({
       dir={isAr ? "rtl" : "ltr"}
     >
       <div className="max-w-3xl mx-auto">
-        <div aria-label="Breadcrumb" className="mb-6">
-          <Link
-            href={dictionary.backPath}
-            className="text-sm font-bold text-blue-600 hover:underline inline-flex items-center gap-1"
-          >
-            {dictionary.backLink}
-          </Link>
-        </div>
-
         <article className="bg-white p-8 md:p-12 rounded-2xl border border-slate-200 shadow-2xs">
+          <div aria-label="Breadcrumb" className="mb-6">
+            <Link
+              href={dictionary.backPath}
+              className="text-sm font-bold text-blue-600 hover:underline inline-flex items-center gap-1"
+            >
+              {dictionary.backLink}
+            </Link>
+          </div>
           <header className="mb-8 pb-6 border-b border-slate-100">
             <h1
               className={`text-2xl sm:text-3xl tracking-tight text-slate-900 leading-tight mb-4 ${isAr ? "font-black" : "font-extrabold"}`}

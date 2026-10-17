@@ -1,20 +1,64 @@
-// app/blog/page.tsx
-import Link from "next/link";
+// file path: app/blog/page.tsx
+import type { Metadata } from "next";
 import { articles } from "@/data/articles";
+import BlogSidebar from "@/components/BlogSidebar";
+import BlogTagFilter from "@/components/BlogTagFilter";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Technical Guides & Engineering Blog | TextArabi",
   description:
-    "Deep dive technical resources covering bidirectional layout algorithms, font parsing performance, and internationalization SEO.",
+    "Here is exactly how technical resources covering bidirectional layout algorithms, font parsing performance, and internationalization SEO.",
+  alternates: {
+    canonical: "https://textarabi.com/blog",
+  },
 };
 
 export default function EnglishBlogIndex() {
   const englishArticles = articles.filter((a) => a.lang === "en");
 
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Engineering Logs & Text Processing Guides | TextArabi",
+      description:
+        "Technical articles on web development, RTL text handling, and database optimization.",
+      url: "https://textarabi.com/blog",
+      inLanguage: "en",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://textarabi.com",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Blog",
+          item: "https://textarabi.com/blog",
+        },
+      ],
+    },
+  ];
+
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800 py-12 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-4xl mx-auto">
-        <header className="mb-12 border-b border-slate-200 pb-8">
+    <main className="min-h-screen bg-slate-50 text-slate-800 px-4 sm:px-6 lg:px-8 font-sans">
+      {/* Schema.org Structured Data */}
+      {jsonLd.map((schema, index) => (
+        <script
+          key={`blog-index-jsonld-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+
+      <div className="max-w-7xl mx-auto">
+        <header className="mb-10 border-b border-slate-200 pb-8 max-w-4xl">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             Engineering Logs & Text Processing Guides
           </h1>
@@ -24,39 +68,15 @@ export default function EnglishBlogIndex() {
           </p>
         </header>
 
-        <div className="grid gap-8">
-          {englishArticles.map((article) => (
-            <article
-              key={article.slug}
-              className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-xs transition-shadow"
-            >
-              <span className="inline-block bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-md mb-3">
-                {article.targetTool} Asset
-              </span>
+        {/* Layout with Main Filterable Grid & Sticky Sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-8">
+            <BlogTagFilter articles={englishArticles} lang="en" />
+          </div>
 
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 hover:text-blue-600 transition-colors">
-                <Link href={`/blog/${article.slug.replace("blog/", "")}`}>
-                  {article.title}
-                </Link>
-              </h2>
-
-              <p className="text-slate-600 mt-2 text-sm sm:text-base line-clamp-3">
-                {article.excerpt}
-              </p>
-
-              <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 font-mono">
-                <span>
-                  Published: {article.publishedAt} • {article.readTime}
-                </span>
-                <Link
-                  href={`/blog/${article.slug.replace("blog/", "")}`}
-                  className="text-blue-600 font-bold hover:underline"
-                >
-                  Read Guide &gt;
-                </Link>
-              </div>
-            </article>
-          ))}
+          <div className="lg:col-span-4">
+            <BlogSidebar lang="en" />
+          </div>
         </div>
       </div>
     </main>

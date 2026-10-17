@@ -1,5 +1,6 @@
-// app/ar/page.tsx
+// file path: app/ar/page.tsx
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   BookOpen,
   ChevronLeft,
@@ -12,16 +13,47 @@ import {
 import TextUtilityPanel from "@/components/TextUtilityPanel";
 import { WhyTextArabi } from "@/components/WhyTextArabi";
 
-export const metadata = {
+export const metadata: Metadata = {
   title:
     "أَدَوَات مُعَالَجَةِ النُّصُوصِ العَرَبِيَّةِ وَحِسَابِ الكَلِمَاتِ | TextArabi",
   description:
     "مجموعة أدوات برمجية متكاملة للمصممين والمطورين لتنظيف النصوص، إزالة الحركات والتشكيل، وتصحيح الكلمات المعكوسة في برامج التصميم مع دعم النسخ بترميز HTML الاحترافي.",
+  alternates: {
+    canonical: "https://textarabi.com/ar",
+  },
 };
 
 export default function ArabicHomePage() {
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "TextArabi",
+      url: "https://textarabi.com/ar",
+      description:
+        "منصة متكاملة لمعالجة النصوص العربية، إزالة التشكيل، وإصلاح الكلمات المعكوسة.",
+      inLanguage: "ar",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "TextArabi",
+      url: "https://textarabi.com/ar",
+      logo: "https://textarabi.com/logo.png",
+    },
+  ];
+
   return (
     <main className="w-full py-12 px-4 max-w-5xl mx-auto flex-grow" dir="rtl">
+      {/* Schema.org Structured Data */}
+      {jsonLd.map((schema, index) => (
+        <script
+          key={`ar-home-jsonld-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+
       {/* Right-Aligned Premium Hero Header with Full Tashkeel */}
       <div className="text-start max-w-3xl mb-10">
         <h1 className="text-3xl font-black text-slate-900 sm:text-4xl mb-4 font-tajawal leading-tight tracking-tight">
@@ -57,7 +89,6 @@ export default function ArabicHomePage() {
       <TextUtilityPanel initialMode="strip" lang="ar" />
       <WhyTextArabi lang="ar" />
 
-      {/* Substantive Editorial & Technical Architecture Section for AdSense Compliance */}
       <section className="my-16 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-2xs">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-4 border border-blue-100 font-tajawal">

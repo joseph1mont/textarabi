@@ -1,17 +1,62 @@
-RewriteEngine On
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
 
-# تحويلات الصفحات التي تم تغيير مسارها
-RewriteRule ^ar/blog/best-arabic-fonts/?$ /ar/blog/ui-font-preview-guide/ [L,R=301]
-RewriteRule ^ar/blog/clean-special-characters/?$ /ar/blog/clean-arabic-database-sql/ [L,R=301]
-RewriteRule ^ar/blog/fix-arabic-photoshop/?$ /ar/blog/fix-photoshop-arabic-text/ [L,R=301]
-RewriteRule ^ar/blog/fix-illustrator-arabic/?$ /ar/blog/fix-premiere-illustrator-arabic/ [L,R=301]
-RewriteRule ^ar/blog/premiere-arabic-fonts/?$ /ar/blog/ui-font-preview-guide/ [L,R=301]
+  # ----------------------------------------------------------------------
+  # 0. FORCE NON-WWW CANONICAL DOMAIN
+  # ----------------------------------------------------------------------
+  RewriteCond %{HTTP_HOST} ^www\.textarabi\.com [NC]
+  RewriteRule ^(.*)$ https://textarabi.com/$1 [R=301,L]
 
-# تحويلات الروابط السبعة إلى صفحة المدونة الرئيسية
-RewriteRule ^ar/blog/long-tail-keywords-seo/?$ /ar/blog/ [L,R=301]
-RewriteRule ^ar/blog/meta-description-guide/?$ /ar/blog/ [L,R=301]
-RewriteRule ^ar/blog/regex-arabic-processing/?$ /ar/blog/ [L,R=301]
-RewriteRule ^ar/blog/seo-article-length-guide/?$ /ar/blog/ [L,R=301]
-RewriteRule ^ar/blog/strip-arabic-diacritics/?$ /ar/blog/ [L,R=301]
-RewriteRule ^ar/blog/understand-utf8-arabic/?$ /ar/blog/ [L,R=301]
-RewriteRule ^ar/blog/word-character-counter-guide/?$ /ar/blog/ [L,R=301]
+  # ----------------------------------------------------------------------
+  # 1. IMMEDIATE 301 REDIRECTS (Consolidated Tools Only)
+  # ----------------------------------------------------------------------
+
+  # English Tool Consolidation Redirects
+  RewriteRule ^tools/?$ https://textarabi.com/tools/arabic-text-normalizer/ [R=301,L]
+  RewriteRule ^tools/character-counter/?$ https://textarabi.com/tools/arabic-text-normalizer/ [R=301,L]
+  RewriteRule ^tools/strip-diacritics/?$ https://textarabi.com/tools/arabic-text-normalizer/ [R=301,L]
+  RewriteRule ^tools/json-formatter/?$ https://textarabi.com/tools/arabic-text-normalizer/ [R=301,L]
+
+  # Arabic Tool Consolidation Redirects
+  RewriteRule ^ar/tools/?$ https://textarabi.com/ar/tools/arabic-text-normalizer/ [R=301,L]
+  RewriteRule ^ar/tools/character-counter/?$ https://textarabi.com/ar/tools/arabic-text-normalizer/ [R=301,L]
+  RewriteRule ^ar/tools/strip-diacritics/?$ https://textarabi.com/ar/tools/arabic-text-normalizer/ [R=301,L]
+  RewriteRule ^ar/tools/json-formatter/?$ https://textarabi.com/ar/tools/arabic-text-normalizer/ [R=301,L]
+
+  # Legacy Slug Aliases -> Active Blog Slugs
+  RewriteRule ^blog/seo-arabic-json-formatter-beautifier/?$ https://textarabi.com/blog/json-formatter-utf8-unicode-guide/ [R=301,L]
+  RewriteRule ^ar/blog/seo-arabic-json-formatter-beautifier/?$ https://textarabi.com/ar/blog/json-formatter-utf8-unicode-guide/ [R=301,L]
+  RewriteRule ^ar/blog/best-arabic-fonts/?$ https://textarabi.com/ar/blog/ui-font-preview-guide/ [R=301,L]
+  RewriteRule ^ar/blog/clean-special-characters/?$ https://textarabi.com/ar/blog/clean-arabic-database-sql/ [R=301,L]
+  RewriteRule ^ar/blog/fix-arabic-photoshop/?$ https://textarabi.com/ar/blog/fix-photoshop-arabic-text/ [R=301,L]
+  RewriteRule ^ar/blog/fix-illustrator-arabic/?$ https://textarabi.com/ar/blog/fix-premiere-illustrator-arabic/ [R=301,L]
+  RewriteRule ^ar/blog/premiere-arabic-fonts/?$ https://textarabi.com/ar/blog/ui-font-preview-guide/ [R=301,L]
+  RewriteRule ^ar/blog/fix-illustrator-premiere-arabic-text/?$ https://textarabi.com/ar/blog/fix-premiere-illustrator-arabic/ [R=301,L]
+  RewriteRule ^blog/fix-illustrator-premiere-arabic-text/?$ https://textarabi.com/blog/fix-premiere-illustrator-arabic/ [R=301,L]
+
+  # Retired Slugs -> Main Arabic Blog Index
+  RewriteRule ^ar/blog/long-tail-keywords-seo/?$ https://textarabi.com/ar/blog/ [R=301,L]
+  RewriteRule ^ar/blog/meta-description-guide/?$ https://textarabi.com/ar/blog/ [R=301,L]
+  RewriteRule ^ar/blog/regex-arabic-processing/?$ https://textarabi.com/ar/blog/ [R=301,L]
+  RewriteRule ^ar/blog/seo-article-length-guide/?$ https://textarabi.com/ar/blog/ [R=301,L]
+  RewriteRule ^ar/blog/strip-arabic-diacritics/?$ https://textarabi.com/ar/blog/ [R=301,L]
+  RewriteRule ^ar/blog/understand-utf8-arabic/?$ https://textarabi.com/ar/blog/ [R=301,L]
+  RewriteRule ^ar/blog/word-character-counter-guide/?$ https://textarabi.com/ar/blog/ [R=301,L]
+
+  # ----------------------------------------------------------------------
+  # 2. FORCE TRAILING SLASH & STATIC EXPORT HTML MAPPING
+  # ----------------------------------------------------------------------
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_URI} !(\.[^/]+)$
+  RewriteCond %{REQUEST_URI} !(.*)/$
+  RewriteRule ^(.*)$ https://textarabi.com/$1/ [R=301,L]
+
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
+  RewriteRule ^(.*)/$ $1/index.html [L]
+
+  ErrorDocument 404 /404.html
+</IfModule>

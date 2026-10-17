@@ -6,6 +6,7 @@ export interface Article {
   targetTool: string;
   lang: string;
   publishedAt: string;
+  updatedAt?: string;
   readTime: string;
   content: string;
 }

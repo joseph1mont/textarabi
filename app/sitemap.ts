@@ -1,14 +1,22 @@
-// app/sitemap.ts
+// file path: app/sitemap.ts
 import { MetadataRoute } from "next";
 
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const buildDate = new Date("2026-08-24T00:00:00.000Z"); // Updated to current date
+  const buildDate = new Date("2026-09-01T00:00:00.000Z");
+  const newArticleDate = new Date("2026-09-28T00:00:00.000Z");
+  const latestBatchDate = new Date("2026-09-29T00:00:00.000Z");
+  const pythonArticleDate = new Date("2026-10-05T00:00:00.000Z");
   const baseUrl = "https://textarabi.com";
 
   const slugs = [
+    "python-arabic-text-shaping-reportlab-matplotlib",
+    "how-to-architect-dual-language-rtl-ltr-nextjs-apps",
+    "fix-indesign-arabic-text",
+    "react-native-flutter-tailwind-rtl-arabic-fix",
     "fix-photoshop-arabic-text",
+    "disable-photoshop-unified-text-engine-hebrew-fix",
     "seo-strip-diacritics",
     "instant-translate-localization",
     "tashkeel-keypad-guide",
@@ -32,8 +40,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "export-arabic-svg-illustrator-to-web",
     "fix-reversed-arabic-text-online-instant-copy-paste",
     "seo-developer-guide-character-counter-tashkeel-removal",
-    "seo-arabic-json-formatter-beautifier",
+    "json-formatter-utf8-unicode-guide",
     "fix-adobe-apps-arabic-text-guide",
+    "bilingual-ocr-image-to-text-2026-guide",
+    "extract-text-from-images-securely-guide",
+    "text-to-digital-ocr-guide",
+    "canadian-bilingual-ocr-image-to-text-guide",
+    "zero-dependency-svg-typography-generator",
   ];
 
   return [
@@ -52,7 +65,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/blog/`,
-      lastModified: buildDate,
+      lastModified: pythonArticleDate,
       changeFrequency: "daily",
       priority: 0.9,
     },
@@ -60,25 +73,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/tools/arabic-text-normalizer/`,
       lastModified: buildDate,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 1.0,
     },
     {
-      url: `${baseUrl}/tools/json-formatter/`,
+      url: `${baseUrl}/tools/arabic-keshida-generator/`,
       lastModified: buildDate,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 1.0,
     },
     {
-      url: `${baseUrl}/tools/strip-diacritics/`,
+      url: `${baseUrl}/tools/arabic-text-to-vector/`,
       lastModified: buildDate,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 1.0,
     },
     {
-      url: `${baseUrl}/tools/character-counter/`,
+      url: `${baseUrl}/tools/ocr-scanner/`,
       lastModified: buildDate,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 1.0,
     },
 
     // Core Arabic Platform Pages
@@ -96,7 +109,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/ar/blog/`,
-      lastModified: buildDate,
+      lastModified: pythonArticleDate,
       changeFrequency: "daily",
       priority: 0.9,
     },
@@ -122,41 +135,71 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/ar/tools/arabic-text-normalizer/`,
       lastModified: buildDate,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 1.0,
     },
     {
-      url: `${baseUrl}/ar/tools/json-formatter/`,
+      url: `${baseUrl}/ar/tools/arabic-keshida-generator/`,
       lastModified: buildDate,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 1.0,
     },
     {
-      url: `${baseUrl}/ar/tools/strip-diacritics/`,
+      url: `${baseUrl}/ar/tools/arabic-text-to-vector/`,
       lastModified: buildDate,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 1.0,
     },
     {
-      url: `${baseUrl}/ar/tools/character-counter/`,
+      url: `${baseUrl}/ar/tools/ocr-scanner/`,
       lastModified: buildDate,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 1.0,
     },
 
     // English Blog Articles
-    ...slugs.map((slug) => ({
-      url: `${baseUrl}/blog/${slug}/`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
+    ...slugs.map((slug) => {
+      let modDate = buildDate;
+      if (slug === "python-arabic-text-shaping-reportlab-matplotlib") {
+        modDate = pythonArticleDate;
+      } else if (
+        slug === "how-to-architect-dual-language-rtl-ltr-nextjs-apps"
+      ) {
+        modDate = newArticleDate;
+      } else if (
+        slug === "fix-indesign-arabic-text" ||
+        slug === "react-native-flutter-tailwind-rtl-arabic-fix"
+      ) {
+        modDate = latestBatchDate;
+      }
+      return {
+        url: `${baseUrl}/blog/${slug}/`,
+        lastModified: modDate,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+      };
+    }),
 
     // Arabic Blog Articles
-    ...slugs.map((slug) => ({
-      url: `${baseUrl}/ar/blog/${slug}/`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
+    ...slugs.map((slug) => {
+      let modDate = buildDate;
+      if (slug === "python-arabic-text-shaping-reportlab-matplotlib") {
+        modDate = pythonArticleDate;
+      } else if (
+        slug === "how-to-architect-dual-language-rtl-ltr-nextjs-apps"
+      ) {
+        modDate = newArticleDate;
+      } else if (
+        slug === "fix-indesign-arabic-text" ||
+        slug === "react-native-flutter-tailwind-rtl-arabic-fix"
+      ) {
+        modDate = latestBatchDate;
+      }
+      return {
+        url: `${baseUrl}/ar/blog/${slug}/`,
+        lastModified: modDate,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+      };
+    }),
   ];
 }

@@ -1,23 +1,69 @@
+// file path: app/ar/blog/page.tsx
 import React from "react";
-import Link from "next/link";
+import type { Metadata } from "next";
 import { articles } from "@/data/articles";
+import BlogSidebar from "@/components/BlogSidebar";
+import BlogTagFilter from "@/components/BlogTagFilter";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "الأدلة التقنية والمدونة الرقمية | TextArabi",
   description:
     "مقالات فنية وتطويرية مخصصة لمعالجة النصوص العربية، تحسين السيو، وضبط خطوط واجهات الاستخدام.",
+  alternates: {
+    canonical: "https://textarabi.com/ar/blog",
+  },
 };
 
 export default function ArabicBlogIndex() {
   const arabicArticles = articles.filter((a) => a.lang === "ar");
 
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "الأدلة التقنية وتطوير النصوص | TextArabi",
+      description:
+        "مقالات فنية وتطويرية مخصصة لمعالجة النصوص العربية، تحسين السيو، وضبط خطوط واجهات الاستخدام.",
+      url: "https://textarabi.com/ar/blog",
+      inLanguage: "ar",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "الرئيسية",
+          item: "https://textarabi.com/ar",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "المدونة",
+          item: "https://textarabi.com/ar/blog",
+        },
+      ],
+    },
+  ];
+
   return (
     <main
-      className="min-h-screen bg-slate-50 text-slate-800 py-12 px-4 sm:px-6 lg:px-8 font-tajawal"
+      className="min-h-screen bg-slate-50 text-slate-800 px-4 sm:px-6 lg:px-8 font-tajawal"
       dir="rtl"
     >
-      <div className="max-w-4xl mx-auto">
-        <header className="mb-12 border-b border-slate-200 pb-8">
+      {/* Schema.org Structured Data */}
+      {jsonLd.map((schema, index) => (
+        <script
+          key={`ar-blog-index-jsonld-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+
+      {/* Narrower container optimized for layout viewability */}
+      <div className="max-w-7xl mx-auto">
+        <header className="mb-10 border-b border-slate-200 pb-8 max-w-4xl">
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-tajawal">
             الأدلة التقنية وتطوير النصوص
           </h1>
@@ -27,40 +73,17 @@ export default function ArabicBlogIndex() {
           </p>
         </header>
 
-        <div className="grid gap-8">
-          {arabicArticles.map((article) => (
-            <article
-              key={article.slug}
-              className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-xs transition-shadow"
-            >
-              <span className="inline-block bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-md mb-3 font-tajawal">
-                أداة {article.targetTool}
-              </span>
+        {/* Layout with Main Filterable Content & Sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Main Filterable Content Component */}
+          <div className="lg:col-span-8">
+            <BlogTagFilter articles={arabicArticles} lang="ar" />
+          </div>
 
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 hover:text-blue-600 transition-colors font-tajawal">
-                {/* تنظيف الـ slug عند توليد الرابط */}
-                <Link href={`/ar/blog/${article.slug.replace("ar/blog/", "")}`}>
-                  {article.title}
-                </Link>
-              </h2>
-
-              <p className="text-slate-600 mt-2 text-sm sm:text-base line-clamp-3 font-tajawal">
-                {article.excerpt}
-              </p>
-
-              <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 font-mono">
-                <span className="font-tajawal">
-                  نُشر في: {article.publishedAt} • {article.readTime}
-                </span>
-                <Link
-                  href={`/ar/blog/${article.slug.replace("ar/blog/", "")}`}
-                  className="text-blue-600 font-bold hover:underline font-tajawal"
-                >
-                  قراءة الدليل التقني ←
-                </Link>
-              </div>
-            </article>
-          ))}
+          {/* Sidebar */}
+          <aside className="lg:col-span-4">
+            <BlogSidebar lang="ar" />
+          </aside>
         </div>
       </div>
     </main>

@@ -1,5 +1,6 @@
-// app/page.tsx
+// file path: app/page.tsx
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   BookOpen,
   ChevronRight,
@@ -12,15 +13,46 @@ import {
 import TextUtilityPanel from "@/components/TextUtilityPanel";
 import { WhyTextArabi } from "@/components/WhyTextArabi";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Arabic Text Processing Tools & Word Counter | TextArabi",
   description:
     "A comprehensive suite of web tools for developers, designers, and editors to strip diacritics (Tashkeel), reverse backwards text for design software, count letters/words accurately, and copy clean semantic HTML.",
+  alternates: {
+    canonical: "https://textarabi.com",
+  },
 };
 
 export default function EnglishHomePage() {
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "TextArabi",
+      url: "https://textarabi.com",
+      description:
+        "Developer utility suite for Arabic text normalization, BiDi string reshaping, and diacritics removal.",
+      inLanguage: "en",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "TextArabi",
+      url: "https://textarabi.com",
+      logo: "https://textarabi.com/logo.png",
+    },
+  ];
+
   return (
     <main className="w-full py-12 px-4 max-w-5xl mx-auto flex-grow">
+      {/* Schema.org Structured Data */}
+      {jsonLd.map((schema, index) => (
+        <script
+          key={`home-jsonld-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+
       {/* Left-Aligned Premium Hero Header */}
       <div className="text-start max-w-3xl mb-10">
         <h1 className="text-3xl font-black text-slate-900 sm:text-4xl mb-4 leading-tight tracking-tight">
@@ -51,7 +83,6 @@ export default function EnglishHomePage() {
       <TextUtilityPanel initialMode="strip" lang="en" />
       <WhyTextArabi lang="en" />
 
-      {/* Substantive Editorial & Technical Architecture Section for AdSense Compliance */}
       <section className="my-16 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-2xs">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-4 border border-blue-100">
@@ -190,8 +221,8 @@ export default function EnglishHomePage() {
               Featured Technical Guides & Articles
             </h2>
             <p className="text-xs md:text-sm text-slate-500 mt-1">
-              Deep-dive engineering tutorials on Arabic typography, database
-              normalization, and SEO.
+              Here is exactly how engineering tutorials on Arabic typography,
+              database normalization, and SEO.
             </p>
           </div>
           <Link

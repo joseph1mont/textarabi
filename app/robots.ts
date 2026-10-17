@@ -1,3 +1,4 @@
+// file path: app/robots.ts
 import { MetadataRoute } from "next";
 
 export const dynamic = "force-static";

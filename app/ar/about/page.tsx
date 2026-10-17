@@ -1,16 +1,80 @@
-// app/ar/about/page.tsx
+// file path: app/ar/about/page.tsx
 import React from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "من نحن | المهندس جوزيف توماس",
   description:
     "تعرف على المهندس جوزيف توماس، خبير هندسة البرمجيات والسيو. محاضر سابق في جامعة حلب ومطور منصات لغوية.",
+  alternates: {
+    canonical: "https://textarabi.com/ar/about",
+  },
 };
 
 export default function AboutAR() {
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      name: "المهندس جوزيف توماس",
+      url: "https://textarabi.com/ar/about",
+      inLanguage: "ar",
+      mainEntity: {
+        "@type": "Person",
+        name: "Eng. Joseph Thomas",
+        alternateName: "جوزيف توماس",
+        jobTitle: "Computer Science Engineer & Web Developer",
+        alumniOf: [
+          {
+            "@type": "EducationalOrganization",
+            name: "Aleppo University",
+          },
+          {
+            "@type": "EducationalOrganization",
+            name: "Concordia University",
+          },
+        ],
+        sameAs: ["https://freelancewebdesignusa.com/"],
+        knowsAbout: [
+          "Web Development",
+          "Search Engine Optimization (SEO)",
+          "Arabic Text Processing",
+          "RTL Typography",
+        ],
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "الرئيسية",
+          item: "https://textarabi.com/ar",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "من نحن",
+          item: "https://textarabi.com/ar/about",
+        },
+      ],
+    },
+  ];
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 font-tajawal" dir="rtl">
+      {/* Schema.org Structured Data */}
+      {jsonLd.map((schema, index) => (
+        <script
+          key={`ar-about-jsonld-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+
       <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
         <h1 className="text-3xl font-black mb-6">المهندس جوزيف توماس</h1>
         <p className="text-lg text-slate-700 mb-6">
@@ -56,6 +120,8 @@ export default function AboutAR() {
           <Link
             href="https://freelancewebdesignusa.com/"
             className="text-blue-600 font-bold hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             https://freelancewebdesignusa.com/
           </Link>
