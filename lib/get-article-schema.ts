@@ -1,10 +1,6 @@
 // file path: lib/get-article-schema.ts
 import { Article } from "@/data/types";
 
-/**
- * Helper function to dynamically parse and extract Q&A pairs from HTML content strings.
- * Safely extracts H2/H3 headings that form questions along with their immediately following paragraphs.
- */
 function extractFaqsFromContent(contentHtml: string) {
   if (!contentHtml) return [];
 
@@ -43,6 +39,15 @@ export function getArticleSchema(article: Article, canonicalUrl: string) {
   const siteUrl = "https://textarabi.com";
   const blogHomeUrl = isArabic ? `${siteUrl}/ar/blog/` : `${siteUrl}/blog/`;
 
+  // حل مشكلة TypeScript عبر Cast مؤقت للنوع
+  const articleData = article as {
+    modifiedAt?: string;
+    updatedAt?: string;
+    publishedAt?: string;
+  };
+  const modifiedDate =
+    articleData.modifiedAt || articleData.updatedAt || articleData.publishedAt;
+
   // 1. Core BlogPosting / TechArticle Schema
   const blogPostingSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -56,7 +61,7 @@ export function getArticleSchema(article: Article, canonicalUrl: string) {
     url: canonicalUrl,
     inLanguage: isArabic ? "ar-SA" : "en-US",
     datePublished: article.publishedAt,
-    dateModified: article.updatedAt || article.publishedAt,
+    dateModified: modifiedDate,
     author: {
       "@type": "Organization",
       name: "TextArabi",

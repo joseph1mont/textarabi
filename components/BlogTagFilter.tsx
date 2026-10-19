@@ -10,6 +10,8 @@ interface Article {
   excerpt: string;
   targetTool?: string;
   publishedAt?: string;
+  modifiedAt?: string;
+  updatedAt?: string;
   readTime?: string;
 }
 
@@ -21,7 +23,6 @@ interface BlogTagFilterProps {
 export default function BlogTagFilter({ articles, lang }: BlogTagFilterProps) {
   const [selectedTag, setSelectedTag] = useState<string>("All");
 
-  // Dynamically extract all unique targetTools (tags) from the articles array
   const uniqueTags = Array.from(
     new Set(articles.map((art) => art.targetTool).filter(Boolean)),
   ) as string[];
@@ -61,12 +62,16 @@ export default function BlogTagFilter({ articles, lang }: BlogTagFilterProps) {
         ))}
       </div>
 
-      {/* Articles Grid (Single Column for full title readability) */}
+      {/* Articles Grid */}
       <div className="grid grid-cols-1 gap-6">
         {filteredArticles.map((article) => {
           const cleanSlug = article.slug.replace(/^(ar\/)?blog\//, "");
           const href =
             lang === "en" ? `/blog/${cleanSlug}` : `/ar/blog/${cleanSlug}`;
+
+          // شرط استخدام تاريخ التحديث أو النشر في بطاقات القائمة
+          const displayDate =
+            article.modifiedAt || article.updatedAt || article.publishedAt;
 
           return (
             <article
@@ -75,7 +80,7 @@ export default function BlogTagFilter({ articles, lang }: BlogTagFilterProps) {
             >
               <div>
                 <span className="inline-block bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-md mb-3">
-                  {article.targetTool} - Blog
+                  {article.targetTool}
                 </span>
 
                 <h2 className="text-lg sm:text-xl font-bold text-slate-900 hover:text-blue-600 transition-colors">
@@ -89,7 +94,7 @@ export default function BlogTagFilter({ articles, lang }: BlogTagFilterProps) {
 
               <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 font-mono">
                 <span>
-                  {article.publishedAt} • {article.readTime}
+                  {displayDate} • {article.readTime}
                 </span>
                 <Link
                   href={href}

@@ -1,7 +1,6 @@
 // file path: app/layout.tsx
 import type { Metadata } from "next";
 import { Cairo, Tajawal, Amiri, Inter } from "next/font/google";
-import Script from "next/script";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -57,20 +56,6 @@ export default function RootLayout({
       dir="ltr"
       className={`${inter.variable} ${cairo.variable} ${tajawal.variable} ${amiri.variable} bg-slate-50 min-h-screen antialiased`}
     >
-      <head>
-        {/* Resource Preconnects for Monetag CDN */}
-        <link rel="preconnect" href="https://quge5.com" />
-        <link rel="dns-prefetch" href="https://quge5.com" />
-
-        {/* Native Next.js Monetag MultiTag Loading */}
-        <Script
-          id="monetag-multitag"
-          src="https://quge5.com/88/tag.min.js"
-          strategy="lazyOnload"
-          data-zone="296693"
-          data-cfasync="false"
-        />
-      </head>
       <body className="min-h-screen flex flex-col text-slate-800 font-sans">
         <GoogleAnalytics gaId="G-M3KFLTY6T7" />
         <Navbar />

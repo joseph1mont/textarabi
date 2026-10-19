@@ -1,3 +1,4 @@
+// file path: components/BasePostPage.tsx
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/data/articles";
@@ -26,6 +27,25 @@ export default function BasePostPage({
 
   const isAr = lang === "ar";
 
+  // استخراج البيانات وتجنب أخطاء TypeScript
+  const articleData = article as {
+    modifiedAt?: string;
+    updatedAt?: string;
+    publishedAt?: string;
+  };
+  const displayDate =
+    articleData.modifiedAt || articleData.updatedAt || articleData.publishedAt;
+
+  // تحديد التسمية: تاريخ التعديل إذا وُجد تاريخ تحديث، وإلا تاريخ النشر الافتراضي
+  const hasBeenModified = Boolean(
+    articleData.modifiedAt || articleData.updatedAt,
+  );
+  const dateLabelText = hasBeenModified
+    ? isAr
+      ? "تاريخ التعديل"
+      : "Last Updated"
+    : dictionary.dateLabel;
+
   return (
     <main
       className={`min-h-screen bg-slate-50 text-slate-800 py-12 px-4 sm:px-6 lg:px-8 ${isAr ? "font-tajawal" : "font-sans"}`}
@@ -49,20 +69,13 @@ export default function BasePostPage({
             </h1>
             <div className="flex gap-4 text-xs font-mono text-slate-400">
               <span>
-                {dictionary.dateLabel}: {article.publishedAt}
+                {dateLabelText}: {displayDate}
               </span>
               <span>•</span>
               <span>{article.readTime}</span>
             </div>
           </header>
 
-          {/* 
-            CRITICAL RESPONSIVE TABLES FIX (Tailwind CSS v4 arbitrary selectors)
-            - Converts un-shrinkable browser <table> layouts into responsive block structures on small layouts.
-            - Adds overflow-x-auto to give dynamic tables clean touch-swipe scrolling functionality.
-            - Uses whitespace-nowrap and structural cell padding to prevent dense text from compressing.
-            - Works natively for LTR and RTL orientations automatically.
-          */}
           <div
             className={`max-w-none text-sm sm:text-base ${isAr ? "prose-arabic" : "prose-english"}
                        [&_table]:block [&_table]:w-full [&_table]:overflow-x-auto [&_table]:whitespace-nowrap [&_table]:my-6 [&_table]:border-collapse
