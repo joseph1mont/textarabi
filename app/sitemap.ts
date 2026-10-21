@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const newArticleDate = new Date("2026-09-28T00:00:00.000Z");
   const latestBatchDate = new Date("2026-09-29T00:00:00.000Z");
   const pythonArticleDate = new Date("2026-10-05T00:00:00.000Z");
+  const typingTestDate = new Date("2026-10-20T00:00:00.000Z");
   const baseUrl = "https://textarabi.com";
 
   const slugs = [
@@ -93,6 +94,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1.0,
     },
+    {
+      url: `${baseUrl}/tools/typing-test/`,
+      lastModified: typingTestDate,
+      changeFrequency: "weekly",
+      priority: 1.0,
+    },
 
     // Core Arabic Platform Pages
     {
@@ -152,6 +159,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${baseUrl}/ar/tools/ocr-scanner/`,
       lastModified: buildDate,
+      changeFrequency: "weekly",
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/ar/tools/typing-test/`,
+      lastModified: typingTestDate,
       changeFrequency: "weekly",
       priority: 1.0,
     },
