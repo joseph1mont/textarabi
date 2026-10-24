@@ -14,8 +14,6 @@ interface Props {
 
 export const dynamicParams = false;
 
-// app/blog/[slug]/page.tsx
-
 function cleanSlug(slug: string) {
   if (!slug) return "";
   return slug
@@ -87,6 +85,9 @@ export default async function EnglishPostPage({ params }: Props) {
   const canonicalUrl = `https://textarabi.com/blog/${targetSlug}/`;
   const toolEndpoint = "/tools/arabic-text-normalizer/";
 
+  // Semrush Impact Affiliate Tracking Link
+  const semrushAffiliateUrl = "https://semrush.sjv.io/c/7969469/1438303/13053";
+
   return (
     <>
       {/* Inject Structured Data Schemas */}
@@ -94,6 +95,7 @@ export default async function EnglishPostPage({ params }: Props) {
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Main Article Content */}
           <div className="lg:col-span-8">
             <BasePostPage
               slug={currentSlug}
@@ -111,29 +113,133 @@ export default async function EnglishPostPage({ params }: Props) {
             />
           </div>
 
+          {/* Sidebar Section */}
           <aside className="lg:col-span-4 space-y-6">
-            {/* Developer & Design Tools 4-Button Suite */}
+            {/* 1. High-Converting Custom RTL & Arabic Solutions Banner */}
+            <div className="bg-gradient-to-b from-[#0238a8] to-[#012573] text-white rounded-2xl p-6 shadow-md relative overflow-hidden flex flex-col items-center text-center border border-blue-900 group">
+              {/* Badge Icon */}
+              <div className="mb-2.5 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-blue-400/20 border border-blue-300/30 flex items-center justify-center text-xs font-black text-blue-200 shadow-inner">
+                  RTL ⇄
+                </div>
+              </div>
+
+              {/* Subtitle / Domain */}
+              <span className="text-[11px] font-semibold text-blue-200 tracking-wider uppercase mb-1">
+                freelancewebdesignusa.com
+              </span>
+
+              {/* Headline */}
+              <h3 className="text-xl font-black leading-snug mb-3 text-white">
+                Need Custom RTL &amp; Arabic Web Solutions?
+              </h3>
+
+              {/* Bulleted Capabilities List (Centered container with high-contrast text) */}
+              <div className="w-full max-w-[270px] mx-auto mb-6">
+                <ul className="text-xs text-blue-50 space-y-2 text-left leading-relaxed">
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold shrink-0">
+                      ✓
+                    </span>
+                    <span>Fix broken CSS &amp; RTL layout alignments</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold shrink-0">
+                      ✓
+                    </span>
+                    <span>Optimize bilingual (AR/EN) user experience</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold shrink-0">
+                      ✓
+                    </span>
+                    <span>Custom Arabic API &amp; typography integration</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* CTA Button */}
+              <a
+                href="https://freelancewebdesignusa.com/?utm_source=textarabi&utm_medium=sidebar_card&utm_campaign=custom_rtl_en"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3.5 px-5 bg-[#00a859] hover:bg-[#008f4c] active:bg-[#007a41] text-white font-bold text-sm rounded-xl transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 group-hover:scale-[1.01]"
+              >
+                <span>Get a Free Quote</span>
+                <span className="text-base">→</span>
+              </a>
+            </div>
+
+            {/* 2. Semrush SEO & Audit Card (Native Graphic Component) */}
+            <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col items-center">
+              <div className="w-full flex items-center justify-between mb-3 px-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Recommended Resource
+                </span>
+                <span className="text-[10px] text-slate-400 font-medium">
+                  Sponsored
+                </span>
+              </div>
+
+              <a
+                href={semrushAffiliateUrl}
+                target="_blank"
+                rel="nofollow sponsored"
+                className="block w-full group transition-all"
+              >
+                {/* Native Custom Graphic Card */}
+                <div className="w-full bg-slate-900 rounded-xl p-5 border border-slate-800 text-left relative overflow-hidden mb-3">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-black tracking-widest text-orange-400 uppercase">
+                      SEMRUSH
+                    </span>
+                    <span className="bg-orange-500/20 text-orange-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-orange-500/30">
+                      SEO Toolkit
+                    </span>
+                  </div>
+
+                  <h4 className="text-sm font-bold text-white mb-1.5 leading-snug group-hover:text-orange-400 transition-colors">
+                    Everything You Need to Succeed in SEO
+                  </h4>
+
+                  <p className="text-[11px] text-slate-300 leading-relaxed mb-3">
+                    Audit bilingual site health, track Arabic keyword rankings,
+                    &amp; analyze competitor backlinks.
+                  </p>
+
+                  <div className="flex items-center gap-2 text-[11px] text-emerald-400 font-semibold">
+                    <span>✓ Free 7-Day Trial Access</span>
+                  </div>
+                </div>
+
+                <div className="w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-slate-950 font-extrabold text-xs rounded-xl transition-all duration-200 text-center flex items-center justify-center gap-1.5 shadow-xs">
+                  <span>Try Semrush Free</span>
+                  <span className="text-sm">→</span>
+                </div>
+              </a>
+            </div>
+
+            {/* 3. Developer & Design Tools 4-Button Suite */}
             <section className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
               <strong className="block text-slate-900 font-bold text-base mb-1">
-                Free Online Developer & Design Tools
+                Free Online Developer &amp; Design Tools
               </strong>
               <p className="text-slate-600 text-xs mb-4">
-                Instant 100% client-side web utilities for Arabic text & vector
-                workflows:
+                Instant 100% client-side web utilities for Arabic text &amp;
+                vector workflows:
               </p>
 
               <div className="space-y-3">
-                {/* Button 1: Text Normalizer */}
                 <Link
                   href="/tools/arabic-text-normalizer/"
                   className="flex items-center justify-between p-3.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 rounded-xl transition-all duration-200 shadow-2xs group"
                 >
                   <div className="pr-2">
                     <span className="block text-xs font-bold text-emerald-950 group-hover:text-emerald-900">
-                      Text Normalizer & Reverser
+                      Text Normalizer &amp; Reverser
                     </span>
                     <span className="block text-[11px] text-emerald-800 mt-0.5">
-                      Fix RTL formatting & strip diacritics
+                      Fix RTL formatting &amp; strip diacritics
                     </span>
                   </div>
                   <span className="shrink-0 px-2.5 py-1 bg-emerald-600 group-hover:bg-emerald-700 text-white font-semibold rounded-lg text-xs transition-colors">
@@ -141,7 +247,6 @@ export default async function EnglishPostPage({ params }: Props) {
                   </span>
                 </Link>
 
-                {/* Button 2: OCR Scanner */}
                 <Link
                   href="/tools/ocr-scanner/"
                   className="flex items-center justify-between p-3.5 bg-blue-50 hover:bg-blue-100 border border-blue-300 rounded-xl transition-all duration-200 shadow-2xs group"
@@ -151,7 +256,7 @@ export default async function EnglishPostPage({ params }: Props) {
                       Bilingual OCR Scanner
                     </span>
                     <span className="block text-[11px] text-blue-800 mt-0.5">
-                      Extract text from images & PDFs
+                      Extract text from images &amp; PDFs
                     </span>
                   </div>
                   <span className="shrink-0 px-2.5 py-1 bg-blue-600 group-hover:bg-blue-700 text-white font-semibold rounded-lg text-xs transition-colors">
@@ -159,7 +264,6 @@ export default async function EnglishPostPage({ params }: Props) {
                   </span>
                 </Link>
 
-                {/* Button 3: Keshida Generator */}
                 <Link
                   href="/tools/arabic-keshida-generator/"
                   className="flex items-center justify-between p-3.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 rounded-xl transition-all duration-200 shadow-2xs group"
@@ -177,7 +281,6 @@ export default async function EnglishPostPage({ params }: Props) {
                   </span>
                 </Link>
 
-                {/* Button 4: Text to Vector */}
                 <Link
                   href="/tools/arabic-text-to-vector/"
                   className="flex items-center justify-between p-3.5 bg-purple-50 hover:bg-purple-100 border border-purple-300 rounded-xl transition-all duration-200 shadow-2xs group"
@@ -197,37 +300,7 @@ export default async function EnglishPostPage({ params }: Props) {
               </div>
             </section>
 
-            {/* Next.js & Bilingual Development Agency Promo Card (English) */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 flex flex-col gap-4 relative overflow-hidden group hover:border-blue-300 transition-all duration-300">
-              <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500"></div>
-
-              <div className="flex flex-col gap-1.5 text-left">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full w-fit">
-                  Expert Engineering Services
-                </span>
-                <h3 className="font-bold text-slate-900 text-base leading-snug">
-                  Building a Bilingual (RTL/LTR) Next.js App?
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  We engineer high-performance web applications and custom
-                  frontend architectures optimized for global markets.
-                </p>
-              </div>
-
-              <a
-                href="https://freelancewebdesignusa.com/?utm_source=textarabi&utm_medium=sidebar_card&utm_campaign=nextjs_rtl_en"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-2.5 px-4 bg-slate-900 hover:bg-blue-600 text-white font-semibold rounded-xl text-xs transition-all duration-200 flex items-center justify-center gap-2 group-hover:shadow-md"
-                style={{ color: "#ffffff !important", textDecoration: "none" }}
-              >
-                <span>Hire a Next.js Expert</span>
-                <span className="transform group-hover:translate-x-1 transition-transform">
-                  →
-                </span>
-              </a>
-            </div>
-
+            {/* 4. Popular Posts Navigation */}
             <BlogSidebar currentSlug={currentSlug} lang="en" />
           </aside>
         </div>

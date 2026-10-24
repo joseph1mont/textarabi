@@ -87,6 +87,9 @@ export default async function ArabicPostPage({ params }: Props) {
   const canonicalUrl = `https://textarabi.com/ar/blog/${targetSlug}/`;
   const toolEndpoint = "/ar/tools/arabic-text-normalizer/";
 
+  // Semrush Impact Affiliate Tracking Link
+  const semrushAffiliateUrl = "https://semrush.sjv.io/c/7969469/1438303/13053";
+
   return (
     <>
       {/* Inject Structured Data Schemas */}
@@ -94,6 +97,7 @@ export default async function ArabicPostPage({ params }: Props) {
 
       <div className="container mx-auto px-4 py-8" dir="rtl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Main Article Content */}
           <div className="lg:col-span-8">
             <BasePostPage
               slug={currentSlug}
@@ -111,8 +115,111 @@ export default async function ArabicPostPage({ params }: Props) {
             />
           </div>
 
+          {/* Sidebar Section */}
           <aside className="lg:col-span-4 space-y-6">
-            {/* Developer & Design Tools 4-Button Suite (RTL) */}
+            {/* 1. Custom RTL & Arabic Solutions Banner (Primary Agency Service) */}
+            <div className="bg-gradient-to-b from-[#0238a8] to-[#012573] text-white rounded-2xl p-6 shadow-md relative overflow-hidden flex flex-col items-center text-center border border-blue-900 group">
+              {/* Badge Icon */}
+              <div className="mb-2.5 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-blue-400/20 border border-blue-300/30 flex items-center justify-center text-xs font-black text-blue-200 shadow-inner">
+                  RTL ⇄
+                </div>
+              </div>
+
+              {/* Subtitle / Domain */}
+              <span className="text-[11px] font-semibold text-blue-200 tracking-wider uppercase mb-1">
+                freelancewebdesignusa.com
+              </span>
+
+              {/* Headline */}
+              <h3 className="text-xl font-black leading-snug mb-3 text-white">
+                هل تحتاج حلول ويب مخصصة للغة العربية و RTL؟
+              </h3>
+
+              {/* Bulleted Capabilities List (Centered container with high-contrast Arabic text) */}
+              <div className="w-full max-w-[280px] mx-auto mb-6">
+                <ul className="text-xs text-blue-50 space-y-2 text-right leading-relaxed">
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold shrink-0">
+                      ✓
+                    </span>
+                    <span>تصحيح مشاكل اتجاه النص (RTL) وتنسيقات CSS</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold shrink-0">
+                      ✓
+                    </span>
+                    <span>تحسين المواقع ثنائية اللغة للمستخدم العربي</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold shrink-0">
+                      ✓
+                    </span>
+                    <span>تكامل API مخصص وتضبيط البيانات العربية</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* CTA Button */}
+              <a
+                href="https://freelancewebdesignusa.com/?utm_source=textarabi&utm_medium=sidebar_card&utm_campaign=custom_rtl_ar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3.5 px-5 bg-[#00a859] hover:bg-[#008f4c] active:bg-[#007a41] text-white font-bold text-sm rounded-xl transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 group-hover:scale-[1.01]"
+              >
+                <span>احصل على عرض أسعار ←</span>
+              </a>
+            </div>
+
+            {/* 2. Semrush SEO & Audit Card (Native Arabic Graphic Component) */}
+            <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col items-center">
+              <div className="w-full flex items-center justify-between mb-3 px-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  مصدر موصى به
+                </span>
+                <span className="text-[10px] text-slate-400 font-medium">
+                  إعلان برعاية
+                </span>
+              </div>
+
+              <a
+                href={semrushAffiliateUrl}
+                target="_blank"
+                rel="nofollow sponsored"
+                className="block w-full group transition-all"
+              >
+                {/* Native Custom Graphic Card */}
+                <div className="w-full bg-slate-900 rounded-xl p-5 border border-slate-800 text-right relative overflow-hidden mb-3">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-black tracking-widest text-orange-400 uppercase">
+                      SEMRUSH
+                    </span>
+                    <span className="bg-orange-500/20 text-orange-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-orange-500/30">
+                      أدوات السيو SEO
+                    </span>
+                  </div>
+
+                  <h4 className="text-sm font-bold text-white mb-1.5 leading-snug group-hover:text-orange-400 transition-colors">
+                    كل ما تحتاجه للنجاح في تحسين محركات البحث
+                  </h4>
+
+                  <p className="text-[11px] text-slate-300 leading-relaxed mb-3">
+                    فحص صحة المواقع ثنائية اللغة، تتبع ترتيب الكلمات المفتاحية
+                    العربية، وتحليل المنافسين.
+                  </p>
+
+                  <div className="flex items-center gap-2 text-[11px] text-emerald-400 font-semibold">
+                    <span>✓ فترة تجريبية مجانية لمدة 7 أيام</span>
+                  </div>
+                </div>
+
+                <div className="w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-slate-950 font-extrabold text-xs rounded-xl transition-all duration-200 text-center flex items-center justify-center gap-1.5 shadow-xs">
+                  <span>جرب Semrush مجاناً ←</span>
+                </div>
+              </a>
+            </div>
+
+            {/* 3. Developer & Design Tools 4-Button Suite (RTL) */}
             <section className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
               <strong className="block text-slate-900 font-bold text-base mb-1">
                 أدوات الويب المجانية للمطورين والمصممين
@@ -196,37 +303,7 @@ export default async function ArabicPostPage({ params }: Props) {
               </div>
             </section>
 
-            {/* Next.js & Bilingual Development Agency Promo Sidebar Card */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 flex flex-col gap-4 relative overflow-hidden group hover:border-blue-300 transition-all duration-300">
-              <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500"></div>
-
-              <div className="flex flex-col gap-1.5 text-right">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full w-fit">
-                  خدمات التطوير الاحترافية
-                </span>
-                <h3 className="font-bold text-slate-900 text-base leading-snug">
-                  هل تبني موقعاً أو تطبيق Next.js يدعم اللغتين (RTL/LTR)؟
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  نقدم خدمات هندسة وتطوير واجهات برمجية فائقة السرعة، مخصصة
-                  للمؤسسات والشركات الناشئة في أمريكا والخليج.
-                </p>
-              </div>
-
-              <a
-                href="https://freelancewebdesignusa.com/?utm_source=textarabi&utm_medium=sidebar_card&utm_campaign=nextjs_rtl_ar"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-2.5 px-4 bg-slate-900 hover:bg-blue-600 text-white font-semibold rounded-xl text-xs transition-all duration-200 flex items-center justify-center gap-2 group-hover:shadow-md"
-                style={{ color: "#ffffff !important", textDecoration: "none" }}
-              >
-                <span>استشر مهندس تطوير Next.js</span>
-                <span className="transform group-hover:-translate-x-1 transition-transform">
-                  ←
-                </span>
-              </a>
-            </div>
-
+            {/* 4. Popular Posts Navigation */}
             <BlogSidebar currentSlug={currentSlug} lang="ar" />
           </aside>
         </div>
