@@ -48,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "text-to-digital-ocr-guide",
     "canadian-bilingual-ocr-image-to-text-guide",
     "zero-dependency-svg-typography-generator",
+    "typing-speed-test-wpm-guide",
   ];
 
   return [

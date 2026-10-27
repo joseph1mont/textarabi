@@ -38,6 +38,7 @@ import howToArchitectDualLanguageRtlLtrNextjsAppsAr from "./articles/ar/how-to-a
 import fixIndesignArabicTextAr from "./articles/ar/fix-indesign-arabic-text.json";
 import reactNativeFlutterTailwindRtlArabicFixAr from "./articles/ar/react-native-flutter-tailwind-rtl-arabic-fix.json";
 import pythonArabicTextShapingReportlabMatplotlibAr from "./articles/ar/python-arabic-text-shaping-reportlab-matplotlib.json";
+import typingSpeedTestWpmGuideAr from "./articles/ar/typing-speed-test-wpm-guide.json";
 
 // English Imports
 import fixPhotoshopArabicTextEn from "./articles/en/fix-photoshop-arabic-text.json";
@@ -76,6 +77,7 @@ import howToArchitectDualLanguageRtlLtrNextjsAppsEn from "./articles/en/how-to-a
 import fixIndesignArabicTextEn from "./articles/en/fix-indesign-arabic-text.json";
 import reactNativeFlutterTailwindRtlArabicFixEn from "./articles/en/react-native-flutter-tailwind-rtl-arabic-fix.json";
 import pythonArabicTextShapingReportlabMatplotlibEn from "./articles/en/python-arabic-text-shaping-reportlab-matplotlib.json";
+import typingSpeedTestWpmGuideEn from "./articles/en/typing-speed-test-wpm-guide.json";
 
 const rawArticles: Article[] = [
   // Arabic Articles
@@ -115,6 +117,7 @@ const rawArticles: Article[] = [
   fixIndesignArabicTextAr,
   reactNativeFlutterTailwindRtlArabicFixAr,
   pythonArabicTextShapingReportlabMatplotlibAr,
+  typingSpeedTestWpmGuideAr,
 
   // English Articles
   fixPhotoshopArabicTextEn,
@@ -153,6 +156,7 @@ const rawArticles: Article[] = [
   fixIndesignArabicTextEn,
   reactNativeFlutterTailwindRtlArabicFixEn,
   pythonArabicTextShapingReportlabMatplotlibEn,
+  typingSpeedTestWpmGuideEn,
 ];
 
 // Sort from newer (descending date) to older

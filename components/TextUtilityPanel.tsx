@@ -582,14 +582,19 @@ export default function TextUtilityPanel({
                 <span>{isRtl ? "مسح ضوئي OCR" : "OCR Scanner"}</span>
               </TabsTrigger>
             )}
-
             {showTypingTest && (
               <TabsTrigger
                 value="typing-test"
-                className="flex items-center justify-start sm:justify-center gap-2 px-3 py-3 text-sm font-medium font-tajawal rounded-lg transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                className="relative flex items-center justify-start sm:justify-center gap-1.5 px-3 py-3 text-sm font-semibold font-tajawal rounded-lg transition-all bg-slate-200/60 text-slate-800 hover:bg-slate-200 data-[state=active]:bg-blue-600 data-[state=active]:text-white group"
               >
-                <Keyboard className="w-4 h-4 shrink-0" />
+                <Keyboard className="w-4 h-4 shrink-0 text-slate-600 group-data-[state=active]:text-white" />
+
                 <span>{isRtl ? "اختبار السرعة" : "Typing Test"}</span>
+
+                {/* Extra Large, Raised Badge (No Flashing) */}
+                <span className="inline-block text-sm font-black uppercase text-amber-600 group-data-[state=active]:text-amber-300 -translate-y-1.5 ms-1 select-none leading-none">
+                  {isRtl ? "جديد" : "NEW"}
+                </span>
               </TabsTrigger>
             )}
           </TabsList>
