@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import TextUtilityPanel from "@/components/TextUtilityPanel";
+import BuyMeACoffeeButton from "@/components/BuyMeACoffeeButton";
 
 export const metadata: Metadata = {
   title: "أداة استخراج النصوص OCR من الصور اونلاين | TextArabi",
@@ -59,6 +60,8 @@ export default function OcrTextScannerArPage() {
         lang="ar"
         allowedTool="ocr-scanner"
       />
+
+      <BuyMeACoffeeButton />
 
       {/* SEO & Technical Overview */}
       <section

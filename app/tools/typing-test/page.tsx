@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import TextUtilityPanel from "@/components/TextUtilityPanel";
+import BuyMeACoffeeButton from "@/components/BuyMeACoffeeButton";
 
 export const metadata: Metadata = {
   title: "Typing Speed Test & WPM Calculator (Arabic & English) | TextArabi",
@@ -76,6 +77,8 @@ export default function TypingTestPage() {
         lang="en"
         allowedTool="typing-test"
       />
+
+      <BuyMeACoffeeButton />
 
       {/* 1200+ Words Technical SEO Guide */}
       <section className="max-w-5xl mx-auto px-4 mt-12 py-8 border-t border-slate-200">

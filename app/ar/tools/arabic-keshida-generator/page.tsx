@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import TextUtilityPanel from "@/components/TextUtilityPanel";
+import BuyMeACoffeeButton from "@/components/BuyMeACoffeeButton";
 
 export const metadata: Metadata = {
   title: "أداة تطويل النص العربي والكشيدة الذكية اونلاين | TextArabi",
@@ -72,11 +73,16 @@ export default function KashidaArPage() {
       </div>
 
       {/* Primary Tool Panel */}
-      <TextUtilityPanel
-        initialMode="keshida"
-        lang="ar"
-        allowedTool="arabic-keshida-generator"
-      />
+      <div className="max-w-5xl mx-auto px-4">
+        <TextUtilityPanel
+          initialMode="keshida"
+          lang="ar"
+          allowedTool="arabic-keshida-generator"
+        />
+      </div>
+
+      {/* Buy a coffee support section - Perfectly aligned & responsive */}
+      <BuyMeACoffeeButton />
 
       {/* SEO & Developer Comprehensive Technical Guide */}
       <section className="max-w-5xl mx-auto px-4 mt-12 py-8 border-t border-slate-200">

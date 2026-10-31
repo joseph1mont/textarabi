@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import TextUtilityPanel from "@/components/TextUtilityPanel";
+import BuyMeACoffeeButton from "@/components/BuyMeACoffeeButton";
 
 export const metadata: Metadata = {
   title: "اختبار سرعة الطباعة بالعربية والإنجليزية (WPM) اونلاين | TextArabi",
@@ -75,6 +76,8 @@ export default function TypingTestArPage() {
         lang="ar"
         allowedTool="typing-test"
       />
+
+      <BuyMeACoffeeButton />
 
       {/* Comprehensive Technical SEO & Developer Guide */}
       <section className="max-w-5xl mx-auto px-4 mt-12 py-8 border-t border-slate-200">

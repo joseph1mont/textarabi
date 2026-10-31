@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import TextUtilityPanel from "@/components/TextUtilityPanel";
+import BuyMeACoffeeButton from "@/components/BuyMeACoffeeButton";
 
 export const metadata: Metadata = {
   title: "مُحول النص العربي إلى متجه SVG اونلاين | TextArabi",
@@ -77,6 +78,8 @@ export default function VectorTextArPage() {
         lang="ar"
         allowedTool="arabic-text-to-vector"
       />
+
+      <BuyMeACoffeeButton />
 
       {/* SEO & Developer Comprehensive Technical Guide */}
       <section className="max-w-5xl mx-auto px-4 mt-12 py-8 border-t border-slate-200">

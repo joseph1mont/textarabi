@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import TextUtilityPanel from "@/components/TextUtilityPanel";
+import BuyMeACoffeeButton from "@/components/BuyMeACoffeeButton";
 
 export const metadata: Metadata = {
   title: "Arabic Text to Vector (SVG Path) Outline Converter | TextArabi",
@@ -77,6 +78,8 @@ export default function TextToVectorPage() {
         lang="en"
         allowedTool="arabic-text-to-vector"
       />
+
+      <BuyMeACoffeeButton />
 
       {/* 1200+ Words Technical SEO Guide */}
       <section className="max-w-5xl mx-auto px-4 mt-12 py-8 border-t border-slate-200">
